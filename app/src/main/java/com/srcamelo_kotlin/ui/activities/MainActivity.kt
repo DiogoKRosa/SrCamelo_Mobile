@@ -46,16 +46,17 @@ class MainActivity : ComponentActivity() {
         setContent {
             SrCamelo_KotlinTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    MainScreen(
-                        chooseAccount = {
-                            startActivity(
-                                Intent(
-                                    this,
-                                    ChooseAccountActivity::class.java
-                                )
-                            )
-                        }
-                    )
+                    ClientFormScreen()
+                //                    MainScreen(
+//                        chooseAccount = {
+//                            startActivity(
+//                                Intent(
+//                                    this,
+//                                    ChooseAccountActivity::class.java
+//                                )
+//                            )
+//                        }
+//                    )
                 }
             }
         }
@@ -93,6 +94,20 @@ fun MainScreen(
             onClick = {
                 chooseAccount()
             })
+    }
+}
+
+@Composable
+fun ClientFormScreen(
+    modifier: Modifier = Modifier
+){
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+        modifier = modifier
+            .background(color = LightOrange)
+            .fillMaxSize()) {
+        Text(text = "Cadastro")
     }
 }
 
