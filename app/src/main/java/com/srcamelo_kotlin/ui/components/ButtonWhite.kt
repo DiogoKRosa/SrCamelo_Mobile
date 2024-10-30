@@ -24,10 +24,11 @@ import com.srcamelo_kotlin.ui.theme.White
 
 @Composable
 fun ButtonWhite(
-    title: String = "Botão",
     modifier: Modifier = Modifier,
+    title: String = "Botão",
+    onClick: () -> Unit = {}
 ){
-    Button(onClick = { /*TODO*/ },
+    Button(onClick = { onClick() },
         modifier = modifier
             .width(190.dp)
             .height(58.dp)
@@ -43,6 +44,6 @@ fun ButtonWhite(
 @Composable
 fun PreviewButton(){
     SrCamelo_KotlinTheme {
-        ButtonWhite("Login")
+        ButtonWhite(title="Login", onClick = {})
     }
 }

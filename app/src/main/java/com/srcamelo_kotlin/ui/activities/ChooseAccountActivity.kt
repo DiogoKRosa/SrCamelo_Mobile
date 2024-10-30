@@ -1,5 +1,6 @@
 package com.srcamelo_kotlin.ui.activities
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -24,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.srcamelo_kotlin.R
 import com.srcamelo_kotlin.ui.components.ButtonWhite
+import com.srcamelo_kotlin.ui.components.SpecialText
 import com.srcamelo_kotlin.ui.fonts.Montserrat
 import com.srcamelo_kotlin.ui.theme.DarkOrange
 import com.srcamelo_kotlin.ui.theme.LightOrange
@@ -36,7 +38,11 @@ class ChooseAccountActivity : ComponentActivity() {
         setContent {
             SrCamelo_KotlinTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    ChooseAccountScreen()
+                    ChooseAccountScreen(
+                        callClientForm = { startActivity( Intent(this, NewClientFormActivity::class.java))},
+                        callVendorForm = { startActivity( Intent(this, NewVendorFormActivity::class.java))},
+                        callStart = { startActivity( Intent(this, MainActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))}
+                    )
                 }
             }
         }
@@ -44,7 +50,11 @@ class ChooseAccountActivity : ComponentActivity() {
 }
 
 @Composable
-fun ChooseAccountScreen(){
+fun ChooseAccountScreen(
+    callClientForm: () -> Unit = {},
+    callVendorForm: () -> Unit = {},
+    callStart: () -> Unit = {}
+){
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
@@ -56,20 +66,21 @@ fun ChooseAccountScreen(){
 
         Spacer(modifier = Modifier.height(83.dp))
 
-        ButtonWhite("Consumidor")
+        ButtonWhite(title="Consumidor", onClick={callClientForm()})
 
         Spacer(modifier = Modifier.height(50.dp))
 
-        ButtonWhite("Vendedor")
+        ButtonWhite(title="Vendedor", onClick={callVendorForm()})
 
         Spacer(modifier = Modifier.height(35.dp))
 
-        Text(text = "Já possuo uma conta",
-            fontFamily = Montserrat,
-            fontSize = 12.sp,
-            fontWeight = FontWeight.Medium,
-            color = DarkOrange,
-            textDecoration = TextDecoration.Underline)
+        //Text(text = "Já possuo uma conta",
+         //   fontFamily = Montserrat,
+         //   fontSize = 12.sp,
+        //    fontWeight = FontWeight.Medium,
+        //    color = DarkOrange,
+        //    textDecoration = TextDecoration.Underline)
+        SpecialText(text = "Já possuo uma conta", onClick=callStart)
 }
 }
 

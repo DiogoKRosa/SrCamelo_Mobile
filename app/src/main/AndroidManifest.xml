@@ -26,6 +26,9 @@
         <activity android:name=".ui.activities.ChooseAccountActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustResize"/>
+        <activity android:name=".ui.activities.NewClientFormActivity"
+            android:exported="true"
+            android:windowSoftInputMode="adjustResize"/>
     </application>
 
 </manifest>
