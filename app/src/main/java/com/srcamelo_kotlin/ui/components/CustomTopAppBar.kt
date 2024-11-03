@@ -1,5 +1,6 @@
 package com.srcamelo_kotlin.ui.components
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -12,22 +13,18 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.srcamelo_kotlin.R
+import com.srcamelo_kotlin.SrCameloScreens
 import com.srcamelo_kotlin.ui.theme.DarkOrange
 import com.srcamelo_kotlin.ui.theme.LightOrange
 import com.srcamelo_kotlin.ui.theme.SrCamelo_KotlinTheme
@@ -36,9 +33,9 @@ import com.srcamelo_kotlin.ui.theme.White
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BackTopAppBar(
-    finish: () -> Unit = {}
+    onClickBack: () -> Unit = {}
 ){
-    Box(){
+    Box{
         CenterAlignedTopAppBar(
             colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                 containerColor = DarkOrange
@@ -48,8 +45,9 @@ fun BackTopAppBar(
                 Box(modifier = Modifier
                     .fillMaxHeight()
                     .padding(start = 14.dp), contentAlignment = Alignment.Center){
-                    IconButton(onClick = {finish()}) {
-                        Image(painter = painterResource(id = R.drawable.goback_white), contentDescription = "")
+                    IconButton(onClick = onClickBack) {
+                        Image(painter = painterResource(id = R.drawable.goback_white),
+                            contentDescription = "")
                     }
                 }
 
@@ -66,13 +64,14 @@ fun BackTopAppBar(
 }
 
 
-@Preview()
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@Preview
 @Composable
 fun PreviewTopBar(){
     SrCamelo_KotlinTheme {
         Scaffold(
             topBar = {BackTopAppBar()},
-        ) { innerpadding ->
+        ) {
         }
     }
 }

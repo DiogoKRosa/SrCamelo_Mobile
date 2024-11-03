@@ -4,7 +4,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import retrofit2.http.GET
 
-private const val BASE_URL = "http://127.0.0.1:8000"
+private const val BASE_URL = "http://10.0.2.2:8000"
 
 private val retrofit = Retrofit.Builder()
     .addConverterFactory(ScalarsConverterFactory.create())
@@ -17,7 +17,7 @@ interface SrcameloApiService{
 }
 
 object SrcameloApi{
-    val SrcameloApiService : SrcameloApiService by lazy {
+    val retrofitService : SrcameloApiService by lazy {
         retrofit.create(SrcameloApiService::class.java)
     }
 }

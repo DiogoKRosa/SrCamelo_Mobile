@@ -6,6 +6,8 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <application
+        android:networkSecurityConfig="@xml/network_security_config"
+
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -16,7 +18,7 @@
         android:theme="@style/Theme.SrCamelo_Kotlin"
         tools:targetApi="31">
         <activity
-            android:name=".ui.activities.MainActivity"
+            android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.SrCamelo_Kotlin">
@@ -26,10 +28,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.activities.ChooseAccountActivity"
+        <activity android:name=".ui.screens.ChooseAccountActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustResize"/>
-        <activity android:name=".ui.activities.NewClientFormActivity"
+        <activity android:name=".ui.screens.NewClientFormActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustResize"/>
     </application>
