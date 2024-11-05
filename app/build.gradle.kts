@@ -55,6 +55,7 @@ dependencies {
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     // Retrofit with Scalar Converter
     implementation("com.squareup.retrofit2:converter-scalars:2.9.0")
+    implementation ("com.squareup.retrofit2:converter-gson:2.3.0")
 
     // Import the Compose BOM
     implementation(platform("androidx.compose:compose-bom:2023.08.00"))
@@ -69,4 +70,5 @@ dependencies {
 
     debugImplementation("androidx.compose.ui:ui-test-manifest")
     debugImplementation("androidx.compose.ui:ui-tooling")
+    implementation(kotlin("script-runtime"))
 }

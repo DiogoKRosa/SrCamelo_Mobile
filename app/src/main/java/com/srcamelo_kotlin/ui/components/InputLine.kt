@@ -21,10 +21,10 @@ import com.srcamelo_kotlin.ui.theme.SrCamelo_KotlinTheme
 
 @Composable
 fun InputLine(
+    modifier: Modifier = Modifier,
     placeholder: String,
     value: String = "",
     onValueChange: (String) -> Unit = {},
-    modifier: Modifier = Modifier
 ){
     var textState by remember { mutableStateOf(TextFieldValue(value))}
     TextField(value = textState,

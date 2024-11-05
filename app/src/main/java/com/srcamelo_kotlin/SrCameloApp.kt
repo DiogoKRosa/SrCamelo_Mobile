@@ -2,6 +2,7 @@ package com.srcamelo_kotlin
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -9,6 +10,8 @@ import androidx.navigation.compose.rememberNavController
 import com.srcamelo_kotlin.ui.screens.ChooseAccountScreen
 import com.srcamelo_kotlin.ui.screens.LoginScreen
 import com.srcamelo_kotlin.ui.screens.NewFormClientScreen
+import com.srcamelo_kotlin.ui.viewModel.UsersUiState
+import com.srcamelo_kotlin.ui.viewModel.UsersViewModel
 
 enum class SrCameloScreens(){
     Login,
@@ -22,6 +25,8 @@ fun SrCameloApp(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController()
 ){
+    val userModel: UsersViewModel = viewModel()
+
     NavHost(
         navController = navController,
         startDestination = SrCameloScreens.Login.name,
@@ -30,7 +35,8 @@ fun SrCameloApp(
         composable(route = SrCameloScreens.Login.name){
             LoginScreen(
                 onLoginSubmit = {/*TODO*/},
-                onChooseAccountClick = {navController.navigate(SrCameloScreens.ChooseAccount.name)}
+                onChooseAccountClick = {navController.navigate(SrCameloScreens.ChooseAccount.name)},
+                usersUiState = userModel.usersUiState
             )
         }
 

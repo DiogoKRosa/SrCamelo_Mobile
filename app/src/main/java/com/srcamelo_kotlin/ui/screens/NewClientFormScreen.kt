@@ -15,6 +15,10 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -22,6 +26,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.srcamelo_kotlin.R
+import com.srcamelo_kotlin.model.User
 import com.srcamelo_kotlin.ui.components.BackTopAppBar
 import com.srcamelo_kotlin.ui.components.ButtonWhite
 import com.srcamelo_kotlin.ui.components.InputLine
@@ -54,20 +59,42 @@ fun NewFormClientScreen(
                 }
                 Spacer(modifier = Modifier.height(33.dp))
                 Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                    InputLine(placeholder = "Nome")
+                    var name by remember { mutableStateOf("")}
+                    InputLine(placeholder = "Nome", value = name, onValueChange = { it -> name = it})
+
                     InputLine(placeholder = "CPF")
+
+
                     InputLine(placeholder = "E-mail")
+
+
                     InputLine(placeholder = "Telefone")
+
+
                     InputLine(placeholder = "Senha")
+
+
                     InputLine(placeholder = "Confirmar Senha")
                     Row(horizontalArrangement = Arrangement.spacedBy(20.dp)){
+
+
                         InputLine(placeholder = "País", modifier = Modifier.width(169.dp))
+
+
                         InputLine(placeholder = "UF", modifier = Modifier.width(79.dp))
                     }
+
+
                     InputLine(placeholder = "Cidade")
                 }
+
                 Spacer(modifier = Modifier.height(100.dp))
-                ButtonWhite(title="Cadastrar-se", onClick = onSubmit)
+                ButtonWhite(title="Cadastrar-se", onClick = {
+                    var user = User(
+                        userType = null,
+                        name = name)
+                    onSubmit
+                })
                 SpecialText(text = "Já possuo uma conta", onClick = onClickLogin)
             }
         })

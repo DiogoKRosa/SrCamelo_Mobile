@@ -6,6 +6,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.srcamelo_kotlin.model.User
 import com.srcamelo_kotlin.network.SrcameloApi
 import kotlinx.coroutines.launch
 import java.io.IOException
@@ -21,15 +23,23 @@ class UsersViewModel(): ViewModel(){
     var usersUiState: UsersUiState by mutableStateOf(UsersUiState.Loading)
         private set
 
-    init {
-        getUsers()
-    }
-
     private fun getUsers() {
         viewModelScope.launch {
             try {
                 val listResult = SrcameloApi.retrofitService.getUsers()
                 usersUiState = UsersUiState.Success(listResult)
+            } catch (e: IOException){
+                Log.e("CourontineError", "Coroutine encountered an error", e)
+                usersUiState = UsersUiState.Error
+            }
+        }
+    }
+
+    private fun createUser(user: User){
+        viewModelScope.launch {
+            try {
+                SrcameloApi.retrofitService.createUser(user)
+                usersUiState = UsersUiState.Success("Usuário Cadastrado com sucesso")
             } catch (e: IOException){
                 Log.e("CourontineError", "Coroutine encountered an error", e)
                 usersUiState = UsersUiState.Error
