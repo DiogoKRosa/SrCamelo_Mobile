@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 import java.io.IOException
 
 sealed interface UsersUiState{
-    data class Success(val names: String) : UsersUiState
+    data class Success(val response: String) : UsersUiState
     object Error : UsersUiState
     object Loading : UsersUiState
 }
@@ -23,7 +23,7 @@ class UsersViewModel(): ViewModel(){
     var usersUiState: UsersUiState by mutableStateOf(UsersUiState.Loading)
         private set
 
-    private fun getUsers() {
+    fun getUsers() {
         viewModelScope.launch {
             try {
                 val listResult = SrcameloApi.retrofitService.getUsers()
@@ -35,7 +35,7 @@ class UsersViewModel(): ViewModel(){
         }
     }
 
-    private fun createUser(user: User){
+    fun createUser(user: User){
         viewModelScope.launch {
             try {
                 SrcameloApi.retrofitService.createUser(user)

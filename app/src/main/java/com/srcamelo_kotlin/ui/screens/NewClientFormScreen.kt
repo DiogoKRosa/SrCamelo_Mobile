@@ -1,5 +1,6 @@
 package com.srcamelo_kotlin.ui.screens
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -22,11 +23,16 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontLoadingStrategy.Companion.Async
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.srcamelo_kotlin.R
 import com.srcamelo_kotlin.model.User
+import com.srcamelo_kotlin.network.SrcameloApi
+import com.srcamelo_kotlin.network.SrcameloApiService
 import com.srcamelo_kotlin.ui.components.BackTopAppBar
 import com.srcamelo_kotlin.ui.components.ButtonWhite
 import com.srcamelo_kotlin.ui.components.InputLine
@@ -34,16 +40,27 @@ import com.srcamelo_kotlin.ui.components.SpecialText
 import com.srcamelo_kotlin.ui.fonts.Montserrat
 import com.srcamelo_kotlin.ui.theme.DarkOrange
 import com.srcamelo_kotlin.ui.theme.LightOrange
+import com.srcamelo_kotlin.ui.viewModel.UsersUiState
+import com.srcamelo_kotlin.ui.viewModel.UsersViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import org.jetbrains.annotations.Async
+import kotlin.math.log
 
 @Composable
 fun NewFormClientScreen(
     onClickBack : () -> Unit = {},
-    onSubmit: ()-> Unit = {},
+    onSubmit: (User)-> Unit = {},
     onClickLogin: () -> Unit = {}
 ){
     Scaffold (topBar = {BackTopAppBar(onClickBack = onClickBack)},
         content = {
             val scrollState = rememberScrollState()
+
+            var nameUser by remember { mutableStateOf("")}
+
+            var userModel : UsersViewModel = viewModel()
             Column(
                 modifier = Modifier
                     .background(color = LightOrange)
@@ -59,8 +76,9 @@ fun NewFormClientScreen(
                 }
                 Spacer(modifier = Modifier.height(33.dp))
                 Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                    var name by remember { mutableStateOf("")}
-                    InputLine(placeholder = "Nome", value = name, onValueChange = { it -> name = it})
+
+
+                    InputLine(placeholder = "Nome", value = nameUser, onValueChange = { it -> nameUser = it})
 
                     InputLine(placeholder = "CPF")
 
@@ -86,14 +104,32 @@ fun NewFormClientScreen(
 
 
                     InputLine(placeholder = "Cidade")
-                }
 
+                }
                 Spacer(modifier = Modifier.height(100.dp))
                 ButtonWhite(title="Cadastrar-se", onClick = {
-                    var user = User(
-                        userType = null,
-                        name = name)
-                    onSubmit
+                    val user = User(
+                        userType = "",
+                        name = nameUser,
+                        city= "",
+                        country = "",
+                        uf = "",
+                        cpf = "",
+                        email = "",
+                        password = "",
+                        telephone = "")
+//                    runBlocking {
+//                        launch{
+//                            SrcameloApi.retrofitService.createUser(user)
+//                        }
+//                    }
+//                    var uiState = userModel.usersUiState
+//                    userModel.createUser(user)
+//                    when(uiState){
+//                        is UsersUiState.Loading -> Log.e("Load", "Cadastrando...")
+//                        is UsersUiState.Error -> Log.e("Erro", "Houve um problema ao Cadastrar")
+//                        is UsersUiState.Success -> Log.e("Sucesso", uiState.names)
+//                    }
                 })
                 SpecialText(text = "Já possuo uma conta", onClick = onClickLogin)
             }
