@@ -2,6 +2,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    id("org.jetbrains.kotlin.kapt")
 }
 
 android {
@@ -68,6 +69,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.ktx.v262)
     implementation(libs.androidx.lifecycle.viewmodel.compose.v262)
     implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.room.ktx)
 
     debugImplementation(libs.ui.test.manifest)
     debugImplementation(libs.ui.tooling)
@@ -75,4 +77,8 @@ dependencies {
 
     //Gson
     implementation (libs.gson)
+
+    // Hilt dependencies
+    implementation("com.google.dagger:hilt-android:2.44")
+    kapt("com.google.dagger:hilt-android-compiler:2.44")
 }

@@ -1,11 +1,9 @@
 package com.srcamelo_kotlin.network
 
 import com.srcamelo_kotlin.model.User
-import retrofit2.Call
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.converter.scalars.ScalarsConverterFactory
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -19,10 +17,12 @@ private val retrofit = Retrofit.Builder()
 
 interface SrcameloApiService{
     @GET("users")
-    suspend fun getUsers(): String
+    suspend fun getUsers(): Response<List<User>>
 
     @POST("users")
-    suspend fun createUser(@Body user: User): Response<String>
+    suspend fun createUser(
+        @Body registerUserRequest:
+    ): Response<String>
 }
 
 object SrcameloApi{

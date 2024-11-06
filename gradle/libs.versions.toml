@@ -6,6 +6,7 @@ converterGson = "2.9.0"
 converterGsonVersion = "2.3.0"
 coreKtxVersion = "1.12.0"
 gson = "2.10.1"
+hiltAndroidVersion = "<latest-version>"
 kotlin = "1.9.0"
 coreKtx = "1.13.1"
 junit = "4.13.2"
@@ -20,6 +21,7 @@ lifecycleViewmodelKtx = "2.8.7"
 runtimeSavedInstanceState = "1.0.0-alpha11"
 roomCompilerProcessingTesting = "2.6.1"
 navigationCompose = "2.8.3"
+roomKtx = "2.6.1"
 
 [libraries]
 androidx-activity-compose-v180 = { module = "androidx.activity:activity-compose", version.ref = "activityComposeVersion" }
@@ -33,7 +35,9 @@ androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-view
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
 converter-gson-v230 = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGsonVersion" }
 converter-scalars = { module = "com.squareup.retrofit2:converter-scalars", version.ref = "converterGson" }
+dagger-hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroidVersion" }
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
+hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroidVersion" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -56,6 +60,7 @@ ui = { module = "androidx.compose.ui:ui" }
 ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest" }
 ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
+androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "roomKtx" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
