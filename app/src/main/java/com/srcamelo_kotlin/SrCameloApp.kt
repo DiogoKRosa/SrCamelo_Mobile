@@ -13,11 +13,13 @@ import com.srcamelo_kotlin.ui.screens.LoginScreen
 import com.srcamelo_kotlin.ui.screens.NewFormClientScreen
 import com.srcamelo_kotlin.ui.viewModel.UsersViewModel
 import dagger.hilt.android.HiltAndroidApp
+import timber.log.Timber
 
 
 @HiltAndroidApp
 class SrCameloApp: Application(){
     override fun onCreate() {
         super.onCreate()
+        Timber.plant(Timber.DebugTree())
     }
 }

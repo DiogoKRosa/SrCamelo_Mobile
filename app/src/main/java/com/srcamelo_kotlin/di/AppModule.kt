@@ -1,6 +1,8 @@
 package com.srcamelo_kotlin.di
 
-import com.srcamelo_kotlin.repository.CreateUserRepository
+import com.srcamelo_kotlin.data.repository.UserRepositoryImpl
+import com.srcamelo_kotlin.domain.repository.UserRepository
+import com.srcamelo_kotlin.network.SrcameloApiService
 import com.srcamelo_kotlin.ui.use_case.CreateClientUseCase
 import dagger.Module
 import dagger.Provides
@@ -14,7 +16,15 @@ object AppModule{
 
     @Provides
     @Singleton
-    fun provideCreateClientUseCase(repository: CreateUserRepository): CreateClientUseCase {
+    fun provideCreateClientUseCase(repository: UserRepositoryImpl): CreateClientUseCase {
         return CreateClientUseCase(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun providesRepository(apiService: SrcameloApiService): UserRepository{
+        return UserRepositoryImpl(
+            apiService = apiService
+        )
     }
 }

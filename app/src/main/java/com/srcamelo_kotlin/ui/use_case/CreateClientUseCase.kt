@@ -2,7 +2,7 @@ package com.srcamelo_kotlin.ui.use_case
 
 import com.srcamelo_kotlin.model.User
 import com.srcamelo_kotlin.network.Resource
-import com.srcamelo_kotlin.repository.CreateUserRepository
+import com.srcamelo_kotlin.data.repository.UserRepositoryImpl
 
 data class ValidationResult(
     val passwordError: String? = null,
@@ -10,7 +10,7 @@ data class ValidationResult(
 )
 
 class CreateClientUseCase(
-    private val repository: CreateUserRepository
+    private val repository: UserRepositoryImpl
 ){
     suspend operator fun invoke(
         userType: String,
