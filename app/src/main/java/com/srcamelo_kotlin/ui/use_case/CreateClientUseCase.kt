@@ -4,7 +4,7 @@ import com.srcamelo_kotlin.model.User
 import com.srcamelo_kotlin.network.Resource
 import com.srcamelo_kotlin.repository.CreateUserRepository
 
-data class validationResult(
+data class ValidationResult(
     val passwordError: String? = null,
     val result: Resource<Unit>? = null
 )
@@ -23,10 +23,10 @@ class CreateClientUseCase(
         country: String,
         uf: String,
         city: String
-    ):validationResult{
+    ):ValidationResult{
 
         if(password != passwordC){
-            return validationResult(passwordError = "As senhas não coincidem")
+            return ValidationResult(passwordError = "As senhas não coincidem")
         }
 
         val request = User(
@@ -41,6 +41,6 @@ class CreateClientUseCase(
             city = city
         )
 
-        return validationResult( result = repository.createClient(request))
+        return ValidationResult( result = repository.createClient(request))
     }
 }

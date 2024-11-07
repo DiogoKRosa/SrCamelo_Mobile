@@ -21,7 +21,7 @@ interface SrcameloApiService{
 
     @POST("users")
     suspend fun createUser(
-        @Body registerUserRequest:
+        @Body registerUserRequest: User
     ): Response<String>
 }
 

@@ -21,9 +21,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.srcamelo_kotlin.R
-import com.srcamelo_kotlin.model.User
 import com.srcamelo_kotlin.ui.components.BackTopAppBar
 import com.srcamelo_kotlin.ui.components.ButtonWhite
 import com.srcamelo_kotlin.ui.components.InputLine
@@ -32,13 +30,13 @@ import com.srcamelo_kotlin.ui.fonts.Montserrat
 import com.srcamelo_kotlin.ui.theme.DarkOrange
 import com.srcamelo_kotlin.ui.theme.LightOrange
 import com.srcamelo_kotlin.ui.viewModel.UsersViewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 
 @Composable
 fun NewFormClientScreen(
     onClickBack : () -> Unit = {},
-    onSubmit: (User)-> Unit = {},
     onClickLogin: () -> Unit = {},
-    viewModel: UsersViewModel = viewModel()
+    viewModel: UsersViewModel = hiltViewModel()
 ){
     Scaffold (topBar = {BackTopAppBar(onClickBack = onClickBack)},
         content = {
@@ -93,25 +91,10 @@ fun NewFormClientScreen(
                 }
                 Spacer(modifier = Modifier.height(100.dp))
                 ButtonWhite(title="Cadastrar-se", onClick = {
-//                    val user = User(
-//                        userType = "",
-//                        name = nameUser,
-//                        city= "",
-//                        country = "",
-//                        uf = "",
-//                        cpf = "",
-//                        email = "",
-//                        password = "",
-//                        telephone = "")
-//
-//                    var uiState = userModel.usersUiState
-//                    userModel.createUser(user)
-//                    when(uiState){
-//                        is UsersUiState.Loading -> Log.e("Load", "Cadastrando...")
-//                        is UsersUiState.Error -> Log.e("Erro", "Houve um problema ao Cadastrar")
-//                        is UsersUiState.Success -> Log.e("Sucesso", uiState.response)
-//                    }
-                    viewModel.createUser()
+                    viewModel.createClient()
+                    if(viewModel.uiState.value.status){
+                        onClickLogin()
+                    }
                 })
                 SpecialText(text = "Já possuo uma conta", onClick = onClickLogin)
             }

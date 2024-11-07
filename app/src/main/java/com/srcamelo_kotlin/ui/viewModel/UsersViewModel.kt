@@ -2,31 +2,27 @@ package com.srcamelo_kotlin.ui.viewModel
 
 import android.util.Log
 import androidx.compose.runtime.State
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.srcamelo_kotlin.common.TextFieldState
-import com.srcamelo_kotlin.model.User
-import com.srcamelo_kotlin.network.SrcameloApi
+import com.srcamelo_kotlin.network.Resource
 import com.srcamelo_kotlin.ui.use_case.CreateClientUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import java.io.IOException
 import javax.inject.Inject
 
-sealed interface UsersUiState {
-    data class Success(val response: String) : UsersUiState
-    object Error : UsersUiState
-    object Loading : UsersUiState
-}
+data class UserState(
+    val status: Boolean = false,
+    val isError: String? = null
+)
 
-// Link: https://developer.android.com/codelabs/basic-android-kotlin-compose-getting-data-internet?hl=pt-br#6
+@HiltViewModel
 class UsersViewModel @Inject constructor(
     private val createClientUseCase: CreateClientUseCase
 ) : ViewModel() {
-    var usersUiState: UsersUiState by mutableStateOf(UsersUiState.Loading)
-        private set
+    private var usersUiState = mutableStateOf(UserState())
+    val uiState: State<UserState> = usersUiState
 
     private val _name = mutableStateOf(TextFieldState())
     val name: State<TextFieldState> = _name
@@ -82,22 +78,11 @@ class UsersViewModel @Inject constructor(
         _city.value = city.value.copy(text = value)
     }
 
-
-//    fun getUsers() {
-//        viewModelScope.launch {
-//            try {
-//                val listResult = SrcameloApi.retrofitService.getUsers()
-//                usersUiState = UsersUiState.Success(listResult)
-//            } catch (e: IOException){
-//                Log.e("CourontineError", "Coroutine encountered an error", e)
-//                usersUiState = UsersUiState.Error
-//            }
-//        }
-//    }
-
-    fun createClient() {
+    fun createClient(){
         viewModelScope.launch {
-            val createClientRequest = CreateClientUseCase(
+            usersUiState.value = uiState.value.copy(status = false)
+
+            val createClientRequest = createClientUseCase(
                 userType = "Cliente",
                 name = name.value.text,
                 city = city.value.text,
@@ -106,9 +91,26 @@ class UsersViewModel @Inject constructor(
                 cpf = cpf.value.text,
                 email = email.value.text,
                 password = password.value.text,
+                passwordC = passwordC.value.text,
                 telephone = telephone.value.text
             )
 
+            if(createClientRequest.passwordError != null){
+                usersUiState.value = uiState.value.copy(status = false, isError = createClientRequest.passwordError)
+            }
+            when(createClientRequest.result){
+                is Resource.Success -> {
+                    Log.e("POST", "Usuário cadastrado")
+                    usersUiState.value = uiState.value.copy(status = true)
+                }
+                is Resource.Error -> {
+                    Log.e("ERRO", "${createClientRequest.result.message}")
+                    usersUiState.value = uiState.value.copy(status = false, isError = createClientRequest.result.message)
+                }
+                else -> {
+
+                }
+            }
         }
     }
 }

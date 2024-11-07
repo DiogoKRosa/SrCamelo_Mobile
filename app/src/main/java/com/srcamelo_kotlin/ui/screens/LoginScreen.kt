@@ -7,9 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -19,21 +17,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.srcamelo_kotlin.R
-import com.srcamelo_kotlin.SrCameloApp
-import com.srcamelo_kotlin.network.SrcameloApi
 import com.srcamelo_kotlin.ui.components.ButtonWhite
 import com.srcamelo_kotlin.ui.components.InputLine
 import com.srcamelo_kotlin.ui.components.SpecialText
 import com.srcamelo_kotlin.ui.theme.LightOrange
-import com.srcamelo_kotlin.ui.viewModel.UsersUiState
-import com.srcamelo_kotlin.ui.viewModel.UsersViewModel
 
 @Composable
 fun LoginScreen(
     modifier: Modifier = Modifier,
     onLoginSubmit: () -> Unit = {},
-    onChooseAccountClick: () -> Unit = {},
-    usersUiState: UsersUiState
+    onChooseAccountClick: () -> Unit = {}
 ){
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -41,12 +34,6 @@ fun LoginScreen(
         modifier = modifier
             .background(color = LightOrange)
             .fillMaxSize()){
-
-//        when( usersUiState ){
-//            is UsersUiState.Loading -> Text("Carregando")
-//            is UsersUiState.Success -> Text(usersUiState.names)
-//            is UsersUiState.Error -> Text("Erro")
-//        }
 
         Image(painter = painterResource(id = R.drawable.logo), contentDescription = null)
 
