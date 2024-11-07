@@ -1,8 +1,10 @@
+import org.jetbrains.kotlin.gradle.internal.kapt.incremental.UnknownSnapshot.classpath
 
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
-    id("org.jetbrains.kotlin.kapt")
+    id("com.android.application")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -79,12 +81,21 @@ dependencies {
     implementation (libs.gson)
 
     //dagger
-    implementation("com.google.dagger:hilt-android:2.38.1")
-    kapt("com.google.dagger:hilt-compiler:2.38.1")
-    implementation("androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha03")
-    kapt("androidx.hilt:hilt-compiler:1.0.0")
-    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
+    implementation("com.google.dagger:hilt-android:2.52")
+    annotationProcessor("com.google.dagger:hilt-compiler:2.52")
+    // For instrumentation tests
+    androidTestImplementation("com.google.dagger:hilt-android-testing:2.52")
+    androidTestAnnotationProcessor("com.google.dagger:hilt-compiler:2.52")
+    // For local unit tests
+    testImplementation("com.google.dagger:hilt-android-testing:2.52")
+    testAnnotationProcessor("com.google.dagger:hilt-compiler:2.52")
+
+    classpath("com.google.dagger:hilt-android-gradle-plugin:2.52")
 
     // Timber for logging
     implementation("com.jakewharton.timber:timber:5.0.1")
+}
+
+kapt{
+    correctErrorTypes true
 }
