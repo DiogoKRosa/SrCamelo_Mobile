@@ -1,9 +1,9 @@
-import org.jetbrains.kotlin.gradle.internal.kapt.incremental.UnknownSnapshot.classpath
+import java.util.Properties
 
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.jetbrains.kotlin.android)
-    id("com.android.application")
+    alias(libs.plugins.kotlin.android)
+    id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
 }
 
@@ -22,6 +22,9 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+    }
+    buildFeatures {
+        buildConfig = true
     }
 
     buildTypes {
@@ -54,48 +57,70 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.activity.compose)
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.ui)
+    implementation(libs.androidx.ui.graphics)
+    implementation(libs.androidx.ui.tooling.preview)
+    implementation(libs.androidx.material3)
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation(libs.androidx.ui.test.junit4)
+    debugImplementation(libs.androidx.ui.tooling)
+    debugImplementation(libs.androidx.ui.test.manifest)
 
-    // Retrofit
-    implementation(libs.retrofit)
-    // Retrofit with Scalar Converter
-    implementation(libs.converter.scalars)
-    implementation (libs.converter.gson.v230)
+    // Coil
+    implementation (libs.coil.compose)
 
-    // Import the Compose BOM
-    implementation(platform(libs.androidx.compose.bom.v20230800))
-    implementation(libs.androidx.activity.compose.v180)
-    implementation(libs.material3)
-    implementation(libs.ui)
-    implementation(libs.ui.tooling.preview)
-    implementation(libs.androidx.core.ktx.v1120)
-    implementation(libs.androidx.lifecycle.runtime.ktx.v262)
-    implementation(libs.androidx.lifecycle.viewmodel.compose.v262)
-    implementation(libs.androidx.navigation.compose)
-    implementation(libs.androidx.room.ktx)
+    // Timber
+    implementation (libs.timber)
 
-    debugImplementation(libs.ui.test.manifest)
-    debugImplementation(libs.ui.tooling)
-    implementation(kotlin("script-runtime"))
+    //DataStore
+    implementation (libs.androidx.datastore.preferences)
+
+    //Splashscreen
+    implementation (libs.androidx.core.splashscreen)
 
     //Gson
     implementation (libs.gson)
 
-    //dagger
-    implementation("com.google.dagger:hilt-android:2.52")
-    annotationProcessor("com.google.dagger:hilt-compiler:2.52")
-    // For instrumentation tests
-    androidTestImplementation("com.google.dagger:hilt-android-testing:2.52")
-    androidTestAnnotationProcessor("com.google.dagger:hilt-compiler:2.52")
-    // For local unit tests
-    testImplementation("com.google.dagger:hilt-android-testing:2.52")
-    testAnnotationProcessor("com.google.dagger:hilt-compiler:2.52")
+    //Others - Compose dependencies
+    implementation (libs.androidx.lifecycle.viewmodel.compose)
+    implementation (libs.androidx.compose.material.icons.extended)
+    implementation (libs.accompanist.flowlayout)
+    implementation (libs.androidx.navigation.compose)
 
-    classpath("com.google.dagger:hilt-android-gradle-plugin:2.52")
+    //Paging3
+    implementation (libs.androidx.paging.runtime.ktx)
+    implementation (libs.androidx.paging.compose)
 
-    // Timber for logging
-    implementation("com.jakewharton.timber:timber:5.0.1")
-}
+    //Coroutines
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.kotlinx.coroutines.android)
 
-kapt{
-    correctErrorTypes true
+    // Coroutine Lifecycle Scopes
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+
+    // Retrofit
+    implementation(libs.com.squareup.retrofit2.retrofit)
+    implementation(libs.com.squareup.retrofit2.converter.gson)
+    implementation(libs.com.squareup.okhttp3.okhttp)
+    implementation(libs.com.squareup.okhttp3.logging.interceptor)
+
+    // DI - Hilt
+    // Hilt
+    implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.android.compiler)
+
+
+    // Room
+    implementation(libs.androidx.room.ktx)
+    implementation(libs.androidx.room.runtime)
+    kapt(libs.androidx.room.room.compiler)
 }

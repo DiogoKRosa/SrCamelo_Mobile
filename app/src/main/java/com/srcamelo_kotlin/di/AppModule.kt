@@ -2,6 +2,7 @@ package com.srcamelo_kotlin.di
 
 import com.srcamelo_kotlin.data.repository.UserRepositoryImpl
 import com.srcamelo_kotlin.domain.repository.UserRepository
+import com.srcamelo_kotlin.network.SrcameloApi
 import com.srcamelo_kotlin.network.SrcameloApiService
 import com.srcamelo_kotlin.ui.use_case.CreateClientUseCase
 import dagger.Module
@@ -22,7 +23,7 @@ object AppModule{
 
     @Provides
     @Singleton
-    fun providesRepository(apiService: SrcameloApiService): UserRepository{
+    fun providesRepository(apiService: SrcameloApi): UserRepository{
         return UserRepositoryImpl(
             apiService = apiService
         )

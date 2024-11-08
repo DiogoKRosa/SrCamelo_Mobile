@@ -28,12 +28,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.screens.ChooseAccountActivity"
-            android:exported="true"
-            android:windowSoftInputMode="adjustResize"/>
-        <activity android:name=".ui.screens.NewClientFormActivity"
-            android:exported="true"
-            android:windowSoftInputMode="adjustResize"/>
     </application>
 
 </manifest>

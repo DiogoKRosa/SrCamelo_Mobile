@@ -49,7 +49,7 @@ fun SrCameloNavigation(
             NewFormClientScreen(
                 onClickBack = {navController.navigateUp()},
                 onClickLogin = {goBackLogin(navController)},
-                //onSubmit = {/*TODO*/}
+
             )
         }
 
