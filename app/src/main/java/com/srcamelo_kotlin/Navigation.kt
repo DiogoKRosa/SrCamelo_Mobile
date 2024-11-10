@@ -7,7 +7,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.srcamelo_kotlin.data.preferences.DataStoreManager
 import com.srcamelo_kotlin.ui.screens.ChooseAccountScreen
+import com.srcamelo_kotlin.ui.screens.ClientHomeScreen
 import com.srcamelo_kotlin.ui.screens.LoginScreen
 import com.srcamelo_kotlin.ui.screens.NewFormClientScreen
 import com.srcamelo_kotlin.ui.viewModel.UsersViewModel
@@ -16,13 +18,15 @@ enum class SrCameloScreens(){
     Login,
     ChooseAccount,
     NewClientForm,
-    NewVendorForm
+    NewVendorForm,
+    ClientHome
 }
 
 @Composable
 fun SrCameloNavigation(
     modifier: Modifier = Modifier,
-    navController: NavHostController = rememberNavController()
+    navController: NavHostController = rememberNavController(),
+    dataStoreManager: DataStoreManager
 ){
     NavHost(
         navController = navController,
@@ -31,8 +35,9 @@ fun SrCameloNavigation(
     ){
         composable(route = SrCameloScreens.Login.name){
             LoginScreen(
-                onLoginSubmit = {/*TODO*/},
+                onLoginSubmit = {navController.navigate(SrCameloScreens.ClientHome.name)},
                 onChooseAccountClick = {navController.navigate(SrCameloScreens.ChooseAccount.name)},
+                dataStore = dataStoreManager
             )
         }
 
@@ -55,6 +60,12 @@ fun SrCameloNavigation(
 
         composable(route = SrCameloScreens.NewVendorForm.name){
 
+        }
+
+        composable(route = SrCameloScreens.ClientHome.name){
+            ClientHomeScreen(
+                dataStore = dataStoreManager
+            )
         }
     }
 }

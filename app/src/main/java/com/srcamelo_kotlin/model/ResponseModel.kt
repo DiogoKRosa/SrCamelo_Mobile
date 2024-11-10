@@ -2,7 +2,7 @@ package com.srcamelo_kotlin.model
 
 import com.google.gson.annotations.SerializedName
 
-data class ReponseModel(
+data class ResponseModel(
     @SerializedName("status")
     val status: Int,
     @SerializedName("message")

@@ -1,7 +1,9 @@
 package com.srcamelo_kotlin.network
 
-import com.srcamelo_kotlin.model.ReponseModel
+import com.srcamelo_kotlin.model.LoginRequest
 import com.srcamelo_kotlin.model.ReponseUser
+import com.srcamelo_kotlin.model.ResponseModel
+import com.srcamelo_kotlin.model.ResponseToken
 import com.srcamelo_kotlin.model.UserModel
 import retrofit2.Response
 import retrofit2.Retrofit
@@ -24,7 +26,13 @@ interface SrcameloApiService{
     @POST("users")
     suspend fun createUser(
         @Body registerUserRequest: UserModel
-    ): Response<ReponseUser>
+    ): ReponseUser
+
+    @POST("login")
+    suspend fun login(
+        @Body loginUserRequest: LoginRequest
+    ): ResponseToken
+
 }
 
 object SrcameloApi{
