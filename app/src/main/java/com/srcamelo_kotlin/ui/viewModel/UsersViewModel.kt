@@ -5,22 +5,21 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.compose.rememberNavController
 import com.srcamelo_kotlin.common.TextFieldState
 import com.srcamelo_kotlin.network.Resource
 import com.srcamelo_kotlin.ui.use_case.CreateClientUseCase
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 data class UserState(
     val status: Boolean = false,
     val isError: String? = null
 )
 
-@HiltViewModel
-class UsersViewModel @Inject constructor(
-    private val createClientUseCase: CreateClientUseCase
+class UsersViewModel(
 ) : ViewModel() {
+    private val createClientUserCase = CreateClientUseCase()
+
     private var usersUiState = mutableStateOf(UserState())
     val uiState: State<UserState> = usersUiState
 
@@ -82,7 +81,7 @@ class UsersViewModel @Inject constructor(
         viewModelScope.launch {
             usersUiState.value = uiState.value.copy(status = false)
 
-            val createClientRequest = createClientUseCase(
+            val createClientRequest = createClientUserCase(
                 userType = "Cliente",
                 name = name.value.text,
                 city = city.value.text,
@@ -96,6 +95,7 @@ class UsersViewModel @Inject constructor(
             )
 
             if(createClientRequest.passwordError != null){
+                Log.e("Input error", "As senhas não coincidem")
                 usersUiState.value = uiState.value.copy(status = false, isError = createClientRequest.passwordError)
             }
             when(createClientRequest.result){

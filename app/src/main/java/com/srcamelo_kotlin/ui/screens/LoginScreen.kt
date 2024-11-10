@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import com.srcamelo_kotlin.R
 import com.srcamelo_kotlin.ui.components.ButtonWhite
 import com.srcamelo_kotlin.ui.components.InputLine
+import com.srcamelo_kotlin.ui.components.InputLinePassword
 import com.srcamelo_kotlin.ui.components.SpecialText
 import com.srcamelo_kotlin.ui.theme.LightOrange
 
@@ -45,7 +46,7 @@ fun LoginScreen(
         Spacer(modifier = Modifier.height(29.dp))
 
         var password by remember { mutableStateOf("") }
-        InputLine(placeholder = "Senha", value = password, onValueChange = {password = it})
+        InputLinePassword(placeholder = "Senha", value = password, onValueChange = {password = it})
 
         Spacer(modifier = Modifier.height(54.dp))
 

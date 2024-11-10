@@ -1,8 +1,8 @@
 package com.srcamelo_kotlin.ui.use_case
 
-import com.srcamelo_kotlin.model.User
 import com.srcamelo_kotlin.network.Resource
 import com.srcamelo_kotlin.data.repository.UserRepositoryImpl
+import com.srcamelo_kotlin.model.UserModel
 
 data class ValidationResult(
     val passwordError: String? = null,
@@ -10,8 +10,10 @@ data class ValidationResult(
 )
 
 class CreateClientUseCase(
-    private val repository: UserRepositoryImpl
+
 ){
+    private val repository = UserRepositoryImpl()
+
     suspend operator fun invoke(
         userType: String,
         name: String,
@@ -29,7 +31,8 @@ class CreateClientUseCase(
             return ValidationResult(passwordError = "As senhas não coincidem")
         }
 
-        val request = User(
+        val request = UserModel(
+            id = null,
             userType = userType,
             name = name,
             cpf = cpf,

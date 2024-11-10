@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
@@ -41,6 +42,31 @@ fun InputLine(
         textStyle = TextStyle(fontSize = 16.sp, fontFamily = Montserrat, fontWeight = FontWeight.Medium),
         modifier = modifier
         )
+}
+
+@Composable
+fun InputLinePassword(
+    modifier: Modifier = Modifier,
+    placeholder: String,
+    value: String = "",
+    onValueChange: (String) -> Unit = {},
+){
+    var textState by remember { mutableStateOf(TextFieldValue(value))}
+    TextField(value = textState,
+        onValueChange = {
+            textState = it
+            onValueChange(it.text)},
+        label = { Text(placeholder, fontFamily = Montserrat, fontWeight = FontWeight.Medium) },
+        colors = TextFieldDefaults.colors(
+            focusedContainerColor = Color.Transparent,
+            unfocusedContainerColor = Color.Transparent,
+            focusedIndicatorColor = DarkOrange,
+            unfocusedIndicatorColor = DarkOrange
+        ),
+        visualTransformation = PasswordVisualTransformation(),
+        textStyle = TextStyle(fontSize = 16.sp, fontFamily = Montserrat, fontWeight = FontWeight.Medium),
+        modifier = modifier
+    )
 }
 
 @Preview(showBackground = true)
