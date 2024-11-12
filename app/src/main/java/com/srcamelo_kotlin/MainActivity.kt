@@ -14,12 +14,13 @@ import com.srcamelo_kotlin.ui.theme.SrCamelo_KotlinTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.map
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            var dataStoreManager = DataStoreManager(this)
+            val dataStoreManager = DataStoreManager(this)
             SrCamelo_KotlinTheme {
                 SrCameloNavigation( dataStoreManager = dataStoreManager)
             }

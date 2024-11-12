@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.datastore.dataStore
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.srcamelo_kotlin.R
 import com.srcamelo_kotlin.data.preferences.DataStoreManager
@@ -34,7 +35,7 @@ fun LoginScreen(
     onLoginSubmit: () -> Unit = {},
     onChooseAccountClick: () -> Unit = {},
     dataStore: DataStoreManager,
-    viewModel: LoginViewModel = viewModel()
+    viewModel: LoginViewModel = hiltViewModel()
 ){
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,

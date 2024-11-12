@@ -12,12 +12,12 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
 
-private const val BASE_URL = "http://10.0.2.2:8000"
-
-private val retrofit = Retrofit.Builder()
-    .addConverterFactory(GsonConverterFactory.create())
-    .baseUrl(BASE_URL)
-    .build()
+//private const val BASE_URL = "http://10.0.2.2:8000"
+//
+//private val retrofit = Retrofit.Builder()
+//    .addConverterFactory(GsonConverterFactory.create())
+//    .baseUrl(BASE_URL)
+//    .build()
 
 interface SrcameloApiService{
     @GET("users")
@@ -32,11 +32,10 @@ interface SrcameloApiService{
     suspend fun login(
         @Body loginUserRequest: LoginRequest
     ): ResponseToken
-
 }
 
-object SrcameloApi{
-    val retrofitService : SrcameloApiService by lazy {
-        retrofit.create(SrcameloApiService::class.java)
-    }
-}
+//object SrcameloApi{
+//    val retrofitService : SrcameloApiService by lazy {
+//        retrofit.create(SrcameloApiService::class.java)
+//    }
+//}

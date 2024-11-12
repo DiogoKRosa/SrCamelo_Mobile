@@ -9,11 +9,15 @@ import com.srcamelo_kotlin.common.TextFieldState
 import com.srcamelo_kotlin.data.preferences.DataStoreManager
 import com.srcamelo_kotlin.network.Resource
 import com.srcamelo_kotlin.ui.use_case.LoginUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class LoginViewModel(
+@HiltViewModel
+class LoginViewModel @Inject constructor(
+    private val loginUseCase: LoginUseCase
 ): ViewModel() {
-    private val loginUseCase = LoginUseCase()
+    //private val loginUseCase = LoginUseCase()
 
     private var usersUiState = mutableStateOf(UserState())
     val uiState: State<UserState> = usersUiState

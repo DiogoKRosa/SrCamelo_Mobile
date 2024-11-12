@@ -3,7 +3,6 @@ package com.srcamelo_kotlin.data.repository
 import com.srcamelo_kotlin.domain.repository.UserRepository
 import com.srcamelo_kotlin.model.UserModel
 import com.srcamelo_kotlin.network.Resource
-import com.srcamelo_kotlin.network.SrcameloApi
 import okio.IOException
 import retrofit2.HttpException
 
@@ -12,7 +11,7 @@ class UserRepositoryImpl(
 
     override suspend fun createClient(user: UserModel): Resource<Unit>{
         return try{
-            val response = SrcameloApi.retrofitService.createUser(user)
+           // val response = SrcameloApiService.createUser(user)
             Resource.Success(Unit)
         } catch( e: HttpException){
             Resource.Error("${e.message}")
