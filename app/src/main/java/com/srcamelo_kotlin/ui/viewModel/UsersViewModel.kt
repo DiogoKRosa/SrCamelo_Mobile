@@ -5,20 +5,22 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.compose.rememberNavController
 import com.srcamelo_kotlin.common.TextFieldState
 import com.srcamelo_kotlin.network.Resource
 import com.srcamelo_kotlin.ui.use_case.CreateClientUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 data class UserState(
     val status: Boolean = false,
     val isError: String? = null
 )
 
-class UsersViewModel(
+@HiltViewModel
+class UsersViewModel @Inject constructor(
+    private val createClientUseCase: CreateClientUseCase
 ) : ViewModel() {
-    private val createClientUserCase = CreateClientUseCase()
 
     private var usersUiState = mutableStateOf(UserState())
     val uiState: State<UserState> = usersUiState
@@ -81,7 +83,7 @@ class UsersViewModel(
         viewModelScope.launch {
             usersUiState.value = uiState.value.copy(status = false)
 
-            val createClientRequest = createClientUserCase(
+            val createClientRequest = createClientUseCase(
                 userType = "Cliente",
                 name = name.value.text,
                 city = city.value.text,
@@ -101,6 +103,7 @@ class UsersViewModel(
             when(createClientRequest.result){
                 is Resource.Success -> {
                     Log.e("POST", "Usuário cadastrado")
+                    Log.e("POST", "${createClientRequest.result.data}")
                     usersUiState.value = uiState.value.copy(status = true)
                 }
                 is Resource.Error -> {

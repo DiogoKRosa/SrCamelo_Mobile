@@ -3,17 +3,16 @@ package com.srcamelo_kotlin.ui.use_case
 import com.srcamelo_kotlin.network.Resource
 import com.srcamelo_kotlin.data.repository.UserRepositoryImpl
 import com.srcamelo_kotlin.model.UserModel
+import javax.inject.Inject
 
 data class ValidationResult(
     val passwordError: String? = null,
-    val result: Resource<Unit>? = null
+    val result: Resource<Any>? = null
 )
 
-class CreateClientUseCase(
-
+class CreateClientUseCase @Inject constructor(
+    private val repository: UserRepositoryImpl
 ){
-    private val repository = UserRepositoryImpl()
-
     suspend operator fun invoke(
         userType: String,
         name: String,

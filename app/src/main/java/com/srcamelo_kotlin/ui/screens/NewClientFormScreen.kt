@@ -23,6 +23,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.srcamelo_kotlin.R
 import com.srcamelo_kotlin.ui.components.BackTopAppBar
 import com.srcamelo_kotlin.ui.components.ButtonWhite
@@ -39,7 +40,7 @@ import com.srcamelo_kotlin.ui.components.InputLinePassword
 fun NewFormClientScreen(
     onClickBack : () -> Unit = {},
     onClickLogin: () -> Unit = {},
-    viewModel: UsersViewModel = viewModel()
+    viewModel: UsersViewModel = hiltViewModel()
 ){
     Scaffold (topBar = {BackTopAppBar(onClickBack = onClickBack)},
         content = {
