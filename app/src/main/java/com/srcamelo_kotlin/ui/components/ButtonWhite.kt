@@ -32,7 +32,7 @@ fun ButtonWhite(
         modifier = modifier
             .width(190.dp)
             .height(58.dp)
-            .border(1.dp, Color(0,0,0,20), RoundedCornerShape(20.dp)),
+            .border(1.dp, Color(0, 0, 0, 20), RoundedCornerShape(20.dp)),
         colors = ButtonDefaults.buttonColors(containerColor = White),
         shape = RoundedCornerShape(20.dp)
     ) {
@@ -40,10 +40,38 @@ fun ButtonWhite(
     }
 }
 
-@Preview(showBackground = true)
+@Composable
+fun SmallButtonWhite(
+    modifier: Modifier = Modifier,
+    title: String = "Botão",
+    onClick: () -> Unit = {}
+){
+    Button(onClick = onClick,
+        modifier = modifier
+            .width(160.dp)
+            .height(49.dp)
+            .border(1.dp, Color(0, 0, 0, 20), RoundedCornerShape(20.dp)),
+        colors = ButtonDefaults.buttonColors(containerColor = White),
+        shape = RoundedCornerShape(20.dp)
+    ) {
+        Text(title, fontFamily = Montserrat, fontWeight = FontWeight.Medium, fontSize = 15.sp,color = Green)
+    }
+}
+
+
+
+@Preview(showBackground = true, backgroundColor = 0)
 @Composable
 fun PreviewButton(){
     SrCamelo_KotlinTheme {
         ButtonWhite(title="Login", onClick = {})
+    }
+}
+
+@Preview(showBackground = true, backgroundColor = 0)
+@Composable
+fun PreviewSmallButton(){
+    SrCamelo_KotlinTheme {
+        SmallButtonWhite(title="Adicionar Foto", onClick = {})
     }
 }

@@ -15,16 +15,19 @@ import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.srcamelo_kotlin.R
 import com.srcamelo_kotlin.SrCameloScreens
+import com.srcamelo_kotlin.ui.fonts.Montserrat
 import com.srcamelo_kotlin.ui.theme.DarkOrange
 import com.srcamelo_kotlin.ui.theme.LightOrange
 import com.srcamelo_kotlin.ui.theme.SrCamelo_KotlinTheme
@@ -53,16 +56,53 @@ fun BackTopAppBar(
 
             },
             modifier = Modifier.height(103.dp))
-        Box(modifier = Modifier.fillMaxWidth()
+        Box(modifier = Modifier
+            .fillMaxWidth()
             .height(6.dp)
             .background(color = LightOrange)
             .align(Alignment.BottomCenter)
             .clip(RoundedCornerShape(100, 100))
-            .border(BorderStroke(0.dp, White), shape = RoundedCornerShape(100,100))){}
+            .border(BorderStroke(0.dp, White), shape = RoundedCornerShape(100, 100))){}
     }
 
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun BackTopAppBarWithTitle(
+    onClickBack: () -> Unit = {},
+    title: String = ""
+){
+    Box{
+        CenterAlignedTopAppBar(
+            colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                containerColor = DarkOrange
+            ),
+            title = {Text(text = title, color = White,
+                fontFamily = Montserrat, fontWeight = FontWeight.SemiBold,
+                modifier = Modifier.align(Alignment.Center))},
+            navigationIcon = {
+                Box(modifier = Modifier
+                    .fillMaxHeight()
+                    .padding(start = 14.dp), contentAlignment = Alignment.Center){
+                    IconButton(onClick = onClickBack) {
+                        Image(painter = painterResource(id = R.drawable.goback_white),
+                            contentDescription = "")
+                    }
+                }
+
+            },
+            modifier = Modifier.height(103.dp))
+        Box(modifier = Modifier
+            .fillMaxWidth()
+            .height(6.dp)
+            .background(color = LightOrange)
+            .align(Alignment.BottomCenter)
+            .clip(RoundedCornerShape(100, 100))
+            .border(BorderStroke(0.dp, White), shape = RoundedCornerShape(100, 100))){}
+    }
+
+}
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Preview
@@ -70,7 +110,7 @@ fun BackTopAppBar(
 fun PreviewTopBar(){
     SrCamelo_KotlinTheme {
         Scaffold(
-            topBar = {BackTopAppBar()},
+            topBar = {BackTopAppBarWithTitle(title = "Foto do Perfil")},
         ) {
         }
     }
