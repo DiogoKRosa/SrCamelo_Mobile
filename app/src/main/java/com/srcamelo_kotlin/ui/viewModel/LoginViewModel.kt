@@ -6,12 +6,19 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.srcamelo_kotlin.common.TextFieldState
-import com.srcamelo_kotlin.data.preferences.DataStoreManager
+import com.srcamelo_kotlin.model.ResponseToken
+import com.srcamelo_kotlin.model.TokenModel
 import com.srcamelo_kotlin.network.Resource
 import com.srcamelo_kotlin.ui.use_case.LoginUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+
+data class LoginState(
+    val status: Boolean = false,
+    val isError: String? = null,
+    val result: TokenModel? = null
+)
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
@@ -19,8 +26,8 @@ class LoginViewModel @Inject constructor(
 ): ViewModel() {
     //private val loginUseCase = LoginUseCase()
 
-    private var usersUiState = mutableStateOf(UserState())
-    val uiState: State<UserState> = usersUiState
+    private var usersUiState = mutableStateOf(LoginState())
+    val uiState: State<LoginState> = usersUiState
 
     private val _email = mutableStateOf(TextFieldState())
     val email: State<TextFieldState> = _email
@@ -48,8 +55,7 @@ class LoginViewModel @Inject constructor(
             when (loginRequest.result) {
                 is Resource.Success -> {
                     Log.e("POST", "Usuário encontrado")
-                    usersUiState.value = uiState.value.copy(status = true)
-
+                    usersUiState.value = uiState.value.copy(status = true, result = loginRequest.result.data)
                 }
 
                 is Resource.Error -> {

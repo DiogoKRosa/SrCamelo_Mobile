@@ -2,7 +2,6 @@ package com.srcamelo_kotlin
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -13,14 +12,17 @@ import com.srcamelo_kotlin.ui.screens.ClientHomeScreen
 import com.srcamelo_kotlin.ui.screens.LoginScreen
 import com.srcamelo_kotlin.ui.screens.NewFormClientScreen
 import com.srcamelo_kotlin.ui.screens.NewVendorFormScreen
-import com.srcamelo_kotlin.ui.viewModel.UsersViewModel
+import com.srcamelo_kotlin.ui.screens.NewVendorHomeScreen
+import com.srcamelo_kotlin.ui.screens.VendorHomeScreen
 
 enum class SrCameloScreens(){
     Login,
     ChooseAccount,
     NewClientForm,
     NewVendorForm,
-    ClientHome
+    ClientHome,
+    VendorHome,
+    NewVendorHome
 }
 
 @Composable
@@ -36,9 +38,11 @@ fun SrCameloNavigation(
     ){
         composable(route = SrCameloScreens.Login.name){
             LoginScreen(
-                onLoginSubmit = {navController.navigate(SrCameloScreens.ClientHome.name)},
+                onClientLoginSubmit = {navController.navigate(SrCameloScreens.ClientHome.name)},
+                onVendorLoginSubmit = {navController.navigate(SrCameloScreens.VendorHome.name)},
+                onNewVendorLoginSubmit = {navController.navigate(SrCameloScreens.NewVendorHome.name)},
                 onChooseAccountClick = {navController.navigate(SrCameloScreens.ChooseAccount.name)},
-                dataStore = dataStoreManager
+                dataStore = dataStoreManager,
             )
         }
 
@@ -70,6 +74,14 @@ fun SrCameloNavigation(
             ClientHomeScreen(
                 dataStore = dataStoreManager
             )
+        }
+
+        composable(route = SrCameloScreens.VendorHome.name){
+            VendorHomeScreen()
+        }
+
+        composable(route = SrCameloScreens.NewVendorHome.name){
+            NewVendorHomeScreen()
         }
     }
 }

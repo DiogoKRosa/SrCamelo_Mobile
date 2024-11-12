@@ -131,7 +131,7 @@ fun NewVendorFormScreen(
                 }
                 Spacer(modifier = Modifier.height(100.dp))
                 ButtonWhite(title = "Cadastrar-se", onClick = {
-                    //viewModel.createVendor()
+                    viewModel.createVendor()
                 })
                 LaunchedEffect(viewModel.uiState.value.status) {
                     if (viewModel.uiState.value.status) {

@@ -14,7 +14,7 @@ import javax.inject.Inject
 
 data class UserState(
     val status: Boolean = false,
-    val isError: String? = null
+    val isError: String? = null,
 )
 
 @HiltViewModel
@@ -117,22 +117,41 @@ class UsersViewModel @Inject constructor(
         }
     }
 
-//    fun CreateVendor(){
-//        viewModelScope.launch {
-//            usersUiState.value = uiState.value.copy(status = false)
-//
-//            val createClientRequest = createVendorUseCase(
-//                userType = "vendedor",
-//                name = name.value.text,
-//                city = city.value.text,
-//                country = country.value.text,
-//                uf = uf.value.text,
-//                cpf = cpf.value.text,
-//                email = email.value.text,
-//                password = password.value.text,
-//                passwordC = passwordC.value.text,
-//                telephone = telephone.value.text
-//            )
-//        }
-//    }
+    fun createVendor(){
+        viewModelScope.launch {
+            usersUiState.value = uiState.value.copy(status = false)
+
+            val createClientRequest = createClientUseCase(
+                userType = "vendedor",
+                name = name.value.text,
+                city = city.value.text,
+                country = country.value.text,
+                uf = uf.value.text,
+                cpf = cpf.value.text,
+                email = email.value.text,
+                password = password.value.text,
+                passwordC = passwordC.value.text,
+                telephone = telephone.value.text
+            )
+
+            if(createClientRequest.passwordError != null){
+                Log.e("Input error", "As senhas não coincidem")
+                usersUiState.value = uiState.value.copy(status = false, isError = createClientRequest.passwordError)
+            }
+            when(createClientRequest.result){
+                is Resource.Success -> {
+                    Log.e("POST", "Usuário cadastrado")
+                    Log.e("POST", "${createClientRequest.result.data}")
+                    usersUiState.value = uiState.value.copy(status = true)
+                }
+                is Resource.Error -> {
+                    Log.e("ERRO", "${createClientRequest.result.message}")
+                    usersUiState.value = uiState.value.copy(status = false, isError = createClientRequest.result.message)
+                }
+                else -> {
+
+                }
+            }
+        }
+    }
 }

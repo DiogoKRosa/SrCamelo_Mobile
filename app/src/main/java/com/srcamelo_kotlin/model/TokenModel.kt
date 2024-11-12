@@ -7,4 +7,8 @@ data class TokenModel(
     val accessToken: String = "",
     @SerializedName("token_type")
     val tokenType: String = "",
+    @SerializedName("userType")
+    val userType: String = "",
+    @SerializedName("user_id")
+    val userId: String = ""
 )
