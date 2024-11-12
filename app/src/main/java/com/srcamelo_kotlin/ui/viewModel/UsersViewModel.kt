@@ -84,7 +84,7 @@ class UsersViewModel @Inject constructor(
             usersUiState.value = uiState.value.copy(status = false)
 
             val createClientRequest = createClientUseCase(
-                userType = "Cliente",
+                userType = "cliente",
                 name = name.value.text,
                 city = city.value.text,
                 country = country.value.text,
@@ -116,4 +116,23 @@ class UsersViewModel @Inject constructor(
             }
         }
     }
+
+//    fun CreateVendor(){
+//        viewModelScope.launch {
+//            usersUiState.value = uiState.value.copy(status = false)
+//
+//            val createClientRequest = createVendorUseCase(
+//                userType = "vendedor",
+//                name = name.value.text,
+//                city = city.value.text,
+//                country = country.value.text,
+//                uf = uf.value.text,
+//                cpf = cpf.value.text,
+//                email = email.value.text,
+//                password = password.value.text,
+//                passwordC = passwordC.value.text,
+//                telephone = telephone.value.text
+//            )
+//        }
+//    }
 }

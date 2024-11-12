@@ -12,6 +12,7 @@ import com.srcamelo_kotlin.ui.screens.ChooseAccountScreen
 import com.srcamelo_kotlin.ui.screens.ClientHomeScreen
 import com.srcamelo_kotlin.ui.screens.LoginScreen
 import com.srcamelo_kotlin.ui.screens.NewFormClientScreen
+import com.srcamelo_kotlin.ui.screens.NewVendorFormScreen
 import com.srcamelo_kotlin.ui.viewModel.UsersViewModel
 
 enum class SrCameloScreens(){
@@ -59,7 +60,10 @@ fun SrCameloNavigation(
         }
 
         composable(route = SrCameloScreens.NewVendorForm.name){
-
+            NewVendorFormScreen(
+                onClickBack = {navController.navigateUp()},
+                onClickLogin = {goBackLogin(navController)}
+            )
         }
 
         composable(route = SrCameloScreens.ClientHome.name){
