@@ -10,12 +10,12 @@ import com.srcamelo_kotlin.ui.theme.SrCamelo_KotlinTheme
 
 @Composable
 fun PaymentCheckBox(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     title: String = "",
 
 ){
     Row {
-        Checkbox(checked = , onCheckedChange = )
+        Checkbox(checked = checked.value , onCheckedChange = )
         Text(title, )
     }
 }
