@@ -5,16 +5,16 @@ import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.util.Log
+import android.widget.Space
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -23,15 +23,19 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import com.srcamelo_kotlin.BuildConfig
-import com.srcamelo_kotlin.ui.components.BackTopAppBar
+import com.srcamelo_kotlin.R
 import com.srcamelo_kotlin.ui.components.BackTopAppBarWithTitle
+import com.srcamelo_kotlin.ui.components.ButtonWhite
+import com.srcamelo_kotlin.ui.components.IconButtonWhite
 import com.srcamelo_kotlin.ui.components.InputLine
 import com.srcamelo_kotlin.ui.components.NewVendorBannerPhoto
+import com.srcamelo_kotlin.ui.components.PaymentCheckboxGroup
 import com.srcamelo_kotlin.ui.extensions.createImageFile
 import com.srcamelo_kotlin.ui.theme.LightOrange
 import java.util.Objects
@@ -44,6 +48,7 @@ fun NewVendorHomeScreen(){
         topBar = { BackTopAppBarWithTitle()},
         content = {innerpadding ->
 //            val uri = remember { mutableStateOf<Uri?>(null) }
+            val scrollState = rememberScrollState()
 
             val context = LocalContext.current
             val file = context.createImageFile()
@@ -72,7 +77,9 @@ fun NewVendorHomeScreen(){
                 }
             }
 
-            Column(modifier = Modifier.padding(innerpadding),
+            Column(modifier = Modifier
+                .padding(innerpadding)
+                .verticalScroll(scrollState),
                 horizontalAlignment = Alignment.CenterHorizontally) {
                 NewVendorBannerPhoto(
                     image = capturedImageUri,
@@ -88,9 +95,30 @@ fun NewVendorHomeScreen(){
                     }
                 )
                 Spacer(modifier = Modifier.height(38.dp))
+
+
                 InputLine(placeholder = "Nome Fantasia")
                 Spacer(modifier = Modifier.height(62.dp))
 
+                val dinheiroState = remember { mutableStateOf(false) }
+                val debitoState = remember { mutableStateOf(false) }
+                val creditoState = remember { mutableStateOf(false) }
+                val pixState = remember { mutableStateOf(false) }
+
+                val paymentMethods = remember {
+                    mutableMapOf(
+                        "dinheiro" to dinheiroState,
+                        "debito" to debitoState,
+                        "credito" to creditoState,
+                        "pix" to pixState
+                    )
+                }
+                PaymentCheckboxGroup(paymentMethods = paymentMethods)
+                Spacer(modifier = Modifier.height(55.dp))
+                IconButtonWhite(title = "Cadastrar produtos", icon = painterResource(id = R.drawable.sacola_icon))
+                Spacer(modifier = Modifier.height(68.dp))
+                ButtonWhite(title = "Finalizar")
+                Spacer(modifier = Modifier.height(35.dp))
             }
         },
     )
