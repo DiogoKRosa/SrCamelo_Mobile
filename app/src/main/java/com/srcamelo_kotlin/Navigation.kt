@@ -13,6 +13,7 @@ import com.srcamelo_kotlin.ui.screens.LoginScreen
 import com.srcamelo_kotlin.ui.screens.NewFormClientScreen
 import com.srcamelo_kotlin.ui.screens.NewVendorFormScreen
 import com.srcamelo_kotlin.ui.screens.NewVendorHomeScreen
+import com.srcamelo_kotlin.ui.screens.ProductFormScreen
 import com.srcamelo_kotlin.ui.screens.VendorHomeScreen
 
 enum class SrCameloScreens(){
@@ -22,7 +23,8 @@ enum class SrCameloScreens(){
     NewVendorForm,
     ClientHome,
     VendorHome,
-    NewVendorHome
+    NewVendorHome,
+    ProductForm
 }
 
 @Composable
@@ -33,7 +35,7 @@ fun SrCameloNavigation(
 ){
     NavHost(
         navController = navController,
-        startDestination = SrCameloScreens.NewVendorHome.name,
+        startDestination = SrCameloScreens.ProductForm.name,
         modifier = modifier
     ){
         composable(route = SrCameloScreens.Login.name){
@@ -82,6 +84,10 @@ fun SrCameloNavigation(
 
         composable(route = SrCameloScreens.NewVendorHome.name){
             NewVendorHomeScreen()
+        }
+
+        composable(route = SrCameloScreens.ProductForm.name){
+            ProductFormScreen()
         }
     }
 }
