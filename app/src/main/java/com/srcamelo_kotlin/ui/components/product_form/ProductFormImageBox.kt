@@ -51,6 +51,33 @@ fun ProductFormImageBox(
     }
 }
 
+@Composable
+fun ProductFormImageBoxOnlyRead(
+    image: Uri? = null,
+) {
+    Box(modifier = Modifier.size(123.dp)
+        .background(White, RoundedCornerShape(10.dp))
+        .border(2.dp, Color(0,0,0,20), RoundedCornerShape(10.dp))){
+        if(image != null && !image.equals(Uri.EMPTY)){
+            Image(
+                modifier = Modifier
+                    .fillMaxSize(),
+                painter = rememberAsyncImagePainter(image),
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                alignment = Alignment.Center
+            )
+        }else{
+            Image(painter = painterResource(
+                id = R.drawable.placeholder_logo_black),
+                contentDescription = "placeholder",
+                modifier = Modifier.fillMaxSize().padding(10.dp),
+                contentScale = ContentScale.Inside,
+                alignment = Alignment.Center)
+        }
+    }
+}
+
 @Preview
 @Composable
 private fun PreviewProductBox(){

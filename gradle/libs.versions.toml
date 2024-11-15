@@ -57,6 +57,7 @@ hiltNavigationCompose = "1.2.0"
 roomKtx = "2.4.2"
 roomRuntime = "2.4.2"
 roomCompiler = "2.4.2"
+identityDoctypesJvm = "202411.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -121,6 +122,7 @@ hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", ve
 androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "roomKtx" }
 androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "roomRuntime" }
 androidx-room-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "roomRuntime" }
+identity-doctypes-jvm = { group = "com.android.identity", name = "identity-doctypes-jvm", version.ref = "identityDoctypesJvm" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
