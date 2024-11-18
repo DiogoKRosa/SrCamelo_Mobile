@@ -104,6 +104,31 @@ fun BackTopAppBarWithTitle(
 
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun TopAppBarWithTitle(
+    title: String = ""
+){
+    Box{
+        CenterAlignedTopAppBar(
+            colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                containerColor = DarkOrange
+            ),
+            title = {Text(text = title, color = White,
+                fontFamily = Montserrat, fontWeight = FontWeight.SemiBold,
+                modifier = Modifier.align(Alignment.Center))},
+            modifier = Modifier.height(103.dp))
+        Box(modifier = Modifier
+            .fillMaxWidth()
+            .height(6.dp)
+            .background(color = LightOrange)
+            .align(Alignment.BottomCenter)
+            .clip(RoundedCornerShape(100, 100))
+            .border(BorderStroke(0.dp, White), shape = RoundedCornerShape(100, 100))){}
+    }
+
+}
+
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Preview
 @Composable
