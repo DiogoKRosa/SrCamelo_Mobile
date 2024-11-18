@@ -37,4 +37,15 @@ class UserRepositoryImpl @Inject constructor(
             Resource.Error("${e.message}")
         }
     }
+
+    suspend fun  getUserById(id: String): Resource<UserModel>{
+        return try{
+            val response = api.getUserById(id)
+            Resource.Success(response)
+        } catch( e: HttpException){
+            Resource.Error("${e.message}")
+        } catch( e: IOException){
+            Resource.Error("${e.message}")
+        }
+    }
 }

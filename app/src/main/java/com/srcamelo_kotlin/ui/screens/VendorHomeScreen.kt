@@ -13,11 +13,16 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -27,10 +32,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.srcamelo_kotlin.BuildConfig
 import com.srcamelo_kotlin.R
+import com.srcamelo_kotlin.data.preferences.DataStoreManager
 import com.srcamelo_kotlin.ui.components.BackTopAppBarWithTitle
 import com.srcamelo_kotlin.ui.components.CustomBottomBar
 import com.srcamelo_kotlin.ui.components.PaymentTypeCart
@@ -38,27 +45,47 @@ import com.srcamelo_kotlin.ui.components.ProductCard
 import com.srcamelo_kotlin.ui.components.TopAppBarWithTitle
 import com.srcamelo_kotlin.ui.fonts.Montserrat
 import com.srcamelo_kotlin.ui.theme.DarkOrange
+import com.srcamelo_kotlin.ui.theme.LightOrange
 import com.srcamelo_kotlin.ui.theme.White
+import com.srcamelo_kotlin.ui.viewModel.ProductViewModel
+import com.srcamelo_kotlin.ui.viewModel.UsersViewModel
 
 @Composable
 fun VendorHomeScreen(
-    onClickBack: () -> Unit = {}
+    homeClick: () -> Unit,
+    cartClick: () -> Unit = {},
+    balloonClick: () -> Unit = {},
+    profileClick: () -> Unit = {},
+    userViewModel: UsersViewModel = hiltViewModel(),
+    productViewModel: ProductViewModel = hiltViewModel(),
+    dataStoreManager: DataStoreManager
 ) {
+    val context = LocalContext.current
+    val baseUrl = BuildConfig.BASE_URL
+    val userId by dataStoreManager.getUserId().collectAsState(initial = "")
+    val user by userViewModel.userObj.observeAsState()
+    LaunchedEffect(Unit){
+        userViewModel.getUserById(userId)
+    }
+
     Scaffold(
-        topBar = { TopAppBarWithTitle(title = "José Lanches") },
+        topBar = { TopAppBarWithTitle(title = user?.name?:"") },
         bottomBar = {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 20.dp)
             ) {
-                CustomBottomBar()
+                CustomBottomBar(
+                    homeClick = homeClick,
+                    cartClick = cartClick,
+                    balloonClick = balloonClick,
+                    profileClick = profileClick
+                )
             }
-        }
+        },
+        containerColor = LightOrange
     ) { innerPadding ->
-        val baseUrl = ""
-        val bannerImage = "https://www.minuano.com.br/mediafiles/img_conteudos/266/1635192340.jpg"
-
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -71,13 +98,13 @@ fun VendorHomeScreen(
                     .height(180.dp)
                     .background(White)
             ) {
-                if (bannerImage.isNotEmpty()) {
+                if (user?.image.toString().isNotEmpty()) {
                     AsyncImage(
                         model = ImageRequest.Builder(LocalContext.current)
-                            .data("$baseUrl$bannerImage")
+                            .data("$baseUrl${user?.image}")
                             .crossfade(true)
                             .build(),
-                        contentDescription = "Product Image",
+                        contentDescription = "Banner Image",
                         contentScale = ContentScale.Crop
                     )
                 } else {
@@ -97,7 +124,7 @@ fun VendorHomeScreen(
 
             Spacer(modifier = Modifier.height(36.dp))
             Text(
-                "Telefone: (11) 11111-9999",
+                "Telefone: ${user?.telephone}",
                 fontFamily = Montserrat,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Normal
@@ -105,11 +132,16 @@ fun VendorHomeScreen(
 
             Spacer(modifier = Modifier.height(15.dp))
             Text(
-                "E-mail: jose.lanches@gmail.com.br",
+                "E-mail: ${user?.email}",
                 fontFamily = Montserrat,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Normal
             )
+
+            val products by productViewModel.products.observeAsState(emptyList())
+            LaunchedEffect(Unit){
+                productViewModel.getProductsFromVendor(userId)
+            }
 
             Spacer(modifier = Modifier.height(68.dp))
             Column(
@@ -128,12 +160,12 @@ fun VendorHomeScreen(
                 )
                 Spacer(modifier = Modifier.height(20.dp))
                 LazyColumn {
-                    item {
+                    items(products) { product ->
                         ProductCard(
-                            name = "Dogão",
-                            price = "9.00",
-                            description = "Dogão com salsicha e mostarda",
-                            imageUri = "https://www.minuano.com.br/mediafiles/img_conteudos/266/1635192340.jpg"
+                            name = product.name,
+                            price = product.price.toString(),
+                            description = product.description,
+                            imageUri = product.image
                         )
                     }
                 }
@@ -158,10 +190,26 @@ fun VendorHomeScreen(
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(10.dp),
                 ) {
-                    PaymentTypeCart(icon = painterResource(R.drawable.dinheiro_icon), type = "Dinheiro")
-                    PaymentTypeCart(icon = painterResource(R.drawable.card_icon), type = "Débito")
-                    PaymentTypeCart(icon = painterResource(R.drawable.card_icon), type = "Crédito")
-                    PaymentTypeCart(icon = painterResource(R.drawable.pix_icon), type = "Pix")
+                    user?.paymentMethods?.forEach { paymentMethod ->
+                        when(paymentMethod){
+                            "dinheiro" -> PaymentTypeCart(
+                                icon = painterResource(R.drawable.dinheiro_icon),
+                                type = paymentMethod
+                            )
+                            "debito" -> PaymentTypeCart(
+                                icon = painterResource(R.drawable.card_icon),
+                                type = paymentMethod
+                            )
+                            "credito" -> PaymentTypeCart(
+                                icon = painterResource(R.drawable.card_icon),
+                                type = paymentMethod
+                            )
+                            "pix" -> PaymentTypeCart(
+                                icon = painterResource(R.drawable.pix_icon),
+                                type = paymentMethod
+                            )
+                        }
+                    }
                 }
             }
 

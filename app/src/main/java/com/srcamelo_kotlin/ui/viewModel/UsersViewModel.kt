@@ -5,11 +5,15 @@ import android.net.Uri
 import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.srcamelo_kotlin.common.TextFieldState
+import com.srcamelo_kotlin.model.UserModel
 import com.srcamelo_kotlin.network.Resource
 import com.srcamelo_kotlin.ui.use_case.CreateClientUseCase
+import com.srcamelo_kotlin.ui.use_case.GetUserUseCase
 import com.srcamelo_kotlin.ui.use_case.UpdateVendorBannerUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -27,8 +31,12 @@ data class UserState(
 @HiltViewModel
 class UsersViewModel @Inject constructor(
     private val createClientUseCase: CreateClientUseCase,
-    private val updateVendorBannerUseCase: UpdateVendorBannerUseCase
+    private val updateVendorBannerUseCase: UpdateVendorBannerUseCase,
+    private val getUserUseCase: GetUserUseCase
 ) : ViewModel() {
+
+    private val _userObj = MutableLiveData<UserModel?>()
+    val userObj: MutableLiveData<UserModel?> = _userObj
 
     private var usersUiState = mutableStateOf(UserState())
     val uiState: State<UserState> = usersUiState
@@ -185,6 +193,23 @@ class UsersViewModel @Inject constructor(
             when(response.result){
                 is Resource.Success -> {
                     println("Banner atualizado")
+                }
+                is Resource.Error -> {
+                    print("Erro: ${response.result.message}")
+                }
+                else -> {
+
+                }
+            }
+        }
+    }
+
+    fun getUserById(userId: String){
+        viewModelScope.launch{
+            val response = getUserUseCase(userId)
+            when(response.result){
+                is Resource.Success -> {
+                    _userObj.value = response.result.data
                 }
                 is Resource.Error -> {
                     print("Erro: ${response.result.message}")

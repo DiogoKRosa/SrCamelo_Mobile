@@ -2,6 +2,7 @@ package com.srcamelo_kotlin.model
 
 
 import com.google.gson.annotations.SerializedName
+import java.io.Serial
 
 data class UserModel(
     @SerializedName("city")
@@ -23,5 +24,13 @@ data class UserModel(
     @SerializedName("uf")
     val uf: Any?,
     @SerializedName("userType")
-    val userType: Any?
+    val userType: Any?,
+    @SerializedName("establishment")
+    val establishment: Any?,
+    @SerializedName("image")
+    val image: Any?,
+    @SerializedName("paymentMethods")
+    val paymentMethods: List<String>?,
+    @SerializedName("firstAccess")
+    val firstAccess: Boolean?,
 )

@@ -28,6 +28,11 @@ interface SrcameloApiService{
     @GET("users")
     suspend fun getUsers(): Response<List<UserModel>>
 
+    @GET("users/{id}")
+    suspend fun getUserById(
+        @Path("id") userId:String
+    ): UserModel
+
     @POST("users")
     suspend fun createUser(
         @Body registerUserRequest: UserModel

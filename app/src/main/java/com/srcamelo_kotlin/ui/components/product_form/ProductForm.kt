@@ -54,7 +54,7 @@ fun ProductForm(
     onCleanInput: () -> Unit = {},
     viewModel: ProductViewModel = hiltViewModel(),
     dataStore: DataStoreManager = DataStoreManager(LocalContext.current)
-){
+) {
     var imageForm by remember { mutableStateOf<Uri>(Uri.EMPTY) }
     var nameForm by remember { mutableStateOf(name) }
     var valueForm by remember { mutableStateOf(value) }
@@ -117,24 +117,27 @@ fun ProductForm(
                     }
                 }
             )
-            Spacer(modifier =Modifier.width(18.dp))
+            Spacer(modifier = Modifier.width(18.dp))
 
-            Column{
-                SmallInputLine(modifier = Modifier.width(139.dp),
+            Column {
+                SmallInputLine(
+                    modifier = Modifier.width(139.dp),
                     placeholder = "Nome",
-                    value = nameForm?:"",
+                    value = nameForm ?: "",
                     onValueChange = { nameForm = it },
                     readOnly = false
                 )
-                SmallInputLine(modifier = Modifier.width(139.dp),
+                SmallInputLine(
+                    modifier = Modifier.width(139.dp),
                     placeholder = "R$ 0,00",
-                    value = valueForm?:"",
+                    value = valueForm ?: "",
                     onValueChange = { valueForm = it },
                     readOnly = false
                 )
-                SmallInputLine(modifier = Modifier.width(139.dp),
+                SmallInputLine(
+                    modifier = Modifier.width(139.dp),
                     placeholder = "Descrição",
-                    value = descriptionForm?:"",
+                    value = descriptionForm ?: "",
                     onValueChange = { descriptionForm = it },
                     readOnly = false
                 )
@@ -158,10 +161,10 @@ fun ProductForm(
         Spacer(modifier = Modifier.height(15.dp))
         CreateIconButton(onClick = {
             viewModel.createProduct(
-                productName = nameForm?: "",
+                productName = nameForm ?: "",
                 productPrice = valueForm?.toDouble() ?: 0.0,
-                productDescription = descriptionForm?: "",
-                productCategory = categoryList[selectedItemIndex!!]?: "",
+                productDescription = descriptionForm ?: "",
+                productCategory = categoryList[selectedItemIndex!!] ?: "",
                 productImage = imageForm,
                 context = context
             )
@@ -181,7 +184,7 @@ fun ProductFormReadOnly(
     selectedItemIndex: Int? = null,
     editClick: () -> Unit = {},
     deleteClick: () -> Unit = {},
-){
+) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -195,22 +198,25 @@ fun ProductFormReadOnly(
             ProductFormImageBoxOnlyRead(
                 image = image,
             )
-            Spacer(modifier =Modifier.width(18.dp))
+            Spacer(modifier = Modifier.width(18.dp))
 
-            Column{
-                SmallInputLine(modifier = Modifier.width(139.dp),
+            Column {
+                SmallInputLine(
+                    modifier = Modifier.width(139.dp),
                     placeholder = "Nome",
-                    value = name?:"",
+                    value = name ?: "",
                     readOnly = true
                 )
-                SmallInputLine(modifier = Modifier.width(139.dp),
+                SmallInputLine(
+                    modifier = Modifier.width(139.dp),
                     placeholder = "R$ 0,00",
-                    value = value?:"",
+                    value = value ?: "",
                     readOnly = true
                 )
-                SmallInputLine(modifier = Modifier.width(139.dp),
+                SmallInputLine(
+                    modifier = Modifier.width(139.dp),
                     placeholder = "Descrição",
-                    value = description?:"",
+                    value = description ?: "",
                     readOnly = true
                 )
 
@@ -224,7 +230,7 @@ fun ProductFormReadOnly(
                     onDismissRequest = {},
                     onSelectNewValue = {},
                     itemPosition = selectedItemIndex,
-                    list = categoryList?: listOf("Salgado", "Doce", "Bijuteria", "Vestimentas")
+                    list = categoryList ?: listOf("Salgado", "Doce", "Bijuteria", "Vestimentas")
                 )
             }
             Spacer(modifier = Modifier.width(8.dp))

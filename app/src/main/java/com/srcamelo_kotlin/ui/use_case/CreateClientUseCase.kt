@@ -40,7 +40,11 @@ class CreateClientUseCase @Inject constructor(
             password = password,
             country = country,
             uf = uf,
-            city = city
+            city = city,
+            establishment = null,
+            image = null,
+            paymentMethods = null,
+            firstAccess = true
         )
 
         return ValidationResult( result = repository.createClient(request))

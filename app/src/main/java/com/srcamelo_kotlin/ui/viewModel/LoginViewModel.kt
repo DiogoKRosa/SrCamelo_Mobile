@@ -24,8 +24,6 @@ data class LoginState(
 class LoginViewModel @Inject constructor(
     private val loginUseCase: LoginUseCase
 ): ViewModel() {
-    //private val loginUseCase = LoginUseCase()
-
     private var usersUiState = mutableStateOf(LoginState())
     val uiState: State<LoginState> = usersUiState
 

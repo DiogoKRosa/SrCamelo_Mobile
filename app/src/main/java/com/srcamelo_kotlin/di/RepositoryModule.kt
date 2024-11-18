@@ -17,6 +17,7 @@ import com.srcamelo_kotlin.ui.use_case.CreateProductUseCase
 import com.srcamelo_kotlin.ui.use_case.DeleteProductUseCase
 import com.srcamelo_kotlin.ui.use_case.GetProductResult
 import com.srcamelo_kotlin.ui.use_case.GetProductUseCase
+import com.srcamelo_kotlin.ui.use_case.GetUserUseCase
 import com.srcamelo_kotlin.ui.use_case.LoginUseCase
 import com.srcamelo_kotlin.ui.use_case.UpdateProductUseCase
 import com.srcamelo_kotlin.ui.use_case.UpdateVendorBannerUseCase
@@ -82,10 +83,14 @@ class RepositoryModule {
     fun provideUpdateBannerVendorUseCase(repository: UserRepositoryImpl): UpdateVendorBannerUseCase{
         return UpdateVendorBannerUseCase(repository)
     }
+    @Provides
+    fun getUserUseCase(repository: UserRepositoryImpl): GetUserUseCase{
+        return GetUserUseCase(repository)
+    }
 
     @Provides
-    fun provideUserViewModel(useCase: CreateClientUseCase, updateVendorBannerUseCase: UpdateVendorBannerUseCase): UsersViewModel{
-        return UsersViewModel(useCase, updateVendorBannerUseCase)
+    fun provideUserViewModel(useCase: CreateClientUseCase, updateVendorBannerUseCase: UpdateVendorBannerUseCase, getUserUseCase: GetUserUseCase): UsersViewModel{
+        return UsersViewModel(useCase, updateVendorBannerUseCase, getUserUseCase)
     }
 
     @Provides

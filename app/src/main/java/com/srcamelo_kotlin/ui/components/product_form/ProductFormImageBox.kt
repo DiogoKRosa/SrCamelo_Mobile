@@ -56,7 +56,7 @@ fun ProductFormImageBox(
 
 @Composable
 fun ProductFormImageBoxOnlyRead(
-    baseUrl: String = "http://10.0.2.2:8000",
+    baseUrl: String = "http://10.0.2.2:8000/",
     image: String? = null,
 ) {
     Box(modifier = Modifier.size(123.dp)
@@ -65,7 +65,7 @@ fun ProductFormImageBoxOnlyRead(
         if(image != null){
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
-                    .data("$baseUrl/$image")
+                    .data("$baseUrl$image")
                     .crossfade(true)
                     .build(),
                 contentDescription = "Product Image",
