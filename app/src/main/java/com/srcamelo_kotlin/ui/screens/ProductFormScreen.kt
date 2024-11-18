@@ -66,6 +66,7 @@ fun ProductFormScreen(
             val context = LocalContext.current
 
             val userId by dataStoreManager.getUserId().collectAsState(initial = "")
+            println(userId)
             var productId by remember { mutableStateOf("")}
 
             var imageForm by remember { mutableStateOf<Uri>(Uri.EMPTY) }

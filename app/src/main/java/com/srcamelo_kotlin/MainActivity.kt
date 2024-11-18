@@ -21,7 +21,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            val dataStoreManager = DataStoreManager(this)
+            val dataStoreManager = DataStoreManager.getInstance(this)
             SrCamelo_KotlinTheme {
                 SrCameloNavigation( dataStoreManager = dataStoreManager)
             }

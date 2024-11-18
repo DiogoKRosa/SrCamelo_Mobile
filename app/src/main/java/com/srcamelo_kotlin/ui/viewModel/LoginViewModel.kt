@@ -52,7 +52,7 @@ class LoginViewModel @Inject constructor(
 
             when (loginRequest.result) {
                 is Resource.Success -> {
-                    Log.e("POST", "Usuário encontrado")
+                    Log.e("POST", "${loginRequest.result.data}")
                     usersUiState.value = uiState.value.copy(status = true, result = loginRequest.result.data)
                 }
 

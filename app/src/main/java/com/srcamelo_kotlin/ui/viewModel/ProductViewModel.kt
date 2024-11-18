@@ -40,7 +40,7 @@ class ProductViewModel @Inject constructor(
     private val _error = MutableLiveData<String>()
     val error: LiveData<String> = _error
 
-    fun getProductsFromVendor(userId: String = "1"){
+    fun getProductsFromVendor(userId: String){
         viewModelScope.launch{
 
             val response = getProductUseCase(userId)
@@ -60,7 +60,7 @@ class ProductViewModel @Inject constructor(
         }
     }
 
-    fun createProduct(userId: String = "",productName: String, productPrice: Double, productDescription: String, productCategory: String, productImage: Uri, context: Context){
+    fun createProduct(userId: String,productName: String, productPrice: Double, productDescription: String, productCategory: String, productImage: Uri, context: Context){
         viewModelScope.launch{
 
             val response =  createProductUseCase(

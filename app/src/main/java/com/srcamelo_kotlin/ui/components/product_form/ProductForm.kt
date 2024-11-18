@@ -41,7 +41,7 @@ import com.srcamelo_kotlin.ui.extensions.createImageFile
 import com.srcamelo_kotlin.ui.viewModel.ProductViewModel
 import java.util.Objects
 
-@Composable
+/*@Composable
 fun ProductForm(
     id: String? = null,
     image: Uri? = null,
@@ -166,12 +166,13 @@ fun ProductForm(
                 productDescription = descriptionForm ?: "",
                 productCategory = categoryList[selectedItemIndex!!] ?: "",
                 productImage = imageForm,
-                context = context
+                context = context,
+                userId = userId
             )
             clearForm()
         })
     }
-}
+}*/
 
 @Composable
 fun ProductFormReadOnly(

@@ -16,8 +16,17 @@ class DataStoreManager( context: Context) {
     private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "AUTH_TOKEN")
     private val dataStore = context.dataStore
 
+
+
     companion object{
+        private var INSTANCE: DataStoreManager? = null
         val AUTH_TOKEN = stringPreferencesKey("AUTH_TOKEN")
+
+        fun getInstance(context: Context): DataStoreManager {
+            return INSTANCE ?: synchronized(this) {
+                INSTANCE ?: DataStoreManager(context.applicationContext).also { INSTANCE = it }
+            }
+        }
     }
 
     suspend fun setAuthToken(token: String){

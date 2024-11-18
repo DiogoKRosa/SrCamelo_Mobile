@@ -32,6 +32,7 @@ import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.lang.reflect.Type
+import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -39,8 +40,9 @@ class RepositoryModule {
 
     //DataStore
     @Provides
+    @Singleton
     fun provideDataStoreManager(@ApplicationContext context: Context):DataStoreManager{
-        return DataStoreManager(context)
+        return DataStoreManager.getInstance(context)
     }
 
     //API

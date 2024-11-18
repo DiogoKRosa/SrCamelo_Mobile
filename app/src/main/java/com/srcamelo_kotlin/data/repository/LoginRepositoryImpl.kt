@@ -18,6 +18,8 @@ class LoginRepositoryImpl @Inject constructor(
         return try{
             val response = apiService.login(loginRequest)
             preferences.setAuthToken(response.data.accessToken)
+            preferences.setUserId(response.data.userId)
+
             Resource.Success(response.data)
         } catch( e: HttpException){
             Resource.Error("${e.message}")

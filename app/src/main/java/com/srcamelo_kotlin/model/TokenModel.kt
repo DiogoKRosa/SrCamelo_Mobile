@@ -11,6 +11,6 @@ data class TokenModel(
     val userType: String = "",
     @SerializedName("user_id")
     val userId: String = "",
-    @SerializedName("firsAccess")
+    @SerializedName("firstAccess")
     val firstAccess: Boolean = false
 )
