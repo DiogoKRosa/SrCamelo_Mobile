@@ -1,5 +1,7 @@
 package com.srcamelo_kotlin.ui.viewModel
 
+import android.content.Context
+import android.net.Uri
 import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
@@ -8,8 +10,13 @@ import androidx.lifecycle.viewModelScope
 import com.srcamelo_kotlin.common.TextFieldState
 import com.srcamelo_kotlin.network.Resource
 import com.srcamelo_kotlin.ui.use_case.CreateClientUseCase
+import com.srcamelo_kotlin.ui.use_case.UpdateVendorBannerUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import java.io.File
 import javax.inject.Inject
 
 data class UserState(
@@ -19,7 +26,8 @@ data class UserState(
 
 @HiltViewModel
 class UsersViewModel @Inject constructor(
-    private val createClientUseCase: CreateClientUseCase
+    private val createClientUseCase: CreateClientUseCase,
+    private val updateVendorBannerUseCase: UpdateVendorBannerUseCase
 ) : ViewModel() {
 
     private var usersUiState = mutableStateOf(UserState())
@@ -153,5 +161,51 @@ class UsersViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    fun updateVendorBanner(
+        userId: String,
+        bannerUrl: Uri,
+        fantasyName: String,
+        paymentMethods: Map<String, Boolean>,
+        context: Context
+    ){
+        viewModelScope.launch {
+            val list: MutableList<String> = mutableListOf()
+            paymentMethods.forEach(
+                { key, value -> if(value){list.add(key)} }
+            )
+            val response = updateVendorBannerUseCase(
+                userId = userId,
+                bannerUrl = prepareFilePart(bannerUrl, context),
+                fantasyName = fantasyName,
+                paymentMethods = list
+            )
+
+            when(response.result){
+                is Resource.Success -> {
+                    println("Banner atualizado")
+                }
+                is Resource.Error -> {
+                    print("Erro: ${response.result.message}")
+                }
+                else -> {
+
+                }
+            }
+        }
+    }
+
+    private fun prepareFilePart(uri: Uri, context: Context): MultipartBody.Part {
+        val contentResolver = context.contentResolver
+        val inputStream = contentResolver.openInputStream(uri) ?: return MultipartBody.Part.createFormData("image", "")
+        val file = File(context.cacheDir, "temp_image.jpg").apply {
+            outputStream().use { output ->
+                inputStream.copyTo(output)
+            }
+        }
+
+        val requestFile = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
+        return MultipartBody.Part.createFormData("image", file.name, requestFile)
     }
 }

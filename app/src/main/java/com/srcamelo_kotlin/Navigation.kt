@@ -35,7 +35,7 @@ fun SrCameloNavigation(
 ){
     NavHost(
         navController = navController,
-        startDestination = SrCameloScreens.ProductForm.name,
+        startDestination = SrCameloScreens.VendorHome.name,
         modifier = modifier
     ){
         composable(route = SrCameloScreens.Login.name){
@@ -83,11 +83,20 @@ fun SrCameloNavigation(
         }
 
         composable(route = SrCameloScreens.NewVendorHome.name){
-            NewVendorHomeScreen()
+            NewVendorHomeScreen(
+                goBack = {navController.navigateUp()},
+                createProduct = {navController.navigate(SrCameloScreens.ProductForm.name)},
+                submitClick = {navController.navigate(SrCameloScreens.VendorHome.name)},
+                dataStoreManager = dataStoreManager
+            )
         }
 
         composable(route = SrCameloScreens.ProductForm.name){
-            ProductFormScreen()
+            ProductFormScreen(
+                dataStoreManager = dataStoreManager,
+                onClickBack = {navController.navigateUp()},
+                onClickFinish = {navController.navigate(SrCameloScreens.NewVendorHome.name)}
+            )
         }
     }
 }

@@ -13,8 +13,8 @@ import javax.inject.Inject
 class LoginRepositoryImpl @Inject constructor(
     private val apiService: SrcameloApiService,
     private val preferences: DataStoreManager
-) : LoginRepository{
-    override suspend fun login(loginRequest: LoginRequest): Resource<TokenModel> {
+){
+    suspend fun login(loginRequest: LoginRequest): Resource<TokenModel> {
         return try{
             val response = apiService.login(loginRequest)
             preferences.setAuthToken(response.data.accessToken)

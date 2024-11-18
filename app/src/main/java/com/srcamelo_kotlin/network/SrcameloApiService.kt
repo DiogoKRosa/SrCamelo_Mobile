@@ -1,5 +1,7 @@
 package com.srcamelo_kotlin.network
 
+import com.srcamelo_kotlin.model.BannerModel
+import com.srcamelo_kotlin.model.Id
 import com.srcamelo_kotlin.model.LoginRequest
 import com.srcamelo_kotlin.model.ProductModel
 import com.srcamelo_kotlin.model.ReponseUser
@@ -31,10 +33,19 @@ interface SrcameloApiService{
         @Body registerUserRequest: UserModel
     ): ReponseUser
 
+    @Multipart
+    @PUT("newVendor/{vendor_id}")
+    suspend fun updateBannerVendor(
+        @Path("vendor_id") userId: String,
+        @Part("bannerFormVendor") bannerFormVendor: BannerModel,
+        @Part image: MultipartBody.Part? = null
+    )
+
     @POST("login")
     suspend fun login(
         @Body loginUserRequest: LoginRequest
     ): ResponseToken
+
 
     @Multipart
     @POST("products")

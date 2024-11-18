@@ -19,6 +19,7 @@ import com.srcamelo_kotlin.ui.use_case.GetProductResult
 import com.srcamelo_kotlin.ui.use_case.GetProductUseCase
 import com.srcamelo_kotlin.ui.use_case.LoginUseCase
 import com.srcamelo_kotlin.ui.use_case.UpdateProductUseCase
+import com.srcamelo_kotlin.ui.use_case.UpdateVendorBannerUseCase
 import com.srcamelo_kotlin.ui.viewModel.LoginViewModel
 import com.srcamelo_kotlin.ui.viewModel.ProductViewModel
 import com.srcamelo_kotlin.ui.viewModel.UsersViewModel
@@ -44,7 +45,6 @@ class RepositoryModule {
     //API
     @Provides
     fun provideSrcamloApi():SrcameloApiService{
-
         return Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
             .baseUrl(BuildConfig.BASE_URL)
@@ -78,10 +78,14 @@ class RepositoryModule {
     fun provideUserUseCase(repository: UserRepositoryImpl): CreateClientUseCase{
         return CreateClientUseCase(repository)
     }
+    @Provides
+    fun provideUpdateBannerVendorUseCase(repository: UserRepositoryImpl): UpdateVendorBannerUseCase{
+        return UpdateVendorBannerUseCase(repository)
+    }
 
     @Provides
-    fun provideUserViewModel(useCase: CreateClientUseCase): UsersViewModel{
-        return UsersViewModel(useCase)
+    fun provideUserViewModel(useCase: CreateClientUseCase, updateVendorBannerUseCase: UpdateVendorBannerUseCase): UsersViewModel{
+        return UsersViewModel(useCase, updateVendorBannerUseCase)
     }
 
     @Provides

@@ -38,6 +38,7 @@ import com.srcamelo_kotlin.BuildConfig
 import com.srcamelo_kotlin.data.preferences.DataStoreManager
 import com.srcamelo_kotlin.model.ResponseProduct
 import com.srcamelo_kotlin.ui.components.BackTopAppBarWithTitle
+import com.srcamelo_kotlin.ui.components.ButtonWhite
 import com.srcamelo_kotlin.ui.components.CreateIconButton
 import com.srcamelo_kotlin.ui.components.DeleteIconButton
 import com.srcamelo_kotlin.ui.components.DropDownInputLine
@@ -52,8 +53,9 @@ import java.util.Objects
 @Composable
 fun ProductFormScreen(
     onClickBack: () -> Unit = {},
+    onClickFinish: () -> Unit = {},
     viewModel: ProductViewModel = hiltViewModel(),
-    dataStoreManager: DataStoreManager = DataStoreManager(LocalContext.current)
+    dataStoreManager: DataStoreManager
 ){
     Scaffold(
         topBar = { BackTopAppBarWithTitle(
@@ -64,7 +66,6 @@ fun ProductFormScreen(
             val context = LocalContext.current
 
             val userId by dataStoreManager.getUserId().collectAsState(initial = "")
-            var productToEdit by remember { mutableStateOf<ResponseProduct?>(null) }
             var productId by remember { mutableStateOf("")}
 
             var imageForm by remember { mutableStateOf<Uri>(Uri.EMPTY) }
@@ -242,6 +243,14 @@ fun ProductFormScreen(
                         }
                     }
                 }
+                Spacer(modifier = Modifier.height(8.dp))
+                ButtonWhite(
+                    title = "Finalizar",
+                    onClick = {
+                        onClickFinish()
+                    },
+                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                )
             }
         }
     )
