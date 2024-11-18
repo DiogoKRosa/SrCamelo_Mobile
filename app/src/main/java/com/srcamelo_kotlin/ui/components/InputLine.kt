@@ -121,22 +121,17 @@ fun InputLinePassword(
 fun SmallInputLine(
     modifier: Modifier = Modifier,
     placeholder: String,
-    value: String = "",
+    value: String,
     onValueChange: (String) -> Unit = {},
     readOnly: Boolean = false
 ) {
-    var textState by remember { mutableStateOf(TextFieldValue(value)) }
-
     Box(
         modifier = modifier
             .height(30.dp),
     ) {
         BasicTextField(
-            value = textState,
-            onValueChange = {
-                textState = it
-                onValueChange(it.text)
-            },
+            value = value,
+            onValueChange = onValueChange,
             modifier = Modifier
                 .padding(start = 8.dp)
                 .padding(vertical = 8.dp)
@@ -153,7 +148,7 @@ fun SmallInputLine(
             singleLine = true,
             decorationBox = { innerTextField ->
                 Box(modifier = Modifier.fillMaxSize()) {
-                    if (textState.text.isEmpty()) {
+                    if (value.isEmpty()) {
                         Text(
                             text = placeholder,
                             style = TextStyle(
@@ -253,7 +248,7 @@ private fun InputPreview() {
         Column {
             InputLine(placeholder = "Email")
             InputLinePassword(placeholder = "Senha")
-            SmallInputLine(placeholder = "Nome")
+
 
             var isDropDownExpanded by remember { mutableStateOf(false) }
             var selectedItemIndex by remember { mutableStateOf<Int?>(null) }

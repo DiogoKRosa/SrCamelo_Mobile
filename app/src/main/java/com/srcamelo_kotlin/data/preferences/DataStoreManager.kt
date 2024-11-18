@@ -39,4 +39,23 @@ class DataStoreManager( context: Context) {
                 preferences[AUTH_TOKEN] ?: ""
             }
     }
+
+    suspend fun setUserId(id: String){
+        dataStore.edit { preferences ->
+            preferences[stringPreferencesKey("USER_ID")] = id
+        }
+    }
+    fun getUserId(): Flow<String> {
+        return dataStore.data
+            .catch { exception ->
+                if (exception is IOException) {
+                    emit(emptyPreferences())
+                } else {
+                    throw exception
+                }
+            }
+            .map { preferences ->
+                preferences[stringPreferencesKey("USER_ID")] ?: ""
+            }
+    }
 }

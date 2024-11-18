@@ -35,6 +35,25 @@ fun CreateIconButton(
 }
 
 @Composable
+fun UpdateIconButton(
+    onClick: () -> Unit = {}
+){
+    IconButton(onClick = onClick,
+        colors = IconButtonColors(
+            containerColor = White,
+            contentColor = Green,
+            disabledContainerColor = White,
+            disabledContentColor = Color.Gray
+        )
+    ) {
+        Icon(
+            imageVector = Icons.Filled.Create,
+            contentDescription = "Adicionar novo produto"
+        )
+    }
+}
+
+@Composable
 fun DeleteIconButton(
     onClick: () -> Unit = {}
 ){
@@ -79,5 +98,6 @@ private fun PreviewIconButtons(){
         CreateIconButton()
         DeleteIconButton()
         EditIconButton()
+        UpdateIconButton()
     }
 }

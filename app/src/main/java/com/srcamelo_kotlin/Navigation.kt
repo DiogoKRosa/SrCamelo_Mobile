@@ -35,7 +35,7 @@ fun SrCameloNavigation(
 ){
     NavHost(
         navController = navController,
-        startDestination = SrCameloScreens.VendorHome.name,
+        startDestination = SrCameloScreens.ProductForm.name,
         modifier = modifier
     ){
         composable(route = SrCameloScreens.Login.name){
