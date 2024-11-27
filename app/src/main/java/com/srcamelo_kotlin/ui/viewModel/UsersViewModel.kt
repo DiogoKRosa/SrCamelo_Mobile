@@ -210,6 +210,7 @@ class UsersViewModel @Inject constructor(
             when(response.result){
                 is Resource.Success -> {
                     _userObj.value = response.result.data
+                    println(response.result.data)
                 }
                 is Resource.Error -> {
                     print("Erro: ${response.result.message}")

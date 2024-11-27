@@ -64,7 +64,7 @@ fun VendorHomeScreen(
     val baseUrl = BuildConfig.BASE_URL
     val userId by dataStoreManager.getUserId().collectAsState(initial = "")
     val user by userViewModel.userObj.observeAsState()
-    LaunchedEffect(Unit){
+    LaunchedEffect(userId){
         userViewModel.getUserById(userId)
     }
 
@@ -139,7 +139,7 @@ fun VendorHomeScreen(
             )
 
             val products by productViewModel.products.observeAsState(emptyList())
-            LaunchedEffect(Unit){
+            LaunchedEffect(userId){
                 productViewModel.getProductsFromVendor(userId)
             }
 
@@ -159,14 +159,16 @@ fun VendorHomeScreen(
                         .padding(start = 36.dp)
                 )
                 Spacer(modifier = Modifier.height(20.dp))
-                LazyColumn {
-                    items(products) { product ->
-                        ProductCard(
-                            name = product.name,
-                            price = product.price.toString(),
-                            description = product.description,
-                            imageUri = product.image
-                        )
+                if(products.isNotEmpty()){
+                    LazyColumn {
+                        items(products) { product ->
+                            ProductCard(
+                                name = product.name,
+                                price = product.price.toString(),
+                                description = product.description,
+                                imageUri = product.image
+                            )
+                        }
                     }
                 }
             }
