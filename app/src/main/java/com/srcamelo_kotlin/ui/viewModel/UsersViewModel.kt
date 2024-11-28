@@ -209,8 +209,8 @@ class UsersViewModel @Inject constructor(
             val response = getUserUseCase(userId)
             when(response.result){
                 is Resource.Success -> {
+                    Log.e("Debug","User:" + response.result.data)
                     _userObj.value = response.result.data
-                    println(response.result.data)
                 }
                 is Resource.Error -> {
                     print("Erro: ${response.result.message}")

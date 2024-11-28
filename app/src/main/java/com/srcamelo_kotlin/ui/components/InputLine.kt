@@ -78,6 +78,7 @@ fun InputLine(
             unfocusedIndicatorColor = DarkOrange
         ),
         textStyle = TextStyle(
+            color = Color.Black,
             fontSize = 16.sp,
             fontFamily = Montserrat,
             fontWeight = FontWeight.Medium
@@ -109,6 +110,7 @@ fun InputLinePassword(
         ),
         visualTransformation = PasswordVisualTransformation(),
         textStyle = TextStyle(
+            color = Color.Black,
             fontSize = 16.sp,
             fontFamily = Montserrat,
             fontWeight = FontWeight.Medium

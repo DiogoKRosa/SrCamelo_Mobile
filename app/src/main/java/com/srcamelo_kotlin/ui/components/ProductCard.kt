@@ -52,7 +52,7 @@ fun ProductCard(
                 if (imageUri.isNotEmpty()) {
                     AsyncImage(
                         model = ImageRequest.Builder(LocalContext.current)
-                            .data("$baseUrl$imageUri")
+                            .data(imageUri)
                             .crossfade(true)
                             .build(),
                         contentDescription = "Product Image",

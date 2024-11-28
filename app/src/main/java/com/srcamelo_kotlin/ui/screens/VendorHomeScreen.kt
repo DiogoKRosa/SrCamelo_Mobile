@@ -14,7 +14,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -23,6 +25,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -65,7 +68,9 @@ fun VendorHomeScreen(
     val userId by dataStoreManager.getUserId().collectAsState(initial = "")
     val user by userViewModel.userObj.observeAsState()
     LaunchedEffect(userId){
-        userViewModel.getUserById(userId)
+        if (userId.isNotBlank()) {
+            userViewModel.getUserById(userId)
+        }
     }
 
     Scaffold(
@@ -84,11 +89,14 @@ fun VendorHomeScreen(
                 )
             }
         },
+
         containerColor = LightOrange
     ) { innerPadding ->
+        val scrollState = rememberScrollState()
         Column(
             modifier = Modifier
                 .fillMaxWidth()
+                .verticalScroll(scrollState)
                 .padding(innerPadding),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -98,7 +106,8 @@ fun VendorHomeScreen(
                     .height(180.dp)
                     .background(White)
             ) {
-                if (user?.image.toString().isNotEmpty()) {
+                if (user != null && user?.image.toString().isNotEmpty()) {
+                    println("\"$baseUrl${user?.image}\"")
                     AsyncImage(
                         model = ImageRequest.Builder(LocalContext.current)
                             .data("$baseUrl${user?.image}")
@@ -140,7 +149,9 @@ fun VendorHomeScreen(
 
             val products by productViewModel.products.observeAsState(emptyList())
             LaunchedEffect(userId){
-                productViewModel.getProductsFromVendor(userId)
+                if(userId.isNotBlank()) {
+                    productViewModel.getProductsFromVendor(userId)
+                }
             }
 
             Spacer(modifier = Modifier.height(68.dp))
@@ -159,18 +170,22 @@ fun VendorHomeScreen(
                         .padding(start = 36.dp)
                 )
                 Spacer(modifier = Modifier.height(20.dp))
-                if(products.isNotEmpty()){
-                    LazyColumn {
-                        items(products) { product ->
-                            ProductCard(
-                                name = product.name,
-                                price = product.price.toString(),
-                                description = product.description,
-                                imageUri = product.image
-                            )
+                Box(modifier = Modifier.height(300.dp)){
+                    if(products.isNotEmpty()){
+                        LazyColumn {
+                            items(products) { product ->
+                                ProductCard(
+                                    name = product.name,
+                                    price = product.price.toString(),
+                                    description = product.description,
+                                    imageUri = "$baseUrl${product.image}"
+                                )
+                                Spacer(modifier = Modifier.height(10.dp))
+                            }
                         }
                     }
                 }
+
             }
 
             Spacer(modifier = Modifier.height(31.dp))

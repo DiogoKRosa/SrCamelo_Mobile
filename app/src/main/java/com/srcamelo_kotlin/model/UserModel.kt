@@ -6,29 +6,29 @@ import java.io.Serial
 
 data class UserModel(
     @SerializedName("city")
-    val city: Any?,
+    val city: String?,
     @SerializedName("country")
-    val country: Any?,
+    val country: String?,
     @SerializedName("cpf")
-    val cpf: Any?,
+    val cpf: String?,
     @SerializedName("email")
-    val email: Any?,
+    val email: String?,
     @SerializedName("_id")
     val id: Id?,
     @SerializedName("name")
     val name: String?,
     @SerializedName("password")
-    val password: Any?,
+    val password: String?,
     @SerializedName("telephone")
-    val telephone: Any?,
+    val telephone: String?,
     @SerializedName("uf")
-    val uf: Any?,
+    val uf: String?,
     @SerializedName("userType")
-    val userType: Any?,
+    val userType: String?,
     @SerializedName("establishment")
-    val establishment: Any?,
+    val establishment: String?,
     @SerializedName("image")
-    val image: Any?,
+    val image: String?,
     @SerializedName("paymentMethods")
     val paymentMethods: List<String>?,
     @SerializedName("firstAccess")

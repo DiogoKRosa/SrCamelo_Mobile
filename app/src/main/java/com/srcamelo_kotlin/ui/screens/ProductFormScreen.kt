@@ -6,6 +6,7 @@ import android.net.Uri
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -47,6 +48,7 @@ import com.srcamelo_kotlin.ui.components.UpdateIconButton
 import com.srcamelo_kotlin.ui.components.product_form.ProductFormImageBox
 import com.srcamelo_kotlin.ui.components.product_form.ProductFormReadOnly
 import com.srcamelo_kotlin.ui.extensions.createImageFile
+import com.srcamelo_kotlin.ui.theme.LightOrange
 import com.srcamelo_kotlin.ui.viewModel.ProductViewModel
 import java.util.Objects
 
@@ -62,6 +64,7 @@ fun ProductFormScreen(
             onClickBack = onClickBack,
             title = "Produtos"
         )},
+        containerColor = LightOrange,
         content = { innerpadding ->
             val context = LocalContext.current
 
@@ -173,43 +176,48 @@ fun ProductFormScreen(
                         DeleteIconButton(onClick = {clearForm()})
                     }
                     Spacer(modifier = Modifier.height(15.dp))
-                    if(productId != ""){
-                        UpdateIconButton(onClick = {
-                            viewModel.updateProduct(
-                                userId = userId,
-                                productId = productId,
-                                productName = nameForm,
-                                productPrice = valueForm.toDouble(),
-                                productDescription = descriptionForm,
-                                productCategory = categoryList[selectedItemIndex!!],
-                                productImage = imageForm,
-                                context = context
-                            )
-                            clearForm()
-                        })
+                    if(userId.isNotEmpty()){
+                        if(productId != ""){
+                            UpdateIconButton(onClick = {
+                                viewModel.updateProduct(
+                                    userId = userId,
+                                    productId = productId,
+                                    productName = nameForm,
+                                    productPrice = valueForm.toDouble(),
+                                    productDescription = descriptionForm,
+                                    productCategory = categoryList[selectedItemIndex!!],
+                                    productImage = imageForm,
+                                    context = context
+                                )
+                                clearForm()
+                            })
+                        }
+                        else{
+                            CreateIconButton(onClick = {
+                                viewModel.createProduct(
+                                    userId = userId,
+                                    productName = nameForm,
+                                    productPrice = valueForm.toDouble(),
+                                    productDescription = descriptionForm,
+                                    productCategory = categoryList[selectedItemIndex!!],
+                                    productImage = imageForm,
+                                    context = context
+                                )
+                                clearForm()
+                            })
+                        }
                     }
-                    else{
-                        CreateIconButton(onClick = {
-                            viewModel.createProduct(
-                                userId = userId,
-                                productName = nameForm,
-                                productPrice = valueForm.toDouble(),
-                                productDescription = descriptionForm,
-                                productCategory = categoryList[selectedItemIndex!!],
-                                productImage = imageForm,
-                                context = context
-                            )
-                            clearForm()
-                        })
-                    }
+
                 }
 
                 val products by viewModel.products.observeAsState(emptyList())
                 val loading by viewModel.loading.observeAsState(false)
                 val error by viewModel.error.observeAsState("")
 
-                LaunchedEffect(Unit) {
-                    viewModel.getProductsFromVendor(userId)
+                LaunchedEffect(userId) {
+                    if(userId.isNotEmpty()){
+                        viewModel.getProductsFromVendor(userId)
+                    }
                 }
 
                 if(loading){
@@ -217,30 +225,32 @@ fun ProductFormScreen(
                 } else if (error.isNotEmpty()) {
                     Text(text = "Erro: $error", color = Color.Red)
                 } else {
-                    LazyColumn {
-                        items(products){ product ->
-                            ProductFormReadOnly(
-                                name = product.name,
-                                value = product.price.toString(),
-                                description = product.description,
-                                categoryList = categoryList,
-                                selectedItemIndex = if(product.category != "") {
-                                    categoryList.indexOf(product.category)
+                    Box(modifier = Modifier.height(417.dp)){
+                        LazyColumn {
+                            items(products){ product ->
+                                ProductFormReadOnly(
+                                    name = product.name,
+                                    value = product.price.toString(),
+                                    description = product.description,
+                                    categoryList = categoryList,
+                                    selectedItemIndex = if(product.category != "") {
+                                        categoryList.indexOf(product.category)
                                     }else{
                                         null
                                     },
-                                image = product.image,
-                                deleteClick = { product.id?.oid?.let { viewModel.deleteProduct(it, product.vendorId) } },
-                                editClick = {
-                                    productId = product.id?.oid ?: ""
-                                    nameForm = product.name
-                                    valueForm = product.price.toString()
-                                    descriptionForm = product.description
-                                    selectedItemIndex = categoryList.indexOf(product.category)
-                                    imageForm = Uri.parse(BuildConfig.BASE_URL + product.image)
-                                }
-                            )
-                            Spacer(modifier = Modifier.height(16.dp))
+                                    image = product.image,
+                                    deleteClick = { product.id?.oid?.let { viewModel.deleteProduct(it, product.vendorId) } },
+                                    editClick = {
+                                        productId = product.id?.oid ?: ""
+                                        nameForm = product.name
+                                        valueForm = product.price.toString()
+                                        descriptionForm = product.description
+                                        selectedItemIndex = categoryList.indexOf(product.category)
+                                        imageForm = Uri.parse(BuildConfig.BASE_URL + product.image)
+                                    }
+                                )
+                                Spacer(modifier = Modifier.height(16.dp))
+                            }
                         }
                     }
                 }

@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
+import com.srcamelo_kotlin.BuildConfig
 import com.srcamelo_kotlin.R
 import com.srcamelo_kotlin.ui.theme.White
 
@@ -56,7 +57,7 @@ fun ProductFormImageBox(
 
 @Composable
 fun ProductFormImageBoxOnlyRead(
-    baseUrl: String = "http://10.0.2.2:8000/",
+    baseUrl: String = BuildConfig.BASE_URL,
     image: String? = null,
 ) {
     Box(modifier = Modifier.size(123.dp)

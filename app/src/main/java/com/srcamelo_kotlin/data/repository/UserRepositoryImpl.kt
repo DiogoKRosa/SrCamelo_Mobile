@@ -1,6 +1,7 @@
 package com.srcamelo_kotlin.data.repository
 
 import android.media.Image
+import android.util.Log
 import com.srcamelo_kotlin.domain.repository.UserRepository
 import com.srcamelo_kotlin.model.BannerModel
 import com.srcamelo_kotlin.model.Id
@@ -38,9 +39,11 @@ class UserRepositoryImpl @Inject constructor(
         }
     }
 
-    suspend fun  getUserById(id: String): Resource<UserModel>{
+    suspend fun getUserById(id: String): Resource<UserModel>{
+        println("getUserById called with id: $id")
         return try{
             val response = api.getUserById(id)
+            print(response)
             Resource.Success(response)
         } catch( e: HttpException){
             Resource.Error("${e.message}")
