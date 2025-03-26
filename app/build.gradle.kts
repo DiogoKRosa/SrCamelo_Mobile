@@ -23,7 +23,20 @@ android {
             useSupportLibrary = true
         }
 
-        buildConfigField("String", "BASE_URL", "\"http://52.90.220.34:8000/\"")
+        //load the values from .properties file
+        val keyStoreFile = project.rootProject.file("apikeys.properties")
+        val properties = Properties()
+        properties.load(keyStoreFile.inputStream())
+
+        //fetch the map key
+        val mapsApiKey = properties.getProperty("MAPS_API_KEY") ?: ""
+        val urlApi = properties.getProperty("API_URL") ?: ""
+
+        buildConfigField("String", "BASE_URL", urlApi)
+
+        //inject the key dynamically into the manifest
+        manifestPlaceholders["GOOGLE_KEY"] = mapsApiKey
+
     }
     buildFeatures {
         buildConfig = true
@@ -126,4 +139,7 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.room.runtime)
     kapt(libs.androidx.room.room.compiler)
+
+    // Google maps
+    implementation(libs.maps.compose)
 }

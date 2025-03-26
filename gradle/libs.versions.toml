@@ -13,6 +13,7 @@ composeBom = "2024.10.00"
 coilCompose = "2.2.2"
 
 # Timber
+mapsCompose = "4.3.3"
 timber = "5.0.1"
 
 # DataStore
@@ -79,6 +80,7 @@ androidx-material3 = { group = "androidx.compose.material3", name = "material3" 
 coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coilCompose" }
 
 # Timber
+maps-compose = { module = "com.google.maps.android:maps-compose", version.ref = "mapsCompose" }
 timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
 
 # DataStore
