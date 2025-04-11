@@ -1,10 +1,10 @@
 package com.srcamelo_kotlin.ui.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -20,7 +20,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonColors
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,51 +27,21 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.srcamelo_kotlin.R
+import com.srcamelo_kotlin.ui.components.CardText
 import com.srcamelo_kotlin.ui.components.ClientHomeTopBar
 import com.srcamelo_kotlin.ui.components.CustomBottomBar
 import com.srcamelo_kotlin.ui.components.SearchBar
-import com.srcamelo_kotlin.ui.fonts.Montserrat
+import com.srcamelo_kotlin.ui.components.SectionTitle
 import com.srcamelo_kotlin.ui.theme.DarkOrange
 import com.srcamelo_kotlin.ui.theme.LightOrange
 import com.srcamelo_kotlin.ui.theme.SrCamelo_KotlinTheme
 import com.srcamelo_kotlin.ui.theme.White
+import com.srcamelo_kotlin.ui.viewModel.MapViewModel
 
-@Composable
-fun SectionTitle(
-    name: String,
-    modifier: Modifier = Modifier
-){
-    Text(name,
-        style = TextStyle(
-            fontFamily = Montserrat,
-            fontSize = 14.sp,
-            fontWeight = FontWeight.Normal,
-            color = DarkOrange
-        ),
-        modifier = modifier
-    )
-}
-@Composable
-fun CardText(
-    name: String,
-    modifier: Modifier = Modifier
-){
-    Text(name,
-        style = TextStyle(
-            fontFamily = Montserrat,
-            fontSize = 12.sp,
-            fontWeight = FontWeight.Normal,
-        ),
-        modifier = modifier
-    )
-}
 
 @Composable
 fun CategoryButton(
@@ -104,10 +73,11 @@ fun CategoryButton(
 
 @Composable
 fun VendorCard(
+    modifier: Modifier = Modifier,
     urlImage: String,
     vendorName: String,
     distance: String,
-    modifier: Modifier = Modifier
+    onClickVendor: () -> Unit = {}
 ){
     Card(
         colors = CardColors(
@@ -116,7 +86,7 @@ fun VendorCard(
             disabledContainerColor = Color.Transparent,
             disabledContentColor = Color.Gray
         ),
-        modifier = modifier
+        modifier = modifier.clickable(enabled = true, onClick = onClickVendor)
     ){
         AsyncImage(
             model = urlImage,
@@ -134,6 +104,13 @@ fun VendorCard(
 
 @Composable
 fun ClientHomeScreen(
+    onClickHome: () -> Unit = {},
+    onClickCart: () -> Unit = {},
+    onClickBalloon: () -> Unit = {},
+    onClickProfile: () -> Unit = {},
+    onClickMap: () -> Unit = {},
+    onClickVendor: () -> Unit = {},
+    mapViewModel: MapViewModel,
 ){
     Scaffold (
         topBar = { ClientHomeTopBar()},
@@ -144,10 +121,10 @@ fun ClientHomeScreen(
                     .padding(bottom = 50.dp)
             ) {
                 CustomBottomBar(
-                    homeClick = {},
-                    cartClick = {},
-                    balloonClick = {},
-                    profileClick = {}
+                    homeClick = onClickHome,
+                    cartClick = onClickCart,
+                    balloonClick = onClickBalloon,
+                    profileClick = onClickProfile
                 )
             }
         },
@@ -182,11 +159,11 @@ fun ClientHomeScreen(
                 modifier = Modifier.fillMaxWidth().padding(horizontal = 33.dp).padding(top = 36.dp),
                 horizontalAlignment = Alignment.Start
             ){
-                SectionTitle("Localização", modifier = Modifier.padding(bottom = 10.dp))
+                SectionTitle("Localização", modifier = Modifier.padding(bottom = 10.dp).clickable(enabled = true, onClick = onClickMap))
                 Box(
                     modifier = Modifier.size(326.dp, 180.dp).background(color = White, shape = RoundedCornerShape(20.dp))
                 ){
-                    Text("Mapa")
+                    MapScreen(mapViewModel)
                 }
             }
 
@@ -208,7 +185,8 @@ fun ClientHomeScreen(
                     items(vendedores){ vendedor ->
                         VendorCard(urlImage = vendedor.urlImage,
                             vendorName = vendedor.vendorName,
-                            distance = vendedor.distance)
+                            distance = vendedor.distance,
+                            onClickVendor = onClickVendor)
                     }
 
                 }
@@ -246,7 +224,8 @@ fun ClientHomeScreen(
 @Preview(showSystemUi = true)
 @Composable
 private fun PreviewClientHomeScreen(){
+    var mapViewModel = MapViewModel()
     SrCamelo_KotlinTheme {
-        ClientHomeScreen()
+        ClientHomeScreen(mapViewModel = mapViewModel)
     }
 }

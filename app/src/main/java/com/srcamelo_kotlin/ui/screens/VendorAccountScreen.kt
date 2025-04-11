@@ -25,14 +25,19 @@ import com.srcamelo_kotlin.ui.theme.LightOrange
 import com.srcamelo_kotlin.ui.theme.SrCamelo_KotlinTheme
 
 @Composable
-fun MyAccountScreen(
-    homeClick: () -> Unit = {},
-    cartClick: () -> Unit = {},
-    balloonClick: () -> Unit = {},
-    profileClick: () -> Unit = {},
+fun VendorAccountScreen(
+    onClickBack: () -> Unit = {},
+    onClickHome: () -> Unit = {},
+    onClickCart: () -> Unit = {},
+    onClickBalloon: () -> Unit = {},
+    onClickProfile: () -> Unit = {},
+    invoicesButton: () -> Unit = {},
+    editInformationButton: () -> Unit = {},
+    editProductButton: () -> Unit = {},
+    leaveButton: () -> Unit = {}
 ){
     Scaffold(
-        topBar = {BackTopAppBarWithTitle(title = "Minha Conta")},
+        topBar = {BackTopAppBarWithTitle(title = "Minha Conta", onClickBack = onClickBack)},
         bottomBar = {
             Box(
             modifier = Modifier
@@ -40,10 +45,10 @@ fun MyAccountScreen(
                 .padding(bottom = 50.dp)
         ) {
             CustomBottomBar(
-                homeClick = homeClick,
-                cartClick = cartClick,
-                balloonClick = balloonClick,
-                profileClick = profileClick
+                homeClick = onClickHome,
+                cartClick = onClickCart,
+                balloonClick = onClickBalloon,
+                profileClick = onClickProfile
             )
         }
         },
@@ -59,10 +64,10 @@ fun MyAccountScreen(
             }
              Column(modifier = Modifier.fillMaxWidth(),
                  verticalArrangement = Arrangement.spacedBy(17.dp)){
-                 GrayNavigationButton("Vendas")
-                 GrayNavigationButton("Dados Cadastrais")
-                 GrayNavigationButton("Produtos")
-                 GrayNavigationButton("Sair")
+                 GrayNavigationButton("Vendas", onClick = invoicesButton)
+                 GrayNavigationButton("Dados Cadastrais", onClick = editInformationButton)
+                 GrayNavigationButton("Produtos", onClick = editProductButton)
+                 GrayNavigationButton("Sair", onClick = leaveButton)
              }
         }
     }
@@ -74,7 +79,7 @@ fun MyAccountScreen(
 private fun PreviewMyAccountScreen(){
     SrCamelo_KotlinTheme {
         Scaffold {
-            MyAccountScreen()
+            VendorAccountScreen()
         }
     }
 }

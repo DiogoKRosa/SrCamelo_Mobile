@@ -79,10 +79,15 @@ fun SemiBoldOrangeSubTitle(
 }
 
 @Composable
-fun PaymentScreen(){
+fun PaymentScreen(
+    onClickBack: () -> Unit = {},
+    onClickDebit: () -> Unit = {},
+    onClickCredit: () -> Unit = {},
+    onClickPix: () -> Unit = {}
+){
     val formatter = NumberFormat.getCurrencyInstance(java.util.Locale("pt", "BR"))
     Scaffold(
-        topBar = { BackTopAppBarWithTitle(title = "Pagamento") },
+        topBar = { BackTopAppBarWithTitle(title = "Pagamento", onClickBack = onClickBack) },
         containerColor = LightOrange
     ) { innerpadding ->
         Column (modifier = Modifier.padding(innerpadding).fillMaxWidth().padding(horizontal = 23.dp). padding(top=42.dp)){
@@ -125,9 +130,9 @@ fun PaymentScreen(){
 
                 data class Payment(val text: String, val painter:Painter)
                 val items = listOf(
-                    Payment("Débito", painterResource(R.drawable.card_icon)),
-                    Payment("Crédito", painterResource(R.drawable.card_icon)),
-                    Payment("Pix", painterResource(R.drawable.pix_icon))
+                    Payment("Débito", painterResource(R.drawable.card_icon), onClickDebit),
+                    Payment("Crédito", painterResource(R.drawable.card_icon), onClickCredit),
+                    Payment("Pix", painterResource(R.drawable.pix_icon), onClickPix)
                 )
 
                 LazyVerticalGrid(
@@ -137,7 +142,7 @@ fun PaymentScreen(){
                 ) {
                     items(items){ item ->
                         Box(modifier = Modifier.wrapContentSize()){
-                            BigIconButton(text = item.text, icon = item.painter)
+                            BigIconButton(text = item.text, icon = item.painter, onClick = {})
                         }
                     }
                 }

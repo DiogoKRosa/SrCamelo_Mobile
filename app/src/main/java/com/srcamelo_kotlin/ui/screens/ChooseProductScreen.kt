@@ -124,9 +124,12 @@ fun ChooseProductItem(
 }
 
 @Composable
-fun ChooseProductScreen(){
+fun ChooseProductScreen(
+    onClickBack: () -> Unit = {},
+    onClickPay: () -> Unit = {}
+){
     Scaffold(
-        topBar = { BackTopAppBarWithTitle(title = "Carrinho")},
+        topBar = { BackTopAppBarWithTitle(title = "Carrinho", onClickBack = onClickBack)},
         containerColor = LightOrange
     ){ innerpadding ->
         Column(
@@ -150,7 +153,8 @@ fun ChooseProductScreen(){
                 fontFamily = Montserrat, fontWeight = FontWeight.Normal, color = DarkOrange, fontSize = 16.sp)
             Text("R$ 15,00", modifier = Modifier.align(Alignment.CenterHorizontally),
                 fontFamily = Montserrat, fontWeight = FontWeight.Normal, color = Gray, fontSize = 20.sp)
-            ButtonWhite(title = "Pagamento", modifier = Modifier.align(Alignment.CenterHorizontally).padding(top=45.dp))
+            ButtonWhite(title = "Pagamento", modifier = Modifier.align(Alignment.CenterHorizontally).padding(top=45.dp),
+                onClick = onClickPay)
         }
     }
 }

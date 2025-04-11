@@ -8,23 +8,37 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.srcamelo_kotlin.data.preferences.DataStoreManager
 import com.srcamelo_kotlin.ui.screens.ChooseAccountScreen
+import com.srcamelo_kotlin.ui.screens.ChooseProductScreen
+import com.srcamelo_kotlin.ui.screens.ClientAccountScreen
 import com.srcamelo_kotlin.ui.screens.ClientHomeScreen
 import com.srcamelo_kotlin.ui.screens.LoginScreen
+import com.srcamelo_kotlin.ui.screens.MapScreen
 import com.srcamelo_kotlin.ui.screens.NewFormClientScreen
 import com.srcamelo_kotlin.ui.screens.NewVendorFormScreen
 import com.srcamelo_kotlin.ui.screens.NewVendorHomeScreen
+import com.srcamelo_kotlin.ui.screens.PaymentScreen
 import com.srcamelo_kotlin.ui.screens.ProductFormScreen
+import com.srcamelo_kotlin.ui.screens.VendorAccountScreen
 import com.srcamelo_kotlin.ui.screens.VendorHomeScreen
+import com.srcamelo_kotlin.ui.screens.VendorPageScreen
+import com.srcamelo_kotlin.ui.viewModel.MapViewModel
 
 enum class SrCameloScreens(){
     Login,
     ChooseAccount,
     NewClientForm,
     NewVendorForm,
-    ClientHome,
     VendorHome,
     NewVendorHome,
-    ProductForm
+    ProductForm,
+    VendorOptions,
+    ClientHome,
+    MapScreen,
+    VendorPage,
+    ClientOptions,
+    ChooseProduct,
+    ChoosePayment,
+    Purchase,
 }
 
 @Composable
@@ -33,6 +47,7 @@ fun SrCameloNavigation(
     navController: NavHostController = rememberNavController(),
     dataStoreManager: DataStoreManager
 ){
+    val mapViewModel = MapViewModel()
     NavHost(
         navController = navController,
         startDestination = SrCameloScreens.Login.name,
@@ -44,7 +59,7 @@ fun SrCameloNavigation(
                 onVendorLoginSubmit = {navController.navigate(SrCameloScreens.VendorHome.name)},
                 onNewVendorLoginSubmit = {navController.navigate(SrCameloScreens.NewVendorHome.name)},
                 onChooseAccountClick = {navController.navigate(SrCameloScreens.ChooseAccount.name)},
-                dataStore = dataStoreManager,
+                /*dataStore = dataStoreManager,*/
             )
         }
 
@@ -54,7 +69,6 @@ fun SrCameloNavigation(
                 onClickVendorForm = {navController.navigate(SrCameloScreens.NewVendorForm.name)},
                 onClickLogin = {goBackLogin(navController)}
             )
-
         }
 
         composable(route = SrCameloScreens.NewClientForm.name){
@@ -71,19 +85,13 @@ fun SrCameloNavigation(
             )
         }
 
-        composable(route = SrCameloScreens.ClientHome.name){
-            ClientHomeScreen(
-                dataStore = dataStoreManager
-            )
-        }
-
         composable(route = SrCameloScreens.VendorHome.name){
             VendorHomeScreen(
                 dataStoreManager = dataStoreManager,
                 homeClick = {navController.navigate(SrCameloScreens.VendorHome.name)},
                 cartClick = {navController.navigate(SrCameloScreens.ProductForm.name)},
                 balloonClick = { /*TODO*/ },
-                profileClick = { /*TODO*/ }
+                profileClick = { navController.navigate(SrCameloScreens.VendorOptions.name) }
             )
         }
 
@@ -101,6 +109,83 @@ fun SrCameloNavigation(
                 dataStoreManager = dataStoreManager,
                 onClickBack = {navController.navigateUp()},
                 onClickFinish = {navController.navigateUp()}
+            )
+        }
+
+        composable(route = SrCameloScreens.VendorOptions.name){
+            VendorAccountScreen(
+                onClickBack = {navController.navigateUp()},
+                onClickHome = {navController.navigate(SrCameloScreens.VendorHome.name)},
+                onClickCart = {/* TODO */},
+                onClickBalloon = {/* TODO */},
+                onClickProfile = {navController.navigate((SrCameloScreens.VendorOptions.name))},
+                invoicesButton = {/* TODO */},
+                editInformationButton = {/* TODO */},
+                editProductButton = {navController.navigate(SrCameloScreens.ProductForm.name)},
+                leaveButton = { goBackLogin(navController)}
+            )
+        }
+
+        composable(route = SrCameloScreens.ClientHome.name){
+            ClientHomeScreen(
+                onClickHome = {navController.navigate(SrCameloScreens.ClientHome.name)},
+                onClickCart = {/*TODO*/},
+                onClickBalloon = {/*TODO*/},
+                onClickProfile = {navController.navigate(SrCameloScreens.ClientOptions.name)},
+                onClickMap = {navController.navigate(SrCameloScreens.MapScreen.name)},
+                onClickVendor = {navController.navigate(SrCameloScreens.VendorPage.name)},
+                mapViewModel = mapViewModel
+            )
+        }
+
+        composable(route = SrCameloScreens.MapScreen.name){
+            MapScreen(mapViewModel = mapViewModel)
+        }
+
+        composable(route = SrCameloScreens.VendorPage.name){
+            var vendor_id = 
+
+            VendorPageScreen(
+                dataStoreManager = dataStoreManager,
+                homeClick = {navController.navigate(SrCameloScreens.VendorHome.name)},
+                cartClick = {navController.navigate(SrCameloScreens.ProductForm.name)},
+                balloonClick = { /*TODO*/ },
+                profileClick = { navController.navigate(SrCameloScreens.VendorOptions.name)},
+                onClickLocation = {navController.navigate(SrCameloScreens.MapScreen.name)},
+                onClickBuy = {navController.navigate(SrCameloScreens.ChooseProduct.name)}
+            )
+        }
+
+        composable(route = SrCameloScreens.ChooseProduct.name){
+            ChooseProductScreen(
+                onClickBack = {navController.navigateUp()},
+                onClickPay = {navController.navigate(SrCameloScreens.ChoosePayment.name)}
+            )
+        }
+
+        composable(route = SrCameloScreens.ChoosePayment.name){
+            PaymentScreen(
+                onClickBack = {navController.navigateUp()},
+                onClickDebit = {/* TODO */},
+                onClickCredit =  {/* TODO */},
+                onClickPix = {/* TODO */}
+            )
+        }
+
+        composable(route = SrCameloScreens.Purchase.name){
+
+        }
+
+        composable(route = SrCameloScreens.ClientOptions.name) {
+            ClientAccountScreen(
+                onClickBack = {navController.navigateUp()},
+                onClickHome = {navController.navigate(SrCameloScreens.ClientHome.name)},
+                onClickCart = {/* TODO */},
+                onClickBalloon = {/* TODO */},
+                onClickProfile = {/* TODO */},
+                invoicesButton = {/* TODO */},
+                editInformationButton = {/* TODO */},
+                leaveButton = { goBackLogin(navController)}
             )
         }
     }
