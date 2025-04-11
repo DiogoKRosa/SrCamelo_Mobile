@@ -79,7 +79,7 @@ fun VendorHomeScreen(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 20.dp)
+                    .padding(bottom = 50.dp)
             ) {
                 CustomBottomBar(
                     homeClick = homeClick,
@@ -228,6 +228,7 @@ fun VendorHomeScreen(
                         }
                     }
                 }
+                Spacer(modifier = Modifier.height(24.dp))
             }
 
         }

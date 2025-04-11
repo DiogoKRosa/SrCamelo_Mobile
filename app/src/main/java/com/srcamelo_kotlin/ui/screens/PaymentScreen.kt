@@ -130,9 +130,9 @@ fun PaymentScreen(
 
                 data class Payment(val text: String, val painter:Painter)
                 val items = listOf(
-                    Payment("Débito", painterResource(R.drawable.card_icon), onClickDebit),
-                    Payment("Crédito", painterResource(R.drawable.card_icon), onClickCredit),
-                    Payment("Pix", painterResource(R.drawable.pix_icon), onClickPix)
+                    Payment("Débito", painterResource(R.drawable.card_icon)),
+                    Payment("Crédito", painterResource(R.drawable.card_icon)),
+                    Payment("Pix", painterResource(R.drawable.pix_icon))
                 )
 
                 LazyVerticalGrid(
