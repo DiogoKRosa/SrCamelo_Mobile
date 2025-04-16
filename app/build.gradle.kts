@@ -143,4 +143,6 @@ dependencies {
 
     // Google maps
     implementation(libs.maps.compose)
+
+    implementation(libs.play.services.location.v2101)
 }

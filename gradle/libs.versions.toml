@@ -14,6 +14,7 @@ coilCompose = "2.2.2"
 
 # Timber
 mapsCompose = "4.3.3"
+playServicesLocationVersion = "21.0.1"
 timber = "5.0.1"
 
 # DataStore
@@ -60,6 +61,7 @@ roomRuntime = "2.4.2"
 roomCompiler = "2.4.2"
 identityDoctypesJvm = "202411.1"
 runtimeLivedata = "1.7.5"
+playServicesLocation = "21.3.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -81,6 +83,7 @@ coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coi
 
 # Timber
 maps-compose = { module = "com.google.maps.android:maps-compose", version.ref = "mapsCompose" }
+play-services-location-v2101 = { module = "com.google.android.gms:play-services-location", version.ref = "playServicesLocationVersion" }
 timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
 
 # DataStore
@@ -127,6 +130,7 @@ androidx-room-runtime = { group = "androidx.room", name = "room-runtime", versio
 androidx-room-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "roomRuntime" }
 identity-doctypes-jvm = { group = "com.android.identity", name = "identity-doctypes-jvm", version.ref = "identityDoctypesJvm" }
 androidx-runtime-livedata = { group = "androidx.compose.runtime", name = "runtime-livedata", version.ref = "runtimeLivedata" }
+play-services-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "playServicesLocation" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

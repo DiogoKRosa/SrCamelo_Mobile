@@ -11,9 +11,14 @@ import com.srcamelo_kotlin.data.preferences.DataStoreManager
 import com.srcamelo_kotlin.ui.theme.SrCamelo_KotlinTheme
 import dagger.hilt.android.AndroidEntryPoint
 import android.Manifest
+import androidx.activity.viewModels
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import com.srcamelo_kotlin.ui.viewModel.UpdateLocationViewModel
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    private val locationViewModel: UpdateLocationViewModel by viewModels()
 
     // Lista das permissões necessárias
     private val permissions = arrayOf(
@@ -42,12 +47,20 @@ class MainActivity : ComponentActivity() {
     // Inicio da tela
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Inicia o rastreamento
+        locationViewModel.startLocationUpdates()
+
         enableEdgeToEdge()
         setContent {
+            val location by locationViewModel.locationFlow.collectAsState()
             val dataStoreManager = DataStoreManager.getInstance(this)
+
             SrCamelo_KotlinTheme {
-                SrCameloNavigation(dataStoreManager = dataStoreManager)
+                SrCameloNavigation(dataStoreManager = dataStoreManager, locationViewModel = locationViewModel)
             }
+
+            //Log.w(TAG, "LatLng: ${location?.latitude ?: "--"}, ${location?.longitude ?: "--"}")
         }
 
         permissionLauncherMultiple.launch(permissions)
