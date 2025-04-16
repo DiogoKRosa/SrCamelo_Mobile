@@ -1,19 +1,11 @@
 package com.srcamelo_kotlin
 
-import android.content.ContentValues.TAG
-import android.content.Context
-import android.content.pm.PackageManager
-import android.util.Log
-import androidx.activity.viewModels
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.core.content.ContextCompat
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.google.android.gms.location.LocationServices
 import com.srcamelo_kotlin.data.preferences.DataStoreManager
 import com.srcamelo_kotlin.ui.screens.ChooseAccountScreen
 import com.srcamelo_kotlin.ui.screens.ChooseProductScreen
@@ -30,8 +22,6 @@ import com.srcamelo_kotlin.ui.screens.VendorAccountScreen
 import com.srcamelo_kotlin.ui.screens.VendorHomeScreen
 import com.srcamelo_kotlin.ui.screens.VendorPageScreen
 import com.srcamelo_kotlin.ui.viewModel.UpdateLocationViewModel
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.time.delay
 
 enum class SrCameloScreens(){
     Login,
