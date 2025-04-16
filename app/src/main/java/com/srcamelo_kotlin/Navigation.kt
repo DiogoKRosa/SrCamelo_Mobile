@@ -1,11 +1,19 @@
 package com.srcamelo_kotlin
 
+import android.content.ContentValues.TAG
+import android.content.Context
+import android.content.pm.PackageManager
+import android.util.Log
+import androidx.activity.viewModels
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.core.content.ContextCompat
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.google.android.gms.location.LocationServices
 import com.srcamelo_kotlin.data.preferences.DataStoreManager
 import com.srcamelo_kotlin.ui.screens.ChooseAccountScreen
 import com.srcamelo_kotlin.ui.screens.ChooseProductScreen
@@ -21,7 +29,9 @@ import com.srcamelo_kotlin.ui.screens.ProductFormScreen
 import com.srcamelo_kotlin.ui.screens.VendorAccountScreen
 import com.srcamelo_kotlin.ui.screens.VendorHomeScreen
 import com.srcamelo_kotlin.ui.screens.VendorPageScreen
-import com.srcamelo_kotlin.ui.viewModel.MapViewModel
+import com.srcamelo_kotlin.ui.viewModel.UpdateLocationViewModel
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.time.delay
 
 enum class SrCameloScreens(){
     Login,
@@ -45,9 +55,10 @@ enum class SrCameloScreens(){
 fun SrCameloNavigation(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
-    dataStoreManager: DataStoreManager
+    dataStoreManager: DataStoreManager,
+    locationViewModel: UpdateLocationViewModel
 ){
-    val mapViewModel = MapViewModel()
+
     NavHost(
         navController = navController,
         startDestination = SrCameloScreens.Login.name,
@@ -134,16 +145,16 @@ fun SrCameloNavigation(
                 onClickProfile = {navController.navigate(SrCameloScreens.ClientOptions.name)},
                 onClickMap = {navController.navigate(SrCameloScreens.MapScreen.name)},
                 onClickVendor = {navController.navigate(SrCameloScreens.VendorPage.name)},
-                mapViewModel = mapViewModel
+                mapViewModel = locationViewModel
             )
         }
 
         composable(route = SrCameloScreens.MapScreen.name){
-            MapScreen(mapViewModel = mapViewModel)
+            MapScreen(mapViewModel = locationViewModel)
         }
 
         composable(route = SrCameloScreens.VendorPage.name){
-            var vendor_id = 
+
 
             VendorPageScreen(
                 dataStoreManager = dataStoreManager,

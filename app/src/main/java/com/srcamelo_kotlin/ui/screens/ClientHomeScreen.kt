@@ -40,7 +40,7 @@ import com.srcamelo_kotlin.ui.theme.DarkOrange
 import com.srcamelo_kotlin.ui.theme.LightOrange
 import com.srcamelo_kotlin.ui.theme.SrCamelo_KotlinTheme
 import com.srcamelo_kotlin.ui.theme.White
-import com.srcamelo_kotlin.ui.viewModel.MapViewModel
+import com.srcamelo_kotlin.ui.viewModel.UpdateLocationViewModel
 
 
 @Composable
@@ -110,7 +110,7 @@ fun ClientHomeScreen(
     onClickProfile: () -> Unit = {},
     onClickMap: () -> Unit = {},
     onClickVendor: () -> Unit = {},
-    mapViewModel: MapViewModel,
+    mapViewModel: UpdateLocationViewModel,
 ){
     Scaffold (
         topBar = { ClientHomeTopBar()},
@@ -224,8 +224,8 @@ fun ClientHomeScreen(
 @Preview(showSystemUi = true)
 @Composable
 private fun PreviewClientHomeScreen(){
-    var mapViewModel = MapViewModel()
+    //val mapViewModel = MapViewModel()
     SrCamelo_KotlinTheme {
-        ClientHomeScreen(mapViewModel = mapViewModel)
+        //ClientHomeScreen(mapViewModel = mapViewModel)
     }
 }

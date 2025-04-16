@@ -3,6 +3,7 @@ package com.srcamelo_kotlin.ui.screens
 import android.content.pm.PackageManager
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
@@ -14,6 +15,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -33,7 +35,8 @@ import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
 import com.srcamelo_kotlin.ui.fonts.Montserrat
 import com.srcamelo_kotlin.ui.theme.DarkOrange
-import com.srcamelo_kotlin.ui.viewModel.MapViewModel
+import com.srcamelo_kotlin.ui.viewModel.UpdateLocationViewModel
+import com.srcamelo_kotlin.ui.viewModel.UsersViewModel
 
 @Composable
 fun OrangeMarker(
@@ -56,14 +59,19 @@ fun OrangeMarker(
 }
 
 @Composable
-fun MapScreen(mapViewModel: MapViewModel) {
+fun MapScreen(mapViewModel: UpdateLocationViewModel) {
     // Initialize the camera position state, which controls the camera's position on the map
     val cameraPositionState = rememberCameraPositionState()
     // Obtain the current context
     val context = LocalContext.current
     // Observe the user's location from the ViewModel
-    val userLocation by mapViewModel.userLocation
-    val fusedLocationClient = remember { LocationServices.getFusedLocationProviderClient(context) }
+    //val userLocation by mapViewModel.userLocation
+    val userLocation by mapViewModel.locationFlow.collectAsState()
+    val latitude = userLocation?.latitude ?: 0.0
+    val longitude = userLocation?.longitude ?: 0.0
+
+    val location = LatLng(latitude, longitude)
+    //val fusedLocationClient = remember { LocationServices.getFusedLocationProviderClient(context) }
 
 
     // Handle permission requests for accessing fine location
@@ -72,7 +80,7 @@ fun MapScreen(mapViewModel: MapViewModel) {
     ) { isGranted ->
         if (isGranted) {
             // Fetch the user's location and update the camera if permission is granted
-            mapViewModel.fetchUserLocation(context, fusedLocationClient)
+            //mapViewModel.fetchUserLocation(context, fusedLocationClient)
         } else {
             // Handle the case when permission is denied
             println("Location permission was denied by the user.")
@@ -88,7 +96,7 @@ fun MapScreen(mapViewModel: MapViewModel) {
                 android.Manifest.permission.ACCESS_FINE_LOCATION
             ) -> {
                 // Fetch the user's location and update the camera
-                mapViewModel.fetchUserLocation(context, fusedLocationClient)
+                //mapViewModel.fetchUserLocation(context, fusedLocationClient)
             }
 
             else -> {
@@ -105,9 +113,9 @@ fun MapScreen(mapViewModel: MapViewModel) {
     ){
         // If the user's location is available, place a marker on the map
         userLocation?.let {
-            OrangeMarker(locationMap = it, name = "Você")
+            OrangeMarker(locationMap = location, name = "Você")
             // Move the camera to the user's location with a zoom level of 10f
-            cameraPositionState.position = CameraPosition.fromLatLngZoom(it, 18f)
+            cameraPositionState.position = CameraPosition.fromLatLngZoom(location, 18f)
         }
     }
 }
@@ -115,5 +123,5 @@ fun MapScreen(mapViewModel: MapViewModel) {
 @Preview
 @Composable
 private fun MapScreenPreview(){
-    MapScreen(mapViewModel = MapViewModel())
+    //MapScreen(mapViewModel = locationViewModel)
 }
