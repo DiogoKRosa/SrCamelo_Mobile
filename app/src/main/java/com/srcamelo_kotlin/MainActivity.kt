@@ -1,5 +1,6 @@
 package com.srcamelo_kotlin
 
+import android.Manifest
 import android.content.ContentValues.TAG
 import android.os.Bundle
 import android.util.Log
@@ -7,14 +8,13 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
-import com.srcamelo_kotlin.data.preferences.DataStoreManager
-import com.srcamelo_kotlin.ui.theme.SrCamelo_KotlinTheme
-import dagger.hilt.android.AndroidEntryPoint
-import android.Manifest
 import androidx.activity.viewModels
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import com.srcamelo_kotlin.data.preferences.DataStoreManager
+import com.srcamelo_kotlin.ui.theme.SrCamelo_KotlinTheme
 import com.srcamelo_kotlin.ui.viewModel.UpdateLocationViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {

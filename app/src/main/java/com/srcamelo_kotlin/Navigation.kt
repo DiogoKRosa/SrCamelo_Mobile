@@ -60,7 +60,7 @@ fun SrCameloNavigation(
                 onVendorLoginSubmit = {navController.navigate(SrCameloScreens.VendorHome.name)},
                 onNewVendorLoginSubmit = {navController.navigate(SrCameloScreens.NewVendorHome.name)},
                 onChooseAccountClick = {navController.navigate(SrCameloScreens.ChooseAccount.name)},
-                /*dataStore = dataStoreManager,*/
+                dataStoreManager = dataStoreManager,
             )
         }
 

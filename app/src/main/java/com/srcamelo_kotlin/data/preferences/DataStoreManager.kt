@@ -12,15 +12,14 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import okio.IOException
 
-class DataStoreManager( context: Context) {
-    private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "AUTH_TOKEN")
+class DataStoreManager(context: Context) {
+    private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
     private val dataStore = context.dataStore
-
-
 
     companion object{
         private var INSTANCE: DataStoreManager? = null
         val AUTH_TOKEN = stringPreferencesKey("AUTH_TOKEN")
+        val USER_ID = stringPreferencesKey("USER_ID")
 
         fun getInstance(context: Context): DataStoreManager {
             return INSTANCE ?: synchronized(this) {
@@ -49,22 +48,22 @@ class DataStoreManager( context: Context) {
             }
     }
 
-    suspend fun setUserId(id: String){
+    suspend fun setUserId(userId: String){
         dataStore.edit { preferences ->
-            preferences[stringPreferencesKey("USER_ID")] = id
+            preferences[USER_ID] = userId
         }
     }
-    fun getUserId(): Flow<String> {
+    fun getUserId(): Flow<String>{
         return dataStore.data
-            .catch { exception ->
-                if (exception is IOException) {
+            .catch{ exception ->
+                if(exception is IOException){
                     emit(emptyPreferences())
-                } else {
+                }else{
                     throw exception
                 }
             }
-            .map { preferences ->
-                preferences[stringPreferencesKey("USER_ID")] ?: ""
+            .map{ preferences ->
+                preferences[USER_ID] ?: ""
             }
     }
 }
