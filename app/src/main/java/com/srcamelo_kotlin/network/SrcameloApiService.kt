@@ -1,9 +1,8 @@
 package com.srcamelo_kotlin.network
 
 import com.srcamelo_kotlin.model.BannerModel
-import com.srcamelo_kotlin.model.Id
+import com.srcamelo_kotlin.model.LocationModel
 import com.srcamelo_kotlin.model.LoginRequest
-import com.srcamelo_kotlin.model.ProductModel
 import com.srcamelo_kotlin.model.ReponseUser
 import com.srcamelo_kotlin.model.ResponseModel
 import com.srcamelo_kotlin.model.ResponseProduct
@@ -12,8 +11,6 @@ import com.srcamelo_kotlin.model.UserModel
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -74,5 +71,18 @@ interface SrcameloApiService{
     suspend fun updateProduct(
         @Part("product") product: RequestBody,
         @Part image: MultipartBody.Part? = null
+    ): ResponseModel
+
+    @POST("location")
+    suspend fun updateLocation(
+        @Body data: LocationModel,
+    ): ResponseModel
+
+    @GET("location")
+    suspend fun getAllLocation(): ResponseModel
+
+    @GET("location/{user_id}")
+    suspend fun getUserLocation(
+        @Path("user_id") userId: String
     ): ResponseModel
 }
