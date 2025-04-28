@@ -1,16 +1,13 @@
 package com.srcamelo_kotlin.data.repository
 
-import android.media.Image
-import android.util.Log
-import com.srcamelo_kotlin.domain.repository.UserRepository
 import com.srcamelo_kotlin.model.BannerModel
-import com.srcamelo_kotlin.model.Id
 import com.srcamelo_kotlin.model.UserModel
 import com.srcamelo_kotlin.network.Resource
 import com.srcamelo_kotlin.network.SrcameloApiService
 import okhttp3.MultipartBody
 import okio.IOException
 import retrofit2.HttpException
+import java.net.SocketTimeoutException
 import javax.inject.Inject
 
 class UserRepositoryImpl @Inject constructor(
@@ -49,6 +46,21 @@ class UserRepositoryImpl @Inject constructor(
             Resource.Error("${e.message}")
         } catch( e: IOException){
             Resource.Error("${e.message}")
+        }
+    }
+
+    suspend fun getAllVendors(): Resource<Any>{
+        return try{
+            val response = api.getAllVendors()
+            Resource.Success(response)
+        } catch (e: HttpException) {
+            Resource.Error("Erro HTTP: ${e.message}")
+        } catch (e: java.io.IOException) {
+            Resource.Error("Erro de IO: ${e.message}")
+        } catch (e: SocketTimeoutException) {
+            Resource.Error("Timeout: ${e.message}")
+        } catch (e: Exception) {
+            Resource.Error("Erro Desconhecido: ${e.message}")
         }
     }
 }

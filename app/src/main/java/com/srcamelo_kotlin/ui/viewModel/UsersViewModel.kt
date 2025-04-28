@@ -13,6 +13,7 @@ import com.srcamelo_kotlin.common.TextFieldState
 import com.srcamelo_kotlin.model.UserModel
 import com.srcamelo_kotlin.network.Resource
 import com.srcamelo_kotlin.ui.use_case.CreateClientUseCase
+import com.srcamelo_kotlin.ui.use_case.GetAllVendorsUseCase
 import com.srcamelo_kotlin.ui.use_case.GetUserUseCase
 import com.srcamelo_kotlin.ui.use_case.UpdateVendorBannerUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -32,8 +33,13 @@ data class UserState(
 class UsersViewModel @Inject constructor(
     private val createClientUseCase: CreateClientUseCase,
     private val updateVendorBannerUseCase: UpdateVendorBannerUseCase,
-    private val getUserUseCase: GetUserUseCase
+    private val getUserUseCase: GetUserUseCase,
+    private val getAllVendorsUseCase: GetAllVendorsUseCase
 ) : ViewModel() {
+
+
+    private val _vendorList = MutableLiveData<MutableList<UserModel?>>()
+    val vendorList: LiveData<MutableList<UserModel?>> = _vendorList
 
     private val _userObj = MutableLiveData<UserModel?>()
     val userObj: MutableLiveData<UserModel?> = _userObj
@@ -216,7 +222,24 @@ class UsersViewModel @Inject constructor(
                     print("Erro: ${response.result.message}")
                 }
                 else -> {
+                    Log.e("ERRO", "Erro Desconhecido")
+                }
+            }
+        }
+    }
 
+    fun getVendors(){
+        viewModelScope.launch{
+            val response = getAllVendorsUseCase()
+            when(response.result){
+                is Resource.Success -> {
+                    Log.e("Debug", "GetAllVendors -> ${response.result.data}")
+                }
+                is Resource.Error -> {
+                    Log.e("ERRO", "GetAllVendors -> ${response.result.message}")
+                }
+                else -> {
+                    Log.e("ERRO", "GetAllVendors -> Desconhecido")
                 }
             }
         }

@@ -14,3 +14,13 @@ class GetUserUseCase @Inject constructor(
         return GetUserResult(repository.getUserById(id))
     }
 }
+
+data class GetAllVendorsResult(val result: Resource<Any>)
+
+data class GetAllVendorsUseCase @Inject constructor(
+    private val repositoryImpl: UserRepositoryImpl
+){
+    suspend operator fun invoke(): GetAllVendorsResult{
+        return GetAllVendorsResult(repositoryImpl.getAllVendors())
+    }
+}

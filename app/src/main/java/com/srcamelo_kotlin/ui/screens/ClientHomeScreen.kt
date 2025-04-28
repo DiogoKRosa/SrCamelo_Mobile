@@ -21,6 +21,8 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonColors
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -29,6 +31,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.srcamelo_kotlin.R
 import com.srcamelo_kotlin.ui.components.CardText
@@ -41,6 +44,7 @@ import com.srcamelo_kotlin.ui.theme.LightOrange
 import com.srcamelo_kotlin.ui.theme.SrCamelo_KotlinTheme
 import com.srcamelo_kotlin.ui.theme.White
 import com.srcamelo_kotlin.ui.viewModel.UpdateLocationViewModel
+import com.srcamelo_kotlin.ui.viewModel.UsersViewModel
 
 
 @Composable
@@ -111,6 +115,7 @@ fun ClientHomeScreen(
     onClickMap: () -> Unit = {},
     onClickVendor: () -> Unit = {},
     mapViewModel: UpdateLocationViewModel,
+    userViewModel: UsersViewModel = hiltViewModel()
 ){
     Scaffold (
         topBar = { ClientHomeTopBar()},
@@ -165,6 +170,11 @@ fun ClientHomeScreen(
                 ){
                     MapScreen(mapViewModel)
                 }
+            }
+
+            val nearbyVendors = userViewModel.vendorList.observeAsState(emptyList())
+            LaunchedEffect(this) {
+                userViewModel.getVendors()
             }
 
             Column(

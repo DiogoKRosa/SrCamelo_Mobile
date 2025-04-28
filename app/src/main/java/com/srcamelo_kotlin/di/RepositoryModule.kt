@@ -12,6 +12,7 @@ import com.srcamelo_kotlin.network.SrcameloApiService
 import com.srcamelo_kotlin.ui.use_case.CreateClientUseCase
 import com.srcamelo_kotlin.ui.use_case.CreateProductUseCase
 import com.srcamelo_kotlin.ui.use_case.DeleteProductUseCase
+import com.srcamelo_kotlin.ui.use_case.GetAllVendorsUseCase
 import com.srcamelo_kotlin.ui.use_case.GetProductUseCase
 import com.srcamelo_kotlin.ui.use_case.GetUserUseCase
 import com.srcamelo_kotlin.ui.use_case.LoginUseCase
@@ -88,8 +89,8 @@ class RepositoryModule {
     }
 
     @Provides
-    fun provideUserViewModel(useCase: CreateClientUseCase, updateVendorBannerUseCase: UpdateVendorBannerUseCase, getUserUseCase: GetUserUseCase): UsersViewModel{
-        return UsersViewModel(useCase, updateVendorBannerUseCase, getUserUseCase)
+    fun provideUserViewModel(useCase: CreateClientUseCase, updateVendorBannerUseCase: UpdateVendorBannerUseCase, getUserUseCase: GetUserUseCase, getAllVendorsUseCase: GetAllVendorsUseCase): UsersViewModel{
+        return UsersViewModel(useCase, updateVendorBannerUseCase, getUserUseCase, getAllVendorsUseCase)
     }
 
     @Provides
