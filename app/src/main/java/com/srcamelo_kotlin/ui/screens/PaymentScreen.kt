@@ -16,67 +16,27 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.srcamelo_kotlin.R
 import com.srcamelo_kotlin.ui.components.BackTopAppBarWithTitle
 import com.srcamelo_kotlin.ui.components.BigIconButton
 import com.srcamelo_kotlin.ui.components.BoldOrangeTitle
 import com.srcamelo_kotlin.ui.components.ButtonWhite
 import com.srcamelo_kotlin.ui.components.CouponTextField
-import com.srcamelo_kotlin.ui.fonts.Montserrat
+import com.srcamelo_kotlin.ui.components.RegularBlackSubTitle
+import com.srcamelo_kotlin.ui.components.SemiBoldBlackSubTitle
+import com.srcamelo_kotlin.ui.components.SemiBoldOrangeSubTitle
+import com.srcamelo_kotlin.ui.components.SemiBoldOrangeTitle
 import com.srcamelo_kotlin.ui.theme.DarkOrange
-import com.srcamelo_kotlin.ui.theme.Gray
 import com.srcamelo_kotlin.ui.theme.LightOrange
 import java.text.NumberFormat
 
-@Composable
-fun SemiBoldOrangeTitle(
-    modifier: Modifier = Modifier,
-    text: String,
-    size: Int = 20
-){
-    Text(text, modifier = modifier,
-        fontFamily = Montserrat, color = DarkOrange, fontSize = size.sp, fontWeight = FontWeight.SemiBold)
-}
-
-@Composable
-fun SemiBoldBlackSubTitle(
-    modifier: Modifier = Modifier,
-    text: String,
-    size: Int = 16
-){
-    Text(text, modifier = modifier, fontFamily = Montserrat, fontSize = size.sp,
-        fontWeight = FontWeight.SemiBold, color = Gray)
-}
-
-@Composable
-fun RegularBlackSubTitle(
-    modifier: Modifier = Modifier,
-    text: String,
-    size: Int = 16
-){
-    Text(text, modifier = modifier, fontFamily = Montserrat, fontSize = size.sp,
-        fontWeight = FontWeight.Normal, color = Gray)
-}
-
-@Composable
-fun SemiBoldOrangeSubTitle(
-    modifier: Modifier = Modifier,
-    text: String,
-    size: Int = 16
-){
-    Text(text = text, modifier=modifier, fontFamily = Montserrat, fontSize = size.sp,
-        fontWeight = FontWeight.SemiBold, color = DarkOrange)
-}
 
 @Composable
 fun PaymentScreen(

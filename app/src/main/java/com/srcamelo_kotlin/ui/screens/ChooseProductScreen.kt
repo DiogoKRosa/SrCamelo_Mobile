@@ -32,6 +32,7 @@ import com.srcamelo_kotlin.ui.components.BackTopAppBarWithTitle
 import com.srcamelo_kotlin.ui.components.BoldOrangeTitle
 import com.srcamelo_kotlin.ui.components.ButtonWhite
 import com.srcamelo_kotlin.ui.components.CardText
+import com.srcamelo_kotlin.ui.components.NumberText
 import com.srcamelo_kotlin.ui.components.OrangeCardText
 import com.srcamelo_kotlin.ui.fonts.Montserrat
 import com.srcamelo_kotlin.ui.theme.DarkOrange
@@ -40,19 +41,6 @@ import com.srcamelo_kotlin.ui.theme.LightGray
 import com.srcamelo_kotlin.ui.theme.LightOrange
 import com.srcamelo_kotlin.ui.theme.SrCamelo_KotlinTheme
 import com.srcamelo_kotlin.ui.theme.White
-
-@Composable
-fun NumberText(
-    modifier: Modifier = Modifier,
-    text: String = "0"
-){
-    Text(text,
-        fontFamily = Montserrat,
-        fontSize = 12.sp,
-        fontWeight = FontWeight.Normal,
-        modifier = modifier
-    )
-}
 
 @Composable
 fun MiniAddButton(
