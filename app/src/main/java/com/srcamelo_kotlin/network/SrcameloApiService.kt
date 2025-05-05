@@ -3,6 +3,7 @@ package com.srcamelo_kotlin.network
 import com.srcamelo_kotlin.model.BannerModel
 import com.srcamelo_kotlin.model.LocationModel
 import com.srcamelo_kotlin.model.LoginRequest
+import com.srcamelo_kotlin.model.MessageModel
 import com.srcamelo_kotlin.model.ReponseUser
 import com.srcamelo_kotlin.model.ResponseModel
 import com.srcamelo_kotlin.model.ResponseProduct
@@ -10,6 +11,7 @@ import com.srcamelo_kotlin.model.ResponseToken
 import com.srcamelo_kotlin.model.UserModel
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import org.json.JSONObject
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -19,6 +21,7 @@ import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Part
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 
 interface SrcameloApiService{
@@ -88,4 +91,20 @@ interface SrcameloApiService{
     suspend fun getUserLocation(
         @Path("user_id") userId: String
     ): ResponseModel
+
+    @GET("chat")
+    suspend fun getAllUniqueLastMessages(
+        @Query("login_id") loginId: String
+    ): ResponseModel
+
+    @GET("chat/{user_id}")
+    suspend fun getAllMessagesBetweenUsers(
+        @Path("user_id") userId: String,
+        @Query("login_id") loginId: String
+    ):ResponseModel
+
+    @POST("chat")
+    suspend fun sendMessage(
+        @Body body: MessageModel
+    ):ResponseModel
 }
