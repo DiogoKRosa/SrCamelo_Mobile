@@ -1,5 +1,6 @@
 package com.srcamelo_kotlin.ui.components
 
+import android.os.Message
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -104,6 +105,7 @@ fun NumberText(
         fontFamily = Montserrat,
         fontSize = size.sp,
         fontWeight = FontWeight.Normal,
+        color = Color.Black,
         modifier = modifier
     )
 }
@@ -150,6 +152,16 @@ fun SemiBoldOrangeSubTitle(
         fontWeight = FontWeight.SemiBold, color = DarkOrange)
 }
 
+@Composable
+fun MessageText(
+    modifier: Modifier = Modifier,
+    text: String,
+    size: Int = 14
+){
+    Text(text = text, modifier=modifier, fontFamily = Montserrat, fontSize = size.sp,
+        fontWeight = FontWeight.Medium, color = Color(0xFF2A2827))
+}
+
 @Preview
 @Composable
 private fun TextVariationsPreview(){
@@ -164,5 +176,6 @@ private fun TextVariationsPreview(){
         SemiBoldOrangeTitle(text = text)
         SemiBoldBlackSubTitle(text= text)
         RegularBlackSubTitle(text = text)
+        MessageText(text = text)
     }
 }
