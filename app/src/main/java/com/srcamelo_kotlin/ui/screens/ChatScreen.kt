@@ -1,5 +1,6 @@
 package com.srcamelo_kotlin.ui.screens
 
+import android.content.Context
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -8,24 +9,34 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.srcamelo_kotlin.R
 import com.srcamelo_kotlin.SrCameloScreens
+import com.srcamelo_kotlin.data.preferences.DataStoreManager
 import com.srcamelo_kotlin.ui.components.BackTopAppBarWithTitle
 import com.srcamelo_kotlin.ui.components.CardText
 import com.srcamelo_kotlin.ui.components.CustomBottomBar
@@ -33,6 +44,9 @@ import com.srcamelo_kotlin.ui.components.RegularBlackSubTitle
 import com.srcamelo_kotlin.ui.theme.Gray
 import com.srcamelo_kotlin.ui.theme.LightGray
 import com.srcamelo_kotlin.ui.theme.LightOrange
+import com.srcamelo_kotlin.ui.viewModel.ChatViewModel
+import com.srcamelo_kotlin.ui.viewModel.UiState
+import dagger.hilt.android.lifecycle.HiltViewModel
 
 
 @Composable
@@ -67,8 +81,18 @@ fun ChatScreen(
     onClickCart: () -> Unit = {},
     onClickBalloon: () -> Unit = {},
     onClickProfile: () -> Unit = {},
-    navController: NavController
+    navController: NavController,
+    dataStoreManager: DataStoreManager,
+    chatViewModel: ChatViewModel = hiltViewModel()
 ){
+    val loginId by dataStoreManager.getUserId().collectAsState("")
+    val chat by chatViewModel.chatList.observeAsState(emptyList())
+    val chatState by chatViewModel.chatUiState.observeAsState(UiState.Loading)
+
+    LaunchedEffect(loginId){
+        chatViewModel.GetAllLastMessage(loginId)
+    }
+
     Scaffold(
         topBar = { BackTopAppBarWithTitle(onClickBack = onClickBack, title = "Conversas")},
         bottomBar = {
@@ -88,12 +112,30 @@ fun ChatScreen(
         containerColor = LightOrange,
         contentColor = LightOrange
     ) { innerPadding ->
-        Column(modifier = Modifier.padding(innerPadding).padding(horizontal = 10.dp).fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally){
-            UserChatRow(onClickChat = {navController.navigate(SrCameloScreens.PrivateChat.name + "/Chat1")})
-            Spacer(modifier = Modifier.width(365.dp).height(1.dp).border(1.dp, LightGray))
-            UserChatRow(onClickChat = {navController.navigate(SrCameloScreens.PrivateChat.name + "/Chat2")})
-            Spacer(modifier = Modifier.width(365.dp).height(1.dp).border(1.dp, LightGray))
+        when(chatState){
+            is UiState.Loading -> {
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    CircularProgressIndicator()
+                }
+            }
+            is UiState.Success -> {
+                LazyColumn(modifier = Modifier.padding(innerPadding).padding(horizontal = 10.dp).fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally){
+                    items(chat){ item ->
+                        item.participants.remove(loginId)
+                        UserChatRow(onClickChat = {navController.navigate(SrCameloScreens.PrivateChat.name + "/${item.participants[0]}")},
+                            userName = item.participants[0],
+                            lastMessagePreview = item.message)
+                        Spacer(modifier = Modifier.width(365.dp).height(1.dp).border(1.dp, LightGray))
+                    }
+                }
+            }
+            is UiState.Error -> {
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    val errorMessage = (chatState as UiState.Error).message
+                    CardText(text = errorMessage)
+                }
+            }
         }
     }
 }
