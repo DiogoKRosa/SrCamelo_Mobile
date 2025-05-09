@@ -34,7 +34,7 @@ interface SrcameloApiService{
     ): UserModel
 
     @GET("vendors")
-    suspend fun getAllVendors(): Response<List<UserModel>>
+    suspend fun getAllVendors(): ResponseModel<List<UserModel>>
 
     @POST("users")
     suspend fun createUser(
@@ -60,7 +60,7 @@ interface SrcameloApiService{
     suspend fun createProduct(
         @Part("product") product: RequestBody,
         @Part image: MultipartBody.Part? = null
-    ): ResponseModel
+    ): ResponseModel<Any>
 
     @GET("products/{vendor_id}")
     suspend fun getProductsById(
@@ -70,41 +70,41 @@ interface SrcameloApiService{
     @DELETE("products/{product_id}")
     suspend fun deleteProduct(
         @Path("product_id") productId:String
-    ): ResponseModel
+    ): ResponseModel<Any>
 
     @Multipart
     @PUT("products/{product_id}")
     suspend fun updateProduct(
         @Part("product") product: RequestBody,
         @Part image: MultipartBody.Part? = null
-    ): ResponseModel
+    ): ResponseModel<Any>
 
     @POST("location")
     suspend fun updateLocation(
         @Body data: LocationModel,
-    ): ResponseModel
+    ): ResponseModel<Any>
 
     @GET("location")
-    suspend fun getAllLocation(): ResponseModel
+    suspend fun getAllLocation(): ResponseModel<Any>
 
     @GET("location/{user_id}")
     suspend fun getUserLocation(
         @Path("user_id") userId: String
-    ): ResponseModel
+    ): ResponseModel<Any>
 
     @GET("chat")
     suspend fun getAllUniqueLastMessages(
         @Query("login_id") loginId: String
-    ): ResponseModel
+    ): ResponseModel<List<MessageModel>>
 
     @GET("chat/{user_id}")
     suspend fun getAllMessagesBetweenUsers(
         @Path("user_id") userId: String,
         @Query("login_id") loginId: String
-    ):ResponseModel
+    ):ResponseModel<List<MessageModel>>
 
     @POST("chat")
     suspend fun sendMessage(
         @Body body: MessageModel
-    ):ResponseModel
+    ):ResponseModel<Any>
 }
