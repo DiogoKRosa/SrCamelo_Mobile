@@ -1,6 +1,7 @@
 package com.srcamelo_kotlin.ui.screens
 
 import android.content.Context
+import android.util.Log
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -37,6 +38,7 @@ import coil.compose.AsyncImage
 import com.srcamelo_kotlin.R
 import com.srcamelo_kotlin.SrCameloScreens
 import com.srcamelo_kotlin.data.preferences.DataStoreManager
+import com.srcamelo_kotlin.model.MessageModel
 import com.srcamelo_kotlin.ui.components.BackTopAppBarWithTitle
 import com.srcamelo_kotlin.ui.components.CardText
 import com.srcamelo_kotlin.ui.components.CustomBottomBar
@@ -47,6 +49,7 @@ import com.srcamelo_kotlin.ui.theme.LightOrange
 import com.srcamelo_kotlin.ui.viewModel.ChatViewModel
 import com.srcamelo_kotlin.ui.viewModel.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 
 
 @Composable
@@ -64,7 +67,7 @@ fun UserChatRow(
             contentDescription = userName,
             placeholder = painterResource(R.drawable.placeholder_logo_black),
             error = painterResource(R.drawable.placeholder_logo_black),
-            modifier = Modifier.size(45.dp).clip(CircleShape).border(1.dp, Gray ,CircleShape)
+            modifier = Modifier.size(45.dp).clip(CircleShape)
         )
         Column(modifier= Modifier.padding(start = 10.dp).fillMaxHeight(),
             verticalArrangement = Arrangement.spacedBy(3.dp)){
@@ -90,7 +93,10 @@ fun ChatScreen(
     val chatState by chatViewModel.chatUiState.observeAsState(UiState.Loading)
 
     LaunchedEffect(loginId){
-        chatViewModel.GetAllLastMessage(loginId)
+        while (true){
+            chatViewModel.GetAllLastMessage(loginId)
+            delay(5000)
+        }
     }
 
     Scaffold(
@@ -122,9 +128,9 @@ fun ChatScreen(
                 LazyColumn(modifier = Modifier.padding(innerPadding).padding(horizontal = 10.dp).fillMaxWidth(),
                     horizontalAlignment = Alignment.CenterHorizontally){
                     items(chat){ item ->
-                        item.participants.remove(loginId)
-                        UserChatRow(onClickChat = {navController.navigate(SrCameloScreens.PrivateChat.name + "/${item.participants[0]}")},
-                            userName = item.participants[0],
+                        val otherParticipant = item.participants.firstOrNull { it != loginId } ?: "Desconhecido"
+                        UserChatRow(onClickChat = {navController.navigate(SrCameloScreens.PrivateChat.name + "/${otherParticipant}")},
+                            userName = otherParticipant,
                             lastMessagePreview = item.message)
                         Spacer(modifier = Modifier.width(365.dp).height(1.dp).border(1.dp, LightGray))
                     }
