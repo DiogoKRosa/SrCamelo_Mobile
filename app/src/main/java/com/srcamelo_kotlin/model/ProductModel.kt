@@ -17,4 +17,6 @@ data class ProductModel(
     val description: String = "",
     @SerializedName("category")
     val category: String = "",
+    @SerializedName("image")
+    val image: String = ""
 )

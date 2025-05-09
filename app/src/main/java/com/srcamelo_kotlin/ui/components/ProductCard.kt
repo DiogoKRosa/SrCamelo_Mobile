@@ -51,10 +51,7 @@ fun ProductCard(
             ) {
                 if (imageUri.isNotEmpty()) {
                     AsyncImage(
-                        model = ImageRequest.Builder(LocalContext.current)
-                            .data(imageUri)
-                            .crossfade(true)
-                            .build(),
+                        model = imageUri,
                         contentDescription = "Product Image",
                         contentScale = ContentScale.Crop,
                         modifier = Modifier

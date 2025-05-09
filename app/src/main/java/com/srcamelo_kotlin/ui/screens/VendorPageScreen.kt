@@ -31,11 +31,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.srcamelo_kotlin.BuildConfig
 import com.srcamelo_kotlin.R
+import com.srcamelo_kotlin.SrCameloScreens
 import com.srcamelo_kotlin.data.preferences.DataStoreManager
+import com.srcamelo_kotlin.model.Id
+import com.srcamelo_kotlin.model.ProductModel
+import com.srcamelo_kotlin.model.UserModel
 import com.srcamelo_kotlin.ui.components.ButtonWhite
 import com.srcamelo_kotlin.ui.components.CustomBottomBar
 import com.srcamelo_kotlin.ui.components.PaymentTypeCart
@@ -50,6 +55,7 @@ import com.srcamelo_kotlin.ui.viewModel.UsersViewModel
 
 @Composable
 fun VendorPageScreen(
+    uid: String,
     homeClick: () -> Unit,
     cartClick: () -> Unit = {},
     balloonClick: () -> Unit = {},
@@ -58,20 +64,19 @@ fun VendorPageScreen(
     productViewModel: ProductViewModel = hiltViewModel(),
     dataStoreManager: DataStoreManager,
     onClickLocation: () -> Unit = {},
-    onClickBuy: () -> Unit = {}
+    onClickBuy: () -> Unit = {},
+    navController: NavController
 ) {
-//    val context = LocalContext.current
-    val baseUrl = BuildConfig.BASE_URL
-    val userId by dataStoreManager.getUserId().collectAsState(initial = "")
+    val loginId by dataStoreManager.getUserId().collectAsState(initial = "")
     val user by userViewModel.userObj.observeAsState()
-    LaunchedEffect(userId){
-        if (userId.isNotBlank()) {
-            userViewModel.getUserById(userId)
+    LaunchedEffect(loginId){
+        if (loginId.isNotBlank()) {
+            userViewModel.getUserById(uid)
         }
     }
 
     Scaffold(
-        topBar = { TopAppBarWithTitle(title = user?.name?:"") },
+        topBar = { TopAppBarWithTitle(title = user?.name ?:"") },
         bottomBar = {
             Box(
                 modifier = Modifier
@@ -104,12 +109,8 @@ fun VendorPageScreen(
                     .background(White)
             ) {
                 if (user != null && user?.image.toString().isNotEmpty()) {
-                    println("\"$baseUrl${user?.image}\"")
                     AsyncImage(
-                        model = ImageRequest.Builder(LocalContext.current)
-                            .data("$baseUrl${user?.image}")
-                            .crossfade(true)
-                            .build(),
+                        model = "${BuildConfig.BASE_URL}${user!!.image}",
                         contentDescription = "Banner Image",
                         contentScale = ContentScale.Crop
                     )
@@ -145,9 +146,9 @@ fun VendorPageScreen(
             )
 
             val products by productViewModel.products.observeAsState(emptyList())
-            LaunchedEffect(userId){
-                if(userId.isNotBlank()) {
-                    productViewModel.getProductsFromVendor(userId)
+            LaunchedEffect(loginId){
+                if(loginId.isNotBlank()) {
+                    productViewModel.getProductsFromVendor(uid)
                 }
             }
 
@@ -175,7 +176,7 @@ fun VendorPageScreen(
                                     name = product.name,
                                     price = product.price.toString(),
                                     description = product.description,
-                                    imageUri = "$baseUrl${product.image}"
+                                    imageUri = "${BuildConfig.BASE_URL}${product.image}"
                                 )
                                 Spacer(modifier = Modifier.height(10.dp))
                             }
@@ -228,7 +229,7 @@ fun VendorPageScreen(
                 Spacer(modifier = Modifier.height(24.dp))
             }
             ButtonWhite(title = "Localizar", onClick = onClickLocation)
-            ButtonWhite(title = "Comprar", onClick = onClickBuy)
+            ButtonWhite(title = "Pedir", onClick = {navController.navigate(SrCameloScreens.ChooseProduct.name + "/${uid}")})
         }
     }
 }
