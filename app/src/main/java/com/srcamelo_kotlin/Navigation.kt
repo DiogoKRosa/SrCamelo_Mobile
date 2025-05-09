@@ -1,5 +1,7 @@
 package com.srcamelo_kotlin
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -46,6 +48,7 @@ enum class SrCameloScreens(){
     PrivateChat
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun SrCameloNavigation(
     modifier: Modifier = Modifier,
@@ -118,6 +121,18 @@ fun SrCameloNavigation(
             )
         }
 
+        composable(route = SrCameloScreens.VendorChat.name){
+            ChatScreen(
+                onClickBack = {navController.navigateUp()},
+                onClickHome = {navController.navigate(SrCameloScreens.VendorHome.name)},
+                onClickCart = {/* TODO */},
+                onClickBalloon = {navController.navigate(SrCameloScreens.VendorChat.name)},
+                onClickProfile = {navController.navigate((SrCameloScreens.VendorOptions.name))},
+                navController = navController,
+                dataStoreManager = dataStoreManager
+            )
+        }
+
         composable(route = SrCameloScreens.VendorOptions.name){
             VendorAccountScreen(
                 onClickBack = {navController.navigateUp()},
@@ -140,7 +155,9 @@ fun SrCameloNavigation(
                 onClickProfile = {navController.navigate(SrCameloScreens.ClientOptions.name)},
                 onClickMap = {navController.navigate(SrCameloScreens.MapScreen.name)},
                 onClickVendor = {navController.navigate(SrCameloScreens.VendorPage.name)},
-                mapViewModel = locationViewModel
+                mapViewModel = locationViewModel,
+                dataStoreManager = dataStoreManager,
+                navController = navController
             )
         }
 
@@ -148,22 +165,28 @@ fun SrCameloNavigation(
             MapScreen(mapViewModel = locationViewModel)
         }
 
-        composable(route = SrCameloScreens.VendorPage.name){
+        composable(route = SrCameloScreens.VendorPage.name + "/{uid}"){ navBackStackEntry ->
+            val uid = navBackStackEntry.arguments?.getString("uid")
             VendorPageScreen(
+                uid = uid?:"",
                 dataStoreManager = dataStoreManager,
                 homeClick = {navController.navigate(SrCameloScreens.ClientHome.name)},
                 cartClick = {},
                 balloonClick = {navController.navigate(SrCameloScreens.ClientChat.name)},
                 profileClick = { navController.navigate(SrCameloScreens.ClientOptions.name)},
                 onClickLocation = {navController.navigate(SrCameloScreens.MapScreen.name)},
-                onClickBuy = {navController.navigate(SrCameloScreens.ChooseProduct.name)}
+                onClickBuy = {navController.navigate(SrCameloScreens.ChooseProduct.name)},
+                navController = navController
             )
         }
 
-        composable(route = SrCameloScreens.ChooseProduct.name){
+        composable(route = SrCameloScreens.ChooseProduct.name + "/{uid}"){ navBackStackEntry ->
+            val uid = navBackStackEntry.arguments?.getString("uid")
             ChooseProductScreen(
+                uid = uid?:"",
                 onClickBack = {navController.navigateUp()},
-                onClickPay = {navController.navigate(SrCameloScreens.ChoosePayment.name)}
+                onClickPay = {navController.navigate(SrCameloScreens.ChoosePayment.name)},
+                dataStoreManager = dataStoreManager
             )
         }
 
@@ -206,8 +229,11 @@ fun SrCameloNavigation(
 
         composable(route = SrCameloScreens.PrivateChat.name + "/{uid}"){ navBackStackEntry ->
             val uid = navBackStackEntry.arguments?.getString("uid")
-            PrivateChatScreen(uid = uid,
-                onClickBack = {navController.navigateUp()})
+            PrivateChatScreen(
+                uid = uid,
+                onClickBack = {navController.navigateUp()},
+                dataStoreManager = dataStoreManager
+            )
         }
     }
 }
