@@ -37,9 +37,8 @@ class UsersViewModel @Inject constructor(
     private val getAllVendorsUseCase: GetAllVendorsUseCase
 ) : ViewModel() {
 
-
-    private val _vendorList = MutableLiveData<MutableList<UserModel?>>()
-    val vendorList: LiveData<MutableList<UserModel?>> = _vendorList
+    private val _vendorList = MutableLiveData<List<UserModel>>()
+    val vendorList: LiveData<List<UserModel>> = _vendorList
 
     private val _userObj = MutableLiveData<UserModel?>()
     val userObj: MutableLiveData<UserModel?> = _userObj
@@ -233,6 +232,7 @@ class UsersViewModel @Inject constructor(
             val response = getAllVendorsUseCase()
             when(response.result){
                 is Resource.Success -> {
+                    _vendorList.value = response.result.data as? List<UserModel> ?: emptyList()
                     Log.e("Debug", "GetAllVendors -> ${response.result.data}")
                 }
                 is Resource.Error -> {

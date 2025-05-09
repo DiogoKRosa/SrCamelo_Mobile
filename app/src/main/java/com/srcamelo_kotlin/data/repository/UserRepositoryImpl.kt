@@ -49,10 +49,10 @@ class UserRepositoryImpl @Inject constructor(
         }
     }
 
-    suspend fun getAllVendors(): Resource<Any>{
+    suspend fun getAllVendors(): Resource<List<UserModel>>{
         return try{
-            val response = api.getAllVendors()
-            Resource.Success(response)
+            val res = api.getAllVendors()
+            Resource.Success(res.data!!)
         } catch (e: HttpException) {
             Resource.Error("Erro HTTP: ${e.message}")
         } catch (e: java.io.IOException) {
