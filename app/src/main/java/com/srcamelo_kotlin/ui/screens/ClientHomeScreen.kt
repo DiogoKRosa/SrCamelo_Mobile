@@ -22,6 +22,8 @@ import androidx.compose.material3.IconButtonColors
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -32,8 +34,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import com.srcamelo_kotlin.BuildConfig
 import com.srcamelo_kotlin.R
+import com.srcamelo_kotlin.SrCameloScreens
+import com.srcamelo_kotlin.data.preferences.DataStoreManager
 import com.srcamelo_kotlin.ui.components.CardText
 import com.srcamelo_kotlin.ui.components.ClientHomeTopBar
 import com.srcamelo_kotlin.ui.components.CustomBottomBar
@@ -115,8 +121,17 @@ fun ClientHomeScreen(
     onClickMap: () -> Unit = {},
     onClickVendor: () -> Unit = {},
     mapViewModel: UpdateLocationViewModel,
-    userViewModel: UsersViewModel = hiltViewModel()
+    userViewModel: UsersViewModel = hiltViewModel(),
+    dataStoreManager: DataStoreManager,
+    navController: NavController
 ){
+    val loginId by dataStoreManager.getUserId().collectAsState("")
+    val vendorList by userViewModel.vendorList.observeAsState(emptyList())
+
+    LaunchedEffect(loginId) {
+        userViewModel.getVendors()
+    }
+
     Scaffold (
         topBar = { ClientHomeTopBar()},
         bottomBar = {
@@ -186,21 +201,20 @@ fun ClientHomeScreen(
                     modifier = Modifier.fillMaxWidth().padding(top = 15.dp),
                     horizontalArrangement = Arrangement.spacedBy(10.dp)
                 ){
+                    /*
                     data class Vendedor(val urlImage: String, val vendorName: String, val distance: String)
                     val vendedores = listOf(
-                        Vendedor("", "José Lanches", "500m"),
-                        Vendedor("", "Fruta Feira", "2km"),
-                        Vendedor("", "Lica Doce", "2.2km"),
-                    )
-                    items(vendedores){ vendedor ->
-                        VendorCard(urlImage = vendedor.urlImage,
-                            vendorName = vendedor.vendorName,
-                            distance = vendedor.distance,
-                            onClickVendor = onClickVendor)
+                        Vendedor("https://th.bing.com/th/id/R.81f5239d7444621274697c3e90ebc098?rik=rQBt9JwLPk1%2f6Q&pid=ImgRaw&r=0", "José Lanches", "500m"),
+                        Vendedor("https://www.fisenf.com/wp-content/uploads/2015/11/frutas-y-frutos-secos.jpg", "Fruta Feira", "2km"),
+                        Vendedor("https://th.bing.com/th/id/OIP.rnBIFkMdWCVwnIIrQvoIYAHaE8?w=272&h=181&c=7&r=0&o=5&cb=iwc1&pid=1.7", "Lica Doce", "2.2km"),
+                    )*/
+                    items(vendorList){ vendor ->
+                        VendorCard(urlImage = "${(BuildConfig.BASE_URL + vendor.image) ?: ""}",
+                            vendorName = vendor.establishment?:"",
+                            distance = "",
+                            onClickVendor = {navController.navigate(SrCameloScreens.VendorPage.name + "/${vendor.id?.oid}")})
                     }
-
                 }
-
             }
 
             Column(
@@ -212,16 +226,16 @@ fun ClientHomeScreen(
                     modifier = Modifier.fillMaxWidth().padding(top = 15.dp),
                     horizontalArrangement = Arrangement.spacedBy(10.dp)
                     ){
-                    data class Vendedor(val urlImage: String, val vendorName: String, val distance: String)
+                    data class Vendedor(val urlImage: String, val vendorName: String)
                     val vendedores = listOf(
-                        Vendedor("", "José Lanches", "500m"),
-                        Vendedor("", "Fruta Feira", "2km"),
-                        Vendedor("", "Lica Doce", "2.2km"),
+                        Vendedor("https://th.bing.com/th/id/OIP.yyu6tac2R2zC2SpRPDX-5QHaE5?cb=iwc1&rs=1&pid=ImgDetMain", "Lauro Coco"),
+                        Vendedor("https://th.bing.com/th/id/OIP.6Banar3lSn5RUxWBO7P6CQHaF7?cb=iwc1&rs=1&pid=ImgDetMain", "Fruta Feira"),
+                        Vendedor("https://th.bing.com/th/id/OIP.rnBIFkMdWCVwnIIrQvoIYAHaE8?w=272&h=181&c=7&r=0&o=5&cb=iwc1&pid=1.7", "Lica Doce"),
                     )
                     items(vendedores){ vendedor ->
                         VendorCard(urlImage = vendedor.urlImage,
                             vendorName = vendedor.vendorName,
-                            distance = vendedor.distance)
+                            distance = "")
                     }
 
                 }
