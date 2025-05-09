@@ -145,4 +145,7 @@ dependencies {
     implementation(libs.maps.compose)
 
     implementation(libs.play.services.location.v2101)
+
+    //Datetime
+    implementation(libs.kotlinx.datetime)
 }
