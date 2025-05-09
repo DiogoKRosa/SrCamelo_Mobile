@@ -11,11 +11,10 @@ import javax.inject.Inject
 class MessageRepositoryImpl @Inject constructor(
     private val api : SrcameloApiService
 ) {
-    suspend fun getAllLastMessages(userId: String): Resource<Any> {
+    suspend fun getAllLastMessages(userId: String): Resource<List<MessageModel>> {
         return try {
-
             val response = api.getAllUniqueLastMessages(userId)
-            Resource.Success(response)
+            Resource.Success(response.data!!)
 
         } catch (e: HttpException) {
             Resource.Error("Erro HTTP: ${e.message}")
@@ -28,10 +27,10 @@ class MessageRepositoryImpl @Inject constructor(
         }
     }
 
-    suspend fun getPrivateChatContent(loginId: String, userId: String): Resource<Any>{
+    suspend fun getPrivateChatContent(loginId: String, userId: String): Resource<List<MessageModel>>{
         return try{
-            val response = api.getAllMessagesBetweenUsers(loginId, userId)
-            Resource.Success(response)
+            val response = api.getAllMessagesBetweenUsers(loginId = loginId, userId = userId)
+            Resource.Success(response.data!!)
         } catch (e: HttpException) {
             Resource.Error("Erro HTTP: ${e.message}")
         } catch (e: IOException) {

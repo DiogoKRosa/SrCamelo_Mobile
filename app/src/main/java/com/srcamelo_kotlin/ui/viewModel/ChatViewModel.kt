@@ -4,6 +4,7 @@ package com.srcamelo_kotlin.ui.viewModel
 import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -53,23 +54,18 @@ class ChatViewModel @Inject constructor(
 
         viewModelScope.launch{
             try{
-                //_chatList.value = listOf()
-                val currentList = _chatList.value?.toMutableList() ?: mutableListOf()
-
                 val response = getLastMessageUseCase(loginId)
-
                 when(response.result){
                     is Resource.Error -> _chatUiState.value = UiState.Error("${response.result.message}")
                     is Resource.Success -> {
-                        //currentList.add()
-                        Log.w("GetAllLastMessages", "${response.result.data}")
-                        _chatList.value = currentList
+                        val messages = response.result.data as? List<MessageModel> ?: emptyList()
+                        _chatList.value = messages
                         _chatUiState.value = UiState.Success
                     }
                     else -> _chatUiState.value = UiState.Error("Erro desconhecido")
                 }
             } catch(e: Exception){
-                _chatUiState.value = UiState.Error("Erro ao carregar mensagens")
+                _chatUiState.value = UiState.Error("Erro ao carregar mensagens: ${e}")
             }
         }
     }
@@ -80,16 +76,13 @@ class ChatViewModel @Inject constructor(
     ){
         viewModelScope.launch {
             try{
-                val currentList = _privateChatMessages.value?.toMutableList() ?: mutableListOf()
-
-                val response = getPrivateChatUseCase(loginId, userId)
+                val response = getPrivateChatUseCase(loginId = loginId, userId = userId)
 
                 when(response.result){
                     is Resource.Error -> _chatUiState.value = UiState.Error("${response.result.message}")
                     is Resource.Success -> {
-                        Log.w("GetAllMessagesFromPrivateChat", "${response.result.data}")
-                        //currentList.add()
-                        _privateChatMessages.value = currentList
+                        val messages = response.result.data as? List<MessageModel> ?: emptyList()
+                        _privateChatMessages.value = messages
                         _chatUiState.value = UiState.Success
                     }
                     else -> _chatUiState.value = UiState.Error("Erro desconhecido")
@@ -105,12 +98,14 @@ class ChatViewModel @Inject constructor(
     ){
         viewModelScope.launch{
             try{
+                //Log.d("SEND_MESSAGE", message.toString())
                 val response = sendMessageUseCase(message)
 
                 when(response.result){
                     is Resource.Error -> _chatUiState.value = UiState.Error("${response.result.message}")
                     is Resource.Success -> {
-                        //GetAllMessagesFromPrivateChat()
+                        setMessage("")
+                        _chatUiState.value = UiState.Success
                     }
                     else -> _chatUiState.value = UiState.Error("Erro desconhecido")
                 }

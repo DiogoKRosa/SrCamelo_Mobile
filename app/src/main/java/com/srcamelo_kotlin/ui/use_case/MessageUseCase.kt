@@ -5,8 +5,8 @@ import com.srcamelo_kotlin.model.MessageModel
 import com.srcamelo_kotlin.network.Resource
 import javax.inject.Inject
 
-data class MessageResult(
-    val result: Resource<Any>? = null
+data class MessageResult<T>(
+    val result: Resource<T>? = null
 )
 
 class GetLastMessageUseCase @Inject constructor(
@@ -14,9 +14,9 @@ class GetLastMessageUseCase @Inject constructor(
 ){
     suspend operator fun invoke(
         userId: String
-    ): MessageResult {
+    ): MessageResult<List<MessageModel>> {
 
-        return MessageResult(repositoryImpl.getAllLastMessages(userId))
+        return MessageResult(repositoryImpl.getAllLastMessages(userId) as Resource<List<MessageModel>>)
 
     }
 }
@@ -27,9 +27,9 @@ class GetPrivateChatUseCase @Inject constructor(
     suspend operator fun invoke(
         loginId: String,
         userId: String
-    ): MessageResult {
+    ): MessageResult<List<MessageModel>> {
 
-        return MessageResult(repositoryImpl.getPrivateChatContent(loginId, userId))
+        return MessageResult(repositoryImpl.getPrivateChatContent(loginId, userId) as Resource<List<MessageModel>>)
     }
 }
 
@@ -38,7 +38,7 @@ class SendMessageUseCase @Inject constructor(
 ){
     suspend operator fun invoke(
         message: MessageModel
-    ): MessageResult{
+    ): MessageResult<Any>{
         return MessageResult(repositoryImpl.sendMessage(message))
     }
 }
