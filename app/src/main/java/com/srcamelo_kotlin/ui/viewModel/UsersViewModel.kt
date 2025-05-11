@@ -40,6 +40,12 @@ class UsersViewModel @Inject constructor(
     private val _vendorList = MutableLiveData<List<UserModel>>()
     val vendorList: LiveData<List<UserModel>> = _vendorList
 
+    private val _clientUser = MutableLiveData<UserModel?>()
+    val clientUser: LiveData<UserModel?> = _clientUser
+
+    private val _vendorUser = MutableLiveData<UserModel?>()
+    val vendorUser: LiveData<UserModel?> = _vendorUser
+
     private val _userObj = MutableLiveData<UserModel?>()
     val userObj: MutableLiveData<UserModel?> = _userObj
 
@@ -214,8 +220,41 @@ class UsersViewModel @Inject constructor(
             val response = getUserUseCase(userId)
             when(response.result){
                 is Resource.Success -> {
-                    Log.e("Debug","User:" + response.result.data)
                     _userObj.value = response.result.data
+                }
+                is Resource.Error -> {
+                    print("Erro: ${response.result.message}")
+                }
+                else -> {
+                    Log.e("ERRO", "Erro Desconhecido")
+                }
+            }
+        }
+    }
+
+    fun getVendorById(userId: String){
+        viewModelScope.launch{
+            val response = getUserUseCase(userId)
+            when(response.result){
+                is Resource.Success -> {
+                    _vendorUser.value = response.result.data
+                }
+                is Resource.Error -> {
+                    print("Erro: ${response.result.message}")
+                }
+                else -> {
+                    Log.e("ERRO", "Erro Desconhecido")
+                }
+            }
+        }
+    }
+
+    fun getClientById(userId: String){
+        viewModelScope.launch{
+            val response = getUserUseCase(userId)
+            when(response.result){
+                is Resource.Success -> {
+                    _clientUser.value = response.result.data
                 }
                 is Resource.Error -> {
                     print("Erro: ${response.result.message}")
