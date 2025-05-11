@@ -1,5 +1,6 @@
 package com.srcamelo_kotlin.ui.screens
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,7 +24,9 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.srcamelo_kotlin.R
+import com.srcamelo_kotlin.model.InvoiceModel
 import com.srcamelo_kotlin.ui.components.BackTopAppBarWithTitle
 import com.srcamelo_kotlin.ui.components.BigIconButton
 import com.srcamelo_kotlin.ui.components.BoldOrangeTitle
@@ -35,17 +38,22 @@ import com.srcamelo_kotlin.ui.components.SemiBoldOrangeSubTitle
 import com.srcamelo_kotlin.ui.components.SemiBoldOrangeTitle
 import com.srcamelo_kotlin.ui.theme.DarkOrange
 import com.srcamelo_kotlin.ui.theme.LightOrange
+import com.srcamelo_kotlin.ui.viewModel.InvoiceViewModel
+import com.srcamelo_kotlin.ui.viewModel.UsersViewModel
 import java.text.NumberFormat
 
 
 @Composable
 fun PaymentScreen(
+    uid: String,
     onClickBack: () -> Unit = {},
-    onClickDebit: () -> Unit = {},
-    onClickCredit: () -> Unit = {},
-    onClickPix: () -> Unit = {}
+    onClickPayment: () -> Unit = {},
+    invoiceViewModel: InvoiceViewModel = hiltViewModel(),
+    usersViewModel: UsersViewModel = hiltViewModel()
 ){
     val formatter = NumberFormat.getCurrencyInstance(java.util.Locale("pt", "BR"))
+    val invoice = invoiceViewModel.invoiceToSend
+
     Scaffold(
         topBar = { BackTopAppBarWithTitle(title = "Pagamento", onClickBack = onClickBack) },
         containerColor = LightOrange
@@ -53,19 +61,19 @@ fun PaymentScreen(
         Column (modifier = Modifier.padding(innerpadding).fillMaxWidth().padding(horizontal = 23.dp). padding(top=42.dp)){
             Row( horizontalArrangement = Arrangement.SpaceBetween ,modifier = Modifier.fillMaxWidth()){
                 BoldOrangeTitle(title = "Total")
-                SemiBoldOrangeTitle(text = formatter.format(15))
+                SemiBoldOrangeTitle(text = formatter.format(invoice?.invoiceTotal))
             }
-            data class Invoice (val name: String, val qtd: Int, val price: Double)
-            val list = listOf(
-                Invoice("Dogão", 1, 9.00),
-                Invoice("Laranjinha", 1, 6.00)
-            )
+            val products = if(invoice != null){
+                invoice.productsList
+            }else{
+                emptyList()
+            }
             LazyColumn(modifier = Modifier.padding(top = 10.dp), verticalArrangement = Arrangement.spacedBy(8.dp) ) {
-                items(list){ item ->
+                items(products){ item ->
                     Row (horizontalArrangement = Arrangement.SpaceBetween,
                         modifier = Modifier.fillMaxWidth().padding(horizontal = 10.dp)){
-                        SemiBoldBlackSubTitle(text="${item.qtd}x ${item.name}")
-                        SemiBoldBlackSubTitle(text=formatter.format(item.price * item.qtd))
+                        SemiBoldBlackSubTitle(text="${item.productQtd}x ${item.productName}")
+                        SemiBoldBlackSubTitle(text=formatter.format(item.productPrice))
                     }
                 }
             }
@@ -88,21 +96,33 @@ fun PaymentScreen(
                 Spacer(modifier = Modifier.height(11.dp))
                 RegularBlackSubTitle(text = "Escolher forma de Pagamento")
 
-                data class Payment(val text: String, val painter:Painter)
-                val items = listOf(
-                    Payment("Débito", painterResource(R.drawable.card_icon)),
-                    Payment("Crédito", painterResource(R.drawable.card_icon)),
-                    Payment("Pix", painterResource(R.drawable.pix_icon))
-                )
+                val vendorUser = usersViewModel.vendorUser.value?.paymentMethods?: emptyList()
 
                 LazyVerticalGrid(
                     columns = GridCells.Fixed(2),
                     modifier = Modifier.padding(top = 32.dp),
                     verticalArrangement = Arrangement.spacedBy(30.dp)
                 ) {
-                    items(items){ item ->
+                    items(vendorUser){ item ->
                         Box(modifier = Modifier.wrapContentSize()){
-                            BigIconButton(text = item.text, icon = item.painter, onClick = {})
+                            if(invoice != null){
+                                if(item == "pix"){
+                                    BigIconButton(text = item, icon= painterResource(R.drawable.pix_icon), onClick = {
+                                        invoice.paymentType = "pix"
+                                        onClickPayment()
+                                    })
+                                }else if(item == "debito"){
+                                    BigIconButton(text = item, icon= painterResource(R.drawable.card_icon), onClick = {
+                                        invoice.paymentType = "debito"
+                                        onClickPayment()
+                                    })
+                                }else if(item=="credito"){
+                                    BigIconButton(text = item, icon= painterResource(R.drawable.card_icon), onClick = {
+                                        invoice.paymentType = "credito"
+                                        onClickPayment()
+                                    })
+                                }
+                            }
                         }
                     }
                 }
@@ -111,8 +131,10 @@ fun PaymentScreen(
     }
 }
 
+/*
 @Preview(showSystemUi = true)
 @Composable
 fun PreviewPaymentScreen(){
     PaymentScreen()
 }
+*/
