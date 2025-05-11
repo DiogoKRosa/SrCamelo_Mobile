@@ -99,13 +99,14 @@ fun  NormalGreenText(
 fun NumberText(
     modifier: Modifier = Modifier,
     text: String = "0",
-    size: Int = 12
+    size: Int = 12,
+    color: Color = Color.Black
 ){
     Text(text,
         fontFamily = Montserrat,
         fontSize = size.sp,
         fontWeight = FontWeight.Normal,
-        color = Color.Black,
+        color = color,
         modifier = modifier
     )
 }
@@ -135,10 +136,11 @@ fun SemiBoldBlackSubTitle(
 fun RegularBlackSubTitle(
     modifier: Modifier = Modifier,
     text: String,
-    size: Int = 16
+    size: Int = 16,
+    color: Color = Gray
 ){
     Text(text, modifier = modifier, fontFamily = Montserrat, fontSize = size.sp,
-        fontWeight = FontWeight.Normal, color = Gray
+        fontWeight = FontWeight.Normal, color = color
     )
 }
 
