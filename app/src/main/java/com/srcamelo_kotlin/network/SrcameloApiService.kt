@@ -1,6 +1,7 @@
 package com.srcamelo_kotlin.network
 
 import com.srcamelo_kotlin.model.BannerModel
+import com.srcamelo_kotlin.model.InvoiceModel
 import com.srcamelo_kotlin.model.LocationModel
 import com.srcamelo_kotlin.model.LoginRequest
 import com.srcamelo_kotlin.model.MessageModel
@@ -106,5 +107,10 @@ interface SrcameloApiService{
     @POST("chat")
     suspend fun sendMessage(
         @Body body: MessageModel
+    ):ResponseModel<Any>
+
+    @POST("invoice")
+    suspend fun sendInvoice(
+        @Body body: InvoiceModel
     ):ResponseModel<Any>
 }
