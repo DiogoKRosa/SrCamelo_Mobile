@@ -3,17 +3,22 @@ package com.srcamelo_kotlin
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navigation
 import com.srcamelo_kotlin.data.preferences.DataStoreManager
 import com.srcamelo_kotlin.ui.screens.ChatScreen
 import com.srcamelo_kotlin.ui.screens.ChooseAccountScreen
 import com.srcamelo_kotlin.ui.screens.ChooseProductScreen
 import com.srcamelo_kotlin.ui.screens.ClientAccountScreen
 import com.srcamelo_kotlin.ui.screens.ClientHomeScreen
+import com.srcamelo_kotlin.ui.screens.CompleteScreen
+import com.srcamelo_kotlin.ui.screens.InitialScreen
 import com.srcamelo_kotlin.ui.screens.LoginScreen
 import com.srcamelo_kotlin.ui.screens.MapScreen
 import com.srcamelo_kotlin.ui.screens.NewFormClientScreen
@@ -22,12 +27,16 @@ import com.srcamelo_kotlin.ui.screens.NewVendorHomeScreen
 import com.srcamelo_kotlin.ui.screens.PaymentScreen
 import com.srcamelo_kotlin.ui.screens.PrivateChatScreen
 import com.srcamelo_kotlin.ui.screens.ProductFormScreen
+import com.srcamelo_kotlin.ui.screens.PurchaseScreen
 import com.srcamelo_kotlin.ui.screens.VendorAccountScreen
 import com.srcamelo_kotlin.ui.screens.VendorHomeScreen
 import com.srcamelo_kotlin.ui.screens.VendorPageScreen
+import com.srcamelo_kotlin.ui.viewModel.InvoiceViewModel
 import com.srcamelo_kotlin.ui.viewModel.UpdateLocationViewModel
+import com.srcamelo_kotlin.ui.viewModel.UsersViewModel
 
 enum class SrCameloScreens(){
+    Initial,
     Login,
     ChooseAccount,
     NewClientForm,
@@ -44,8 +53,9 @@ enum class SrCameloScreens(){
     ChooseProduct,
     ChoosePayment,
     Purchase,
+    Finish,
     ClientChat,
-    PrivateChat
+    PrivateChat,
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -59,16 +69,19 @@ fun SrCameloNavigation(
 
     NavHost(
         navController = navController,
-        startDestination = SrCameloScreens.Login.name,
+        startDestination = SrCameloScreens.Initial.name,
         modifier = modifier
     ){
+        composable(route = SrCameloScreens.Initial.name){
+            InitialScreen(navController = navController)
+        }
+
         composable(route = SrCameloScreens.Login.name){
             LoginScreen(
                 onClientLoginSubmit = {navController.navigate(SrCameloScreens.ClientHome.name)},
                 onVendorLoginSubmit = {navController.navigate(SrCameloScreens.VendorHome.name)},
                 onNewVendorLoginSubmit = {navController.navigate(SrCameloScreens.NewVendorHome.name)},
                 onChooseAccountClick = {navController.navigate(SrCameloScreens.ChooseAccount.name)},
-                dataStoreManager = dataStoreManager,
             )
         }
 
@@ -143,7 +156,7 @@ fun SrCameloNavigation(
                 invoicesButton = {/* TODO */},
                 editInformationButton = {/* TODO */},
                 editProductButton = {navController.navigate(SrCameloScreens.ProductForm.name)},
-                leaveButton = { goBackLogin(navController)}
+                leaveButton = {goBackLogin(navController)}
             )
         }
 
@@ -180,27 +193,65 @@ fun SrCameloNavigation(
             )
         }
 
-        composable(route = SrCameloScreens.ChooseProduct.name + "/{uid}"){ navBackStackEntry ->
-            val uid = navBackStackEntry.arguments?.getString("uid")
-            ChooseProductScreen(
-                uid = uid?:"",
-                onClickBack = {navController.navigateUp()},
-                onClickPay = {navController.navigate(SrCameloScreens.ChoosePayment.name)},
-                dataStoreManager = dataStoreManager
-            )
-        }
+        navigation(
+            startDestination = "ChooseProduct/{uid}",
+            route = "invoice_graph/{uid}"
+        ) {
+            composable("ChooseProduct/{uid}") { entry ->
+                val parentEntry = remember(entry) {
+                    navController.getBackStackEntry("invoice_graph/${entry.arguments?.getString("uid")}")
+                }
+                val invoiceViewModel: InvoiceViewModel = hiltViewModel(parentEntry)
+                val usersViewModel: UsersViewModel = hiltViewModel(parentEntry)
 
-        composable(route = SrCameloScreens.ChoosePayment.name){
-            PaymentScreen(
-                onClickBack = {navController.navigateUp()},
-                onClickDebit = {/* TODO */},
-                onClickCredit =  {/* TODO */},
-                onClickPix = {/* TODO */}
-            )
-        }
+                ChooseProductScreen(
+                    uid = entry.arguments?.getString("uid") ?: "",
+                    onClickBack = {navController.navigateUp()},
+                    invoiceViewModel = invoiceViewModel,
+                    usersViewModel = usersViewModel,
+                    navController = navController,
+                    dataStoreManager = dataStoreManager
+                )
+            }
 
-        composable(route = SrCameloScreens.Purchase.name){
+            composable("ChoosePayment/{uid}") { entry ->
+                val parentEntry = remember(entry) {
+                    navController.getBackStackEntry("invoice_graph/${entry.arguments?.getString("uid")}")
+                }
+                val invoiceViewModel: InvoiceViewModel = hiltViewModel(parentEntry)
+                val usersViewModel: UsersViewModel = hiltViewModel(parentEntry)
 
+                PaymentScreen(
+                    onClickBack = {navController.navigateUp()},
+                    uid = entry.arguments?.getString("uid") ?: "",
+                    invoiceViewModel = invoiceViewModel,
+                    usersViewModel = usersViewModel,
+                    onClickPayment = {navController.navigate(SrCameloScreens.Purchase.name)}
+                )
+            }
+
+            composable(route = SrCameloScreens.Purchase.name){ entry ->
+                val parentEntry = remember(entry) {
+                    navController.getBackStackEntry("invoice_graph/${entry.arguments?.getString("uid")}")
+                }
+                val invoiceViewModel: InvoiceViewModel = hiltViewModel(parentEntry)
+                val usersViewModel: UsersViewModel = hiltViewModel(parentEntry)
+
+                PurchaseScreen(
+                    invoiceViewModel = invoiceViewModel,
+                    usersViewModel = usersViewModel,
+                    onClickBack = {navController.navigateUp()},
+                    onClickFinish = {navController.navigate(SrCameloScreens.Finish.name)}
+                )
+            }
+
+            composable(route = SrCameloScreens.Finish.name){
+                CompleteScreen(
+                    onClickBack = {navController.navigateUp()},
+                    onClickMap = {navController.navigate(SrCameloScreens.MapScreen.name)},
+                    onClickMenu = {navController.navigate(SrCameloScreens.ClientHome.name)}
+                )
+            }
         }
 
         composable(route = SrCameloScreens.ClientOptions.name) {
@@ -212,7 +263,7 @@ fun SrCameloNavigation(
                 onClickProfile = {/* TODO */},
                 invoicesButton = {/* TODO */},
                 editInformationButton = {/* TODO */},
-                leaveButton = { goBackLogin(navController)}
+                leaveButton = {goBackLogin(navController)}
             )
         }
 
@@ -239,5 +290,9 @@ fun SrCameloNavigation(
 }
 
 private fun goBackLogin(navController: NavHostController){
-    navController.popBackStack(SrCameloScreens.Login.name, inclusive = false)
+    navController.navigate(SrCameloScreens.Login.name) {
+        popUpTo(SrCameloScreens.Initial.name) {
+            inclusive = true
+        }
+    }
 }

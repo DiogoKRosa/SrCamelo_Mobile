@@ -31,7 +31,6 @@ fun LoginScreen(
     onVendorLoginSubmit: () -> Unit = {},
     onNewVendorLoginSubmit: () -> Unit = {},
     onChooseAccountClick: () -> Unit = {},
-    dataStore: DataStoreManager,
     viewModel: LoginViewModel = hiltViewModel()
 ){
 
@@ -57,11 +56,8 @@ fun LoginScreen(
         Spacer(modifier = Modifier.height(54.dp))
 
         LaunchedEffect(viewModel.uiState.value.status) {
-            println(viewModel.uiState.value)
             var result = viewModel.uiState.value.result?.userType
             val firstAccess = viewModel.uiState.value.result?.firstAccess
-            println(result)
-            println(firstAccess)
             if(viewModel.uiState.value.status){
                 if(result == "cliente") onClientLoginSubmit()
                 else if(result == "vendedor"){
