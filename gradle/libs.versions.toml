@@ -13,6 +13,7 @@ composeBom = "2024.10.00"
 coilCompose = "2.2.2"
 
 # Timber
+kotlinxDatetime = "0.6.2"
 mapsCompose = "4.3.3"
 playServicesLocationVersion = "21.0.1"
 timber = "5.0.1"
@@ -82,6 +83,7 @@ androidx-material3 = { group = "androidx.compose.material3", name = "material3" 
 coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coilCompose" }
 
 # Timber
+kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDatetime" }
 maps-compose = { module = "com.google.maps.android:maps-compose", version.ref = "mapsCompose" }
 play-services-location-v2101 = { module = "com.google.android.gms:play-services-location", version.ref = "playServicesLocationVersion" }
 timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
