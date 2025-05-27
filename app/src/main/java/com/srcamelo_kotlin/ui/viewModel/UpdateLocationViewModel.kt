@@ -8,6 +8,8 @@ import android.os.Looper
 import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
@@ -15,7 +17,9 @@ import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
 import com.srcamelo_kotlin.data.preferences.DataStoreManager
+import com.srcamelo_kotlin.model.LocationModel
 import com.srcamelo_kotlin.network.Resource
+import com.srcamelo_kotlin.ui.use_case.GetLocationUseCase
 import com.srcamelo_kotlin.ui.use_case.UpdateLocationUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -28,8 +32,12 @@ import javax.inject.Inject
 class UpdateLocationViewModel @Inject constructor(
     application: Application,
     dataStoreManager: DataStoreManager,
-    val updateLocationUseCase: UpdateLocationUseCase
+    val updateLocationUseCase: UpdateLocationUseCase,
+    val getLocationUseCase: GetLocationUseCase
 ) : AndroidViewModel(application) {
+
+    private val _locationList = MutableLiveData<List<LocationModel>>()
+    val locationList: LiveData<List<LocationModel>> = _locationList
 
     private val fusedLocationClient = LocationServices.getFusedLocationProviderClient(application)
     private val _locationFlow = MutableStateFlow<Location?>(null)
@@ -110,6 +118,23 @@ class UpdateLocationViewModel @Inject constructor(
                     Log.e("${updateLocationRequest.result.data}", "${updateLocationRequest.result.message}")
                 } else -> {
                     Log.e("ERRO", "Problema não identificado")
+                }
+            }
+        }
+    }
+
+    fun getAllLocation(loginId: String){
+        viewModelScope.launch{
+            val getLocationRequest = getLocationUseCase(loginId)
+            when(getLocationRequest){
+                is Resource.Success -> {
+                    val locations = getLocationRequest.data as? List<LocationModel> ?: emptyList()
+                    _locationList.value = locations
+                    Log.w("getAllLocation", "${getLocationRequest.data}")
+                }is Resource.Error ->{
+                    Log.e("getAllLocation", "${getLocationRequest.message}")
+                }else ->{
+                    Log.e("getAllLocation", "Problema não identificado")
                 }
             }
         }

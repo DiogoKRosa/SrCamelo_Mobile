@@ -18,8 +18,18 @@ class UpdateLocationUseCase @Inject constructor(
         longitude: Double
     ): UpdateLocationResult{
         val request = LocationModel(
-            userId, latitude, longitude
+            userId = userId, latitude = latitude, longitude = longitude
         )
         return UpdateLocationResult(result = repositoryImpl.updateLocation(request) )
+    }
+}
+
+class GetLocationUseCase @Inject constructor(
+    private val repositoryImpl: LocationRepositoryImpl
+){
+    suspend operator fun invoke(
+        loginId: String
+    ): Resource<List<LocationModel>>{
+        return repositoryImpl.getAllLocation(loginId)
     }
 }

@@ -1,6 +1,5 @@
 package com.srcamelo_kotlin.di
 
-import android.app.Application
 import android.content.Context
 import com.srcamelo_kotlin.BuildConfig
 import com.srcamelo_kotlin.data.preferences.DataStoreManager
@@ -21,7 +20,6 @@ import com.srcamelo_kotlin.ui.use_case.UpdateProductUseCase
 import com.srcamelo_kotlin.ui.use_case.UpdateVendorBannerUseCase
 import com.srcamelo_kotlin.ui.viewModel.LoginViewModel
 import com.srcamelo_kotlin.ui.viewModel.ProductViewModel
-import com.srcamelo_kotlin.ui.viewModel.UpdateLocationViewModel
 import com.srcamelo_kotlin.ui.viewModel.UsersViewModel
 import dagger.Module
 import dagger.Provides
@@ -118,11 +116,6 @@ class RepositoryModule {
     @Provides
     fun provideProductViewModel(createUseCase: CreateProductUseCase, getUseCase: GetProductUseCase, deleteProductUseCase: DeleteProductUseCase, updateProductUseCase: UpdateProductUseCase): ProductViewModel {
         return ProductViewModel(createUseCase, getUseCase, deleteProductUseCase, updateProductUseCase)
-    }
-
-    @Provides
-    fun provideUpdateLocationViewModel(application: Application, dataStoreManager: DataStoreManager, updateLocationUseCase: UpdateLocationUseCase): UpdateLocationViewModel {
-        return UpdateLocationViewModel(application, dataStoreManager, updateLocationUseCase)
     }
 
     @Provides

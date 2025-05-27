@@ -16,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -30,6 +31,7 @@ import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.MarkerComposable
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
+import com.srcamelo_kotlin.data.preferences.DataStoreManager
 import com.srcamelo_kotlin.ui.fonts.Montserrat
 import com.srcamelo_kotlin.ui.theme.DarkOrange
 import com.srcamelo_kotlin.ui.viewModel.UpdateLocationViewModel
@@ -55,7 +57,17 @@ fun OrangeMarker(
 }
 
 @Composable
-fun MapScreen(mapViewModel: UpdateLocationViewModel) {
+fun MapScreen(
+    mapViewModel: UpdateLocationViewModel,
+    dataStoreManager: DataStoreManager
+) {
+    val locationList by mapViewModel.locationList.observeAsState(emptyList())
+    val loginId by dataStoreManager.getUserId().collectAsState("")
+
+    LaunchedEffect(loginId){
+        mapViewModel.getAllLocation(loginId)
+    }
+
     // Initialize the camera position state, which controls the camera's position on the map
     val cameraPositionState = rememberCameraPositionState()
     // Obtain the current context
@@ -112,6 +124,12 @@ fun MapScreen(mapViewModel: UpdateLocationViewModel) {
             OrangeMarker(locationMap = location, name = "Você")
             // Move the camera to the user's location with a zoom level of 10f
             cameraPositionState.position = CameraPosition.fromLatLngZoom(location, 18f)
+        }
+
+        locationList.forEach { marker ->
+            if(marker.userId != loginId){
+                OrangeMarker(locationMap = LatLng(marker.latitude, marker.longitude), name = marker.userName)
+            }
         }
     }
 }

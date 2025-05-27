@@ -86,7 +86,9 @@ interface SrcameloApiService{
     ): ResponseModel<Any>
 
     @GET("location")
-    suspend fun getAllLocation(): ResponseModel<Any>
+    suspend fun getAllLocation(
+        @Query("login_id") loginId: String
+    ): ResponseModel<List<LocationModel>>
 
     @GET("location/{user_id}")
     suspend fun getUserLocation(

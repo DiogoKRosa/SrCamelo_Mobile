@@ -183,7 +183,7 @@ fun ClientHomeScreen(
                 Box(
                     modifier = Modifier.size(326.dp, 180.dp).background(color = White, shape = RoundedCornerShape(20.dp))
                 ){
-                    MapScreen(mapViewModel)
+                    MapScreen(mapViewModel, dataStoreManager = dataStoreManager)
                 }
             }
 
