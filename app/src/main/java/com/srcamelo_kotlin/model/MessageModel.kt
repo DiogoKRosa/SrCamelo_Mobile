@@ -14,5 +14,16 @@ data class MessageModel(
     @SerializedName("message")
     val message: String = "",
     @SerializedName("datetime")
-    val time: String = ""
+    val time: String = "",
+    @SerializedName("participantDetails")
+    val participantDetails: List<ParticipantDetail> = emptyList()
+)
+
+data class ParticipantDetail(
+    @SerializedName("userId")
+    val userId: String = "",
+    @SerializedName("userName")
+    val userName: String = "",
+    @SerializedName("image")
+    val image: String? = null
 )

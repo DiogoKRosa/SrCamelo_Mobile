@@ -1,7 +1,5 @@
 package com.srcamelo_kotlin.ui.screens
 
-import android.content.Context
-import android.util.Log
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -35,20 +33,18 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import com.srcamelo_kotlin.BuildConfig
 import com.srcamelo_kotlin.R
 import com.srcamelo_kotlin.SrCameloScreens
 import com.srcamelo_kotlin.data.preferences.DataStoreManager
-import com.srcamelo_kotlin.model.MessageModel
 import com.srcamelo_kotlin.ui.components.BackTopAppBarWithTitle
 import com.srcamelo_kotlin.ui.components.CardText
 import com.srcamelo_kotlin.ui.components.CustomBottomBar
 import com.srcamelo_kotlin.ui.components.RegularBlackSubTitle
-import com.srcamelo_kotlin.ui.theme.Gray
 import com.srcamelo_kotlin.ui.theme.LightGray
 import com.srcamelo_kotlin.ui.theme.LightOrange
 import com.srcamelo_kotlin.ui.viewModel.ChatViewModel
 import com.srcamelo_kotlin.ui.viewModel.UiState
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 
 
@@ -128,10 +124,17 @@ fun ChatScreen(
                 LazyColumn(modifier = Modifier.padding(innerPadding).padding(horizontal = 10.dp).fillMaxWidth(),
                     horizontalAlignment = Alignment.CenterHorizontally){
                     items(chat){ item ->
-                        val otherParticipant = item.participants.firstOrNull { it != loginId } ?: "Desconhecido"
-                        UserChatRow(onClickChat = {navController.navigate(SrCameloScreens.PrivateChat.name + "/${otherParticipant}")},
-                            userName = otherParticipant,
-                            lastMessagePreview = item.message)
+                        val otherParticipant = item.participantDetails.firstOrNull { it.userId != loginId }
+                        UserChatRow(
+                            onClickChat = {
+                                navController.navigate(
+                                    SrCameloScreens.PrivateChat.name + "/${otherParticipant?.userId ?: ""}"
+                                )
+                            },
+                            userName = otherParticipant?.userName ?: "Desconhecido",
+                            urlImage = "${BuildConfig.BASE_URL}${otherParticipant?.image ?: ""}",
+                            lastMessagePreview = item.message
+                        )
                         Spacer(modifier = Modifier.width(365.dp).height(1.dp).border(1.dp, LightGray))
                     }
                 }
