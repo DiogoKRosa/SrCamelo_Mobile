@@ -31,7 +31,7 @@ fun PaymentTypeCart(
 ){
     Box(
         modifier = Modifier
-            .size(80.dp)
+            .size(75.dp)
             .background(DarkOrange, RoundedCornerShape(26.dp)),
         contentAlignment = Alignment.Center
     ) {

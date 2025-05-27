@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.sp
 import com.srcamelo_kotlin.ui.components.AccountImage
 import com.srcamelo_kotlin.ui.components.BackTopAppBarWithTitle
 import com.srcamelo_kotlin.ui.components.CustomBottomBar
+import com.srcamelo_kotlin.ui.components.CustomVendorBottomBar
 import com.srcamelo_kotlin.ui.components.product_form.GrayNavigationButton
 import com.srcamelo_kotlin.ui.fonts.Montserrat
 import com.srcamelo_kotlin.ui.theme.LightOrange
@@ -30,7 +31,7 @@ fun VendorAccountScreen(
     onClickHome: () -> Unit = {},
     onClickCart: () -> Unit = {},
     onClickBalloon: () -> Unit = {},
-    onClickProfile: () -> Unit = {},
+    onClickBar: () -> Unit = {},
     invoicesButton: () -> Unit = {},
     editInformationButton: () -> Unit = {},
     editProductButton: () -> Unit = {},
@@ -44,12 +45,12 @@ fun VendorAccountScreen(
                 .fillMaxWidth()
                 .padding(bottom = 50.dp)
         ) {
-            CustomBottomBar(
-                homeClick = onClickHome,
-                cartClick = onClickCart,
-                balloonClick = onClickBalloon,
-                profileClick = onClickProfile
-            )
+                CustomVendorBottomBar(
+                    homeClick = onClickHome,
+                    cartClick = onClickCart,
+                    balloonClick = onClickBalloon,
+                    barClick = onClickBar
+                )
         }
         },
         containerColor = LightOrange

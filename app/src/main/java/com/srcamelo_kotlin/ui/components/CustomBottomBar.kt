@@ -3,12 +3,14 @@ package com.srcamelo_kotlin.ui.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -91,8 +93,82 @@ fun CustomBottomBar(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun CustomVendorBottomBar(
+    homeClick: () -> Unit = {},
+    barClick: () -> Unit = {},
+    cartClick: () -> Unit = {},
+    balloonClick: () -> Unit = {}
+) {
+    Box(modifier = Modifier
+        .fillMaxWidth()
+        .height(54.dp)
+        .background(DarkOrange, RoundedCornerShape(28.dp))){
+        Row(modifier = Modifier.fillMaxWidth().align(Alignment.Center).padding(10.dp),
+            horizontalArrangement = Arrangement.SpaceBetween) {
+            IconButton(
+                onClick = homeClick,
+                colors = IconButtonColors(
+                    containerColor = Color.Transparent,
+                    contentColor = White,
+                    disabledContainerColor = Color.Transparent,
+                    disabledContentColor = Color.Gray
+                )
+            ) {
+                Icon(painter = painterResource(R.drawable.home), contentDescription = "Home",
+                    modifier = Modifier.size(45.dp))
+            }
+            IconButton(
+                onClick = barClick,
+                colors = IconButtonColors(
+                    containerColor = Color.Transparent,
+                    contentColor = White,
+                    disabledContainerColor = Color.Transparent,
+                    disabledContentColor = Color.Gray
+                )
+            ) {
+                Icon(painter = painterResource(R.drawable.bar_chart), contentDescription = "Home",
+                    modifier = Modifier.size(45.dp))
+            }
+            IconButton(
+                onClick = cartClick,
+                colors = IconButtonColors(
+                    containerColor = Color.Transparent,
+                    contentColor = White,
+                    disabledContainerColor = Color.Transparent,
+                    disabledContentColor = Color.Gray
+                )
+            ) {
+                Icon(painter = painterResource(R.drawable.shopping_cart),
+                    contentDescription = "Home",
+                    modifier = Modifier.size(45.dp)
+                )
+            }
+            IconButton(
+                onClick = balloonClick,
+                colors = IconButtonColors(
+                    containerColor = Color.Transparent,
+                    contentColor = White,
+                    disabledContainerColor = Color.Transparent,
+                    disabledContentColor = Color.Gray
+                )
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.chat),
+                    contentDescription = "Home",
+                    modifier = Modifier.size(45.dp)
+                )
+            }
+        }
+    }
+}
+
 @Preview
 @Composable
 private fun PreviewBottom(){
-    CustomBottomBar()
+    Column {
+        CustomBottomBar()
+        CustomVendorBottomBar()
+    }
 }

@@ -25,6 +25,7 @@ import coil.compose.AsyncImage
 import com.srcamelo_kotlin.R
 import com.srcamelo_kotlin.ui.components.BackTopAppBarWithTitle
 import com.srcamelo_kotlin.ui.components.CustomBottomBar
+import com.srcamelo_kotlin.ui.components.CustomVendorBottomBar
 import com.srcamelo_kotlin.ui.components.SemiBoldBlackSubTitle
 import com.srcamelo_kotlin.ui.components.SemiBoldOrangeSubTitle
 import com.srcamelo_kotlin.ui.theme.LightOrange
@@ -36,7 +37,7 @@ fun AnalyticsScreen(
     onClickHome: () -> Unit = {},
     onClickCart: () -> Unit = {},
     onClickBalloon: () -> Unit = {},
-    onClickProfile: () -> Unit = {}
+    onClickBar: () -> Unit = {}
 ){
     Scaffold(
         topBar = {BackTopAppBarWithTitle(onClickBack = onClickBack, title = "Análise de Vendas")},
@@ -46,11 +47,11 @@ fun AnalyticsScreen(
                     .fillMaxWidth()
                     .padding(bottom = 50.dp)
             ) {
-                CustomBottomBar(
+                CustomVendorBottomBar(
                     homeClick = onClickHome,
                     cartClick = onClickCart,
                     balloonClick = onClickBalloon,
-                    profileClick = onClickProfile
+                    barClick = onClickBar
                 )
             }
         },

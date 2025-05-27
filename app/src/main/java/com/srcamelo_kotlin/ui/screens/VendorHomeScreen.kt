@@ -2,6 +2,7 @@ package com.srcamelo_kotlin.ui.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,11 +13,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -25,10 +24,10 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -41,10 +40,10 @@ import coil.request.ImageRequest
 import com.srcamelo_kotlin.BuildConfig
 import com.srcamelo_kotlin.R
 import com.srcamelo_kotlin.data.preferences.DataStoreManager
-import com.srcamelo_kotlin.ui.components.BackTopAppBarWithTitle
 import com.srcamelo_kotlin.ui.components.CustomBottomBar
+import com.srcamelo_kotlin.ui.components.CustomVendorBottomBar
 import com.srcamelo_kotlin.ui.components.PaymentTypeCart
-import com.srcamelo_kotlin.ui.components.ProductCard
+import com.srcamelo_kotlin.ui.components.SemiBoldOrangeSubTitle
 import com.srcamelo_kotlin.ui.components.TopAppBarWithTitle
 import com.srcamelo_kotlin.ui.fonts.Montserrat
 import com.srcamelo_kotlin.ui.theme.DarkOrange
@@ -55,15 +54,16 @@ import com.srcamelo_kotlin.ui.viewModel.UsersViewModel
 
 @Composable
 fun VendorHomeScreen(
-    homeClick: () -> Unit,
-    cartClick: () -> Unit = {},
-    balloonClick: () -> Unit = {},
-    profileClick: () -> Unit = {},
+    onClickHome: () -> Unit,
+    onClickCart: () -> Unit = {},
+    onClickBalloon: () -> Unit = {},
+    onClickBar: () -> Unit = {},
+    onClickProfile: () -> Unit = {},
+    onClickEditProduct: () -> Unit = {},
     userViewModel: UsersViewModel = hiltViewModel(),
     productViewModel: ProductViewModel = hiltViewModel(),
     dataStoreManager: DataStoreManager
 ) {
-    val context = LocalContext.current
     val baseUrl = BuildConfig.BASE_URL
     val userId by dataStoreManager.getUserId().collectAsState(initial = "")
     val user by userViewModel.userObj.observeAsState()
@@ -74,18 +74,18 @@ fun VendorHomeScreen(
     }
 
     Scaffold(
-        topBar = { TopAppBarWithTitle(title = user?.name?:"") },
+        topBar = { TopAppBarWithTitle(title = "Bem-vindo ${user?.name?:""}") },
         bottomBar = {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 50.dp)
             ) {
-                CustomBottomBar(
-                    homeClick = homeClick,
-                    cartClick = cartClick,
-                    balloonClick = balloonClick,
-                    profileClick = profileClick
+                CustomVendorBottomBar(
+                    homeClick = onClickHome,
+                    cartClick = onClickCart,
+                    balloonClick = onClickBalloon,
+                    barClick = onClickBar
                 )
             }
         },
@@ -97,7 +97,8 @@ fun VendorHomeScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .verticalScroll(scrollState)
-                .padding(innerPadding),
+                .padding(innerPadding)
+                .padding(horizontal=30.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Box(
@@ -132,21 +133,30 @@ fun VendorHomeScreen(
             }
 
             Spacer(modifier = Modifier.height(36.dp))
-            Text(
-                "Telefone: ${user?.telephone}",
-                fontFamily = Montserrat,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Normal
-            )
+            Column(modifier = Modifier.fillMaxWidth()){
+                SemiBoldOrangeSubTitle(text = "Contato", size = 20)
+                Spacer(modifier = Modifier.height(13.dp))
+                Text(
+                    "E-mail: ${user?.email}",
+                    fontFamily = Montserrat,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Normal
+                )
 
-            Spacer(modifier = Modifier.height(15.dp))
-            Text(
-                "E-mail: ${user?.email}",
-                fontFamily = Montserrat,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Normal
-            )
+                Spacer(modifier = Modifier.height(15.dp))
+                Text(
+                    "Telefone: ${user?.telephone}",
+                    fontFamily = Montserrat,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Normal
+                )
+            }
 
+            HorizontalDivider(color = Color(0x66333333),
+                modifier = Modifier.padding(top=27.dp, bottom=10.dp),
+                thickness = 1.dp)
+
+            /*
             val products by productViewModel.products.observeAsState(emptyList())
             LaunchedEffect(userId){
                 if(userId.isNotBlank()) {
@@ -187,12 +197,13 @@ fun VendorHomeScreen(
                 }
 
             }
+            */
 
-            Spacer(modifier = Modifier.height(31.dp))
             Column(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally
+                modifier = Modifier.fillMaxWidth()
             ) {
+                SemiBoldOrangeSubTitle(text = "Formas de Pagamento", size=20)
+                /*
                 Text(
                     "Formas de Pagamento",
                     fontFamily = Montserrat,
@@ -203,6 +214,7 @@ fun VendorHomeScreen(
                         .align(Alignment.Start)
                         .padding(start = 36.dp)
                 )
+                */
                 Spacer(modifier = Modifier.height(24.dp))
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(10.dp),
@@ -231,6 +243,40 @@ fun VendorHomeScreen(
                 Spacer(modifier = Modifier.height(24.dp))
             }
 
+            HorizontalDivider(color = Color(0x66333333),
+                modifier = Modifier.padding(top=29.dp, bottom=14.dp),
+                thickness = 1.dp)
+
+            Row(modifier=Modifier.fillMaxWidth().clickable { onClickEditProduct() },
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically){
+                SemiBoldOrangeSubTitle(text = "Gerenciar Produtos", size = 20)
+                Icon(painter = painterResource(R.drawable.goback_white), contentDescription = "gerenciar produtos",
+                    tint = DarkOrange,
+                    modifier=Modifier.size(17.dp, 32.dp).graphicsLayer { rotationZ = 180f })
+            }
+
+            HorizontalDivider(color = Color(0x66333333),
+                modifier = Modifier.padding(vertical = 26.dp),
+                thickness = 1.dp)
+
+            Row(modifier=Modifier.fillMaxWidth().clickable { onClickProfile() },
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically){
+                SemiBoldOrangeSubTitle(text = "Minha Conta", size = 20)
+                Icon(painter = painterResource(R.drawable.goback_white), contentDescription = "minha conta",
+                    tint = DarkOrange,
+                    modifier=Modifier.size(17.dp, 32.dp).graphicsLayer { rotationZ = 180f })
+            }
+            Spacer(modifier = Modifier.height(30.dp))
         }
     }
 }
+
+/*
+@Preview
+@Composable
+fun VendorHomeScreenPreview(){
+    VendorHomeScreen()
+}
+*/

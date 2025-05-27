@@ -42,6 +42,7 @@ import com.srcamelo_kotlin.data.preferences.DataStoreManager
 import com.srcamelo_kotlin.model.ProductInvoiceModel
 import com.srcamelo_kotlin.ui.components.BackTopAppBarWithTitle
 import com.srcamelo_kotlin.ui.components.CardText
+import com.srcamelo_kotlin.ui.components.CustomVendorBottomBar
 import com.srcamelo_kotlin.ui.fonts.Montserrat
 import com.srcamelo_kotlin.ui.theme.LightOrange
 import com.srcamelo_kotlin.ui.viewModel.InvoiceViewModel
@@ -109,6 +110,10 @@ fun InvoiceVendorCard(
 @Composable
 fun InvoiceVendorScreen(
     onClickBack: () -> Unit = {},
+    onClickHome: () -> Unit,
+    onClickCart: () -> Unit = {},
+    onClickBalloon: () -> Unit = {},
+    onClickBar: () -> Unit = {},
     dataStoreManager: DataStoreManager,
     invoiceViewModel: InvoiceViewModel = hiltViewModel()
 ){
@@ -122,6 +127,19 @@ fun InvoiceVendorScreen(
 
     Scaffold(
         topBar = { BackTopAppBarWithTitle(onClickBack = onClickBack, title = "Pedidos")},
+        bottomBar = {
+            Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 50.dp)
+        ) {
+            CustomVendorBottomBar(
+                homeClick = onClickHome,
+                cartClick = onClickCart,
+                balloonClick = onClickBalloon,
+                barClick = onClickBar
+            )
+        }},
         containerColor = LightOrange
     ) { innerpadding ->
         LazyColumn(

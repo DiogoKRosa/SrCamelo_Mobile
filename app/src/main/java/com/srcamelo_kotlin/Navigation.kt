@@ -78,6 +78,7 @@ fun SrCameloNavigation(
         startDestination = SrCameloScreens.Initial.name,
         modifier = modifier
     ){
+        /* TELAS INICIAIS */
         composable(route = SrCameloScreens.Initial.name){
             InitialScreen(navController = navController)
         }
@@ -113,13 +114,18 @@ fun SrCameloNavigation(
             )
         }
 
+        /* NAVEGAÇÂO DO VENDEDOR */
+
         composable(route = SrCameloScreens.VendorHome.name){
             VendorHomeScreen(
                 dataStoreManager = dataStoreManager,
-                homeClick = {navController.navigate(SrCameloScreens.VendorHome.name)},
-                cartClick = {navController.navigate(SrCameloScreens.ProductForm.name)},
-                balloonClick = {navController.navigate(SrCameloScreens.VendorChat.name)},
-                profileClick = { navController.navigate(SrCameloScreens.VendorOptions.name) }
+                onClickHome = {navController.navigate(SrCameloScreens.VendorHome.name)},
+                onClickBar = {navController.navigate(SrCameloScreens.SalesAnalytics.name)},
+                onClickCart = {navController.navigate(SrCameloScreens.Sales.name)},
+                onClickBalloon = {navController.navigate(SrCameloScreens.VendorChat.name)},
+                onClickProfile = { navController.navigate(SrCameloScreens.VendorOptions.name)},
+                onClickEditProduct = {navController.navigate(SrCameloScreens.ProductForm.name)},
+
             )
         }
 
@@ -144,9 +150,9 @@ fun SrCameloNavigation(
             ChatScreen(
                 onClickBack = {navController.navigateUp()},
                 onClickHome = {navController.navigate(SrCameloScreens.VendorHome.name)},
-                onClickCart = {/* TODO */},
+                onClickBar = {navController.navigate(SrCameloScreens.SalesAnalytics.name)},
+                onClickCart = {navController.navigate(SrCameloScreens.Sales.name)},
                 onClickBalloon = {navController.navigate(SrCameloScreens.VendorChat.name)},
-                onClickProfile = {navController.navigate((SrCameloScreens.VendorOptions.name))},
                 navController = navController,
                 dataStoreManager = dataStoreManager
             )
@@ -156,15 +162,19 @@ fun SrCameloNavigation(
             AnalyticsScreen(
                 onClickBack = {navController.navigateUp()},
                 onClickHome = {navController.navigate(SrCameloScreens.VendorHome.name)},
+                onClickBar = {navController.navigate(SrCameloScreens.SalesAnalytics.name)},
                 onClickCart = {navController.navigate(SrCameloScreens.Sales.name)},
                 onClickBalloon = {navController.navigate(SrCameloScreens.VendorChat.name)},
-                onClickProfile = {navController.navigate((SrCameloScreens.VendorOptions.name))}
             )
         }
 
         composable(route = SrCameloScreens.Sales.name){
             InvoiceVendorScreen(
                 onClickBack = {navController.navigateUp()},
+                onClickHome = {navController.navigate(SrCameloScreens.VendorHome.name)},
+                onClickBar = {navController.navigate(SrCameloScreens.SalesAnalytics.name)},
+                onClickCart = {navController.navigate(SrCameloScreens.Sales.name)},
+                onClickBalloon = {navController.navigate(SrCameloScreens.VendorChat.name)},
                 dataStoreManager = dataStoreManager
             )
         }
@@ -173,15 +183,17 @@ fun SrCameloNavigation(
             VendorAccountScreen(
                 onClickBack = {navController.navigateUp()},
                 onClickHome = {navController.navigate(SrCameloScreens.VendorHome.name)},
+                onClickBar = {navController.navigate(SrCameloScreens.SalesAnalytics.name)},
                 onClickCart = {navController.navigate(SrCameloScreens.Sales.name)},
                 onClickBalloon = {navController.navigate(SrCameloScreens.VendorChat.name)},
-                onClickProfile = {navController.navigate((SrCameloScreens.VendorOptions.name))},
                 invoicesButton = {navController.navigate(SrCameloScreens.Sales.name)},
                 editInformationButton = {/* TODO */},
                 editProductButton = {navController.navigate(SrCameloScreens.ProductForm.name)},
                 leaveButton = {goBackLogin(navController)}
             )
         }
+
+        /* NAVEGAÇÂO DO CLIENTE */
 
         composable(route = SrCameloScreens.ClientHome.name){
             ClientHomeScreen(

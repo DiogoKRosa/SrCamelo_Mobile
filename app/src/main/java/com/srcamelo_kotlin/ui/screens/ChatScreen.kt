@@ -40,6 +40,7 @@ import com.srcamelo_kotlin.data.preferences.DataStoreManager
 import com.srcamelo_kotlin.ui.components.BackTopAppBarWithTitle
 import com.srcamelo_kotlin.ui.components.CardText
 import com.srcamelo_kotlin.ui.components.CustomBottomBar
+import com.srcamelo_kotlin.ui.components.CustomVendorBottomBar
 import com.srcamelo_kotlin.ui.components.RegularBlackSubTitle
 import com.srcamelo_kotlin.ui.theme.LightGray
 import com.srcamelo_kotlin.ui.theme.LightOrange
@@ -79,7 +80,7 @@ fun ChatScreen(
     onClickHome: () -> Unit = {},
     onClickCart: () -> Unit = {},
     onClickBalloon: () -> Unit = {},
-    onClickProfile: () -> Unit = {},
+    onClickBar: () -> Unit = {},
     navController: NavController,
     dataStoreManager: DataStoreManager,
     chatViewModel: ChatViewModel = hiltViewModel()
@@ -103,11 +104,11 @@ fun ChatScreen(
                     .fillMaxWidth()
                     .padding(bottom = 50.dp)
             ) {
-                CustomBottomBar(
+                CustomVendorBottomBar(
                     homeClick = onClickHome,
                     cartClick = onClickCart,
                     balloonClick = onClickBalloon,
-                    profileClick = onClickProfile
+                    barClick = onClickBar
                 )
             }
         },
