@@ -12,6 +12,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
 import com.srcamelo_kotlin.data.preferences.DataStoreManager
+import com.srcamelo_kotlin.ui.screens.AnalyticsScreen
 import com.srcamelo_kotlin.ui.screens.ChatScreen
 import com.srcamelo_kotlin.ui.screens.ChooseAccountScreen
 import com.srcamelo_kotlin.ui.screens.ChooseProductScreen
@@ -19,6 +20,8 @@ import com.srcamelo_kotlin.ui.screens.ClientAccountScreen
 import com.srcamelo_kotlin.ui.screens.ClientHomeScreen
 import com.srcamelo_kotlin.ui.screens.CompleteScreen
 import com.srcamelo_kotlin.ui.screens.InitialScreen
+import com.srcamelo_kotlin.ui.screens.InvoiceClientScreen
+import com.srcamelo_kotlin.ui.screens.InvoiceVendorScreen
 import com.srcamelo_kotlin.ui.screens.LoginScreen
 import com.srcamelo_kotlin.ui.screens.MapScreen
 import com.srcamelo_kotlin.ui.screens.NewFormClientScreen
@@ -56,6 +59,9 @@ enum class SrCameloScreens(){
     Finish,
     ClientChat,
     PrivateChat,
+    SalesAnalytics,
+    Sales,
+    Orders
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -146,14 +152,31 @@ fun SrCameloNavigation(
             )
         }
 
+        composable(route = SrCameloScreens.SalesAnalytics.name){
+            AnalyticsScreen(
+                onClickBack = {navController.navigateUp()},
+                onClickHome = {navController.navigate(SrCameloScreens.VendorHome.name)},
+                onClickCart = {navController.navigate(SrCameloScreens.Sales.name)},
+                onClickBalloon = {navController.navigate(SrCameloScreens.VendorChat.name)},
+                onClickProfile = {navController.navigate((SrCameloScreens.VendorOptions.name))}
+            )
+        }
+
+        composable(route = SrCameloScreens.Sales.name){
+            InvoiceVendorScreen(
+                onClickBack = {navController.navigateUp()},
+                dataStoreManager = dataStoreManager
+            )
+        }
+
         composable(route = SrCameloScreens.VendorOptions.name){
             VendorAccountScreen(
                 onClickBack = {navController.navigateUp()},
                 onClickHome = {navController.navigate(SrCameloScreens.VendorHome.name)},
-                onClickCart = {/* TODO */},
+                onClickCart = {navController.navigate(SrCameloScreens.Sales.name)},
                 onClickBalloon = {navController.navigate(SrCameloScreens.VendorChat.name)},
                 onClickProfile = {navController.navigate((SrCameloScreens.VendorOptions.name))},
-                invoicesButton = {/* TODO */},
+                invoicesButton = {navController.navigate(SrCameloScreens.Sales.name)},
                 editInformationButton = {/* TODO */},
                 editProductButton = {navController.navigate(SrCameloScreens.ProductForm.name)},
                 leaveButton = {goBackLogin(navController)}
@@ -163,7 +186,7 @@ fun SrCameloNavigation(
         composable(route = SrCameloScreens.ClientHome.name){
             ClientHomeScreen(
                 onClickHome = {navController.navigate(SrCameloScreens.ClientHome.name)},
-                onClickCart = {/*TODO*/},
+                onClickCart = {navController.navigate(SrCameloScreens.Orders.name)},
                 onClickBalloon = {navController.navigate(SrCameloScreens.ClientChat.name)},
                 onClickProfile = {navController.navigate(SrCameloScreens.ClientOptions.name)},
                 onClickMap = {navController.navigate(SrCameloScreens.MapScreen.name)},
@@ -175,7 +198,7 @@ fun SrCameloNavigation(
         }
 
         composable(route = SrCameloScreens.MapScreen.name){
-            MapScreen(mapViewModel = locationViewModel)
+            MapScreen(mapViewModel = locationViewModel, dataStoreManager = dataStoreManager)
         }
 
         composable(route = SrCameloScreens.VendorPage.name + "/{uid}"){ navBackStackEntry ->
@@ -184,7 +207,7 @@ fun SrCameloNavigation(
                 uid = uid?:"",
                 dataStoreManager = dataStoreManager,
                 homeClick = {navController.navigate(SrCameloScreens.ClientHome.name)},
-                cartClick = {},
+                cartClick = {navController.navigate(SrCameloScreens.Orders.name)},
                 balloonClick = {navController.navigate(SrCameloScreens.ClientChat.name)},
                 profileClick = { navController.navigate(SrCameloScreens.ClientOptions.name)},
                 onClickLocation = {navController.navigate(SrCameloScreens.MapScreen.name)},
@@ -258,12 +281,19 @@ fun SrCameloNavigation(
             ClientAccountScreen(
                 onClickBack = {navController.navigateUp()},
                 onClickHome = {navController.navigate(SrCameloScreens.ClientHome.name)},
-                onClickCart = {/* TODO */},
+                onClickCart = {navController.navigate(SrCameloScreens.Orders.name)},
                 onClickBalloon = {navController.navigate(SrCameloScreens.ClientChat.name)},
-                onClickProfile = {/* TODO */},
-                invoicesButton = {/* TODO */},
+                onClickProfile = {navController.navigate(SrCameloScreens.ClientOptions.name)},
+                invoicesButton = {navController.navigate(SrCameloScreens.Orders.name)},
                 editInformationButton = {/* TODO */},
                 leaveButton = {goBackLogin(navController)}
+            )
+        }
+
+        composable(route = SrCameloScreens.Orders.name){
+            InvoiceClientScreen(
+                onClickBack = {navController.navigateUp()},
+                dataStoreManager = dataStoreManager
             )
         }
 
@@ -271,7 +301,7 @@ fun SrCameloNavigation(
             ChatScreen(
                 onClickBack = {navController.navigateUp()},
                 onClickHome = {navController.navigate(SrCameloScreens.ClientHome.name)},
-                onClickCart = {/* TODO */},
+                onClickCart = {navController.navigate(SrCameloScreens.Orders.name)},
                 onClickBalloon = {navController.navigate(SrCameloScreens.ClientChat.name)},
                 navController = navController,
                 dataStoreManager = dataStoreManager
