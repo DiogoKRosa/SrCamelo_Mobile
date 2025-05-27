@@ -125,10 +125,11 @@ fun SemiBoldOrangeTitle(
 fun SemiBoldBlackSubTitle(
     modifier: Modifier = Modifier,
     text: String,
-    size: Int = 16
+    size: Int = 16,
+    color: Color = Gray
 ){
     Text(text, modifier = modifier, fontFamily = Montserrat, fontSize = size.sp,
-        fontWeight = FontWeight.SemiBold, color = Gray
+        fontWeight = FontWeight.SemiBold, color = color
     )
 }
 
