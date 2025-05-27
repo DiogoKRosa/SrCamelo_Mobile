@@ -15,6 +15,27 @@ class SendInvoiceUseCase @Inject constructor(
     suspend operator fun invoke(
         invoice: InvoiceModel
     ): InvoiceResult<Any>{
-        return InvoiceResult(repositoryImpl.SendInvoice(invoice))
+        return InvoiceResult(repositoryImpl.sendInvoice(invoice))
+    }
+}
+
+class GetInvoiceUseCase @Inject constructor(
+     private val repositoryImpl: InvoiceRepositoryImpl
+){
+    suspend operator fun invoke(
+        userId: String
+    ): InvoiceResult<List<InvoiceModel>>{
+        return InvoiceResult(repositoryImpl.getInvoice(userId))
+    }
+}
+
+class UpdateInvoiceUseCase @Inject constructor(
+    private val repositoryImpl: InvoiceRepositoryImpl
+){
+    suspend operator fun invoke(
+        invoiceId: String,
+        status: String
+    ): InvoiceResult<Any>{
+        return InvoiceResult(repositoryImpl.updateInvoice(invoiceId, status))
     }
 }

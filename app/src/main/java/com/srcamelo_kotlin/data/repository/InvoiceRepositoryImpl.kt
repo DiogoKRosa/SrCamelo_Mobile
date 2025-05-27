@@ -11,9 +11,39 @@ import javax.inject.Inject
 class InvoiceRepositoryImpl @Inject constructor(
     private val api : SrcameloApiService
 ) {
-    suspend fun SendInvoice(invoice: InvoiceModel): Resource<Any> {
+    suspend fun sendInvoice(invoice: InvoiceModel): Resource<Any> {
         return try{
             val response = api.sendInvoice(invoice)
+            Resource.Success(response)
+        }catch (e: HttpException) {
+            Resource.Error("Erro HTTP: ${e.message}")
+        } catch (e: IOException) {
+            Resource.Error("Erro de IO: ${e.message}")
+        } catch (e: SocketTimeoutException) {
+            Resource.Error("Timeout: ${e.message}")
+        } catch (e: Exception) {
+            Resource.Error("Erro Desconhecido: ${e.message}")
+        }
+    }
+
+    suspend fun getInvoice(userId: String): Resource<List<InvoiceModel>>{
+        return try{
+            val response = api.getInvoice(userId)
+            Resource.Success(response.data!!)
+        }catch (e: HttpException) {
+            Resource.Error("Erro HTTP: ${e.message}")
+        } catch (e: IOException) {
+            Resource.Error("Erro de IO: ${e.message}")
+        } catch (e: SocketTimeoutException) {
+            Resource.Error("Timeout: ${e.message}")
+        } catch (e: Exception) {
+            Resource.Error("Erro Desconhecido: ${e.message}")
+        }
+    }
+
+    suspend fun updateInvoice(invoiceId: String, status: String): Resource<Any>{
+        return try{
+            val response = api.updateInvoice(invoiceId, status)
             Resource.Success(response)
         }catch (e: HttpException) {
             Resource.Error("Erro HTTP: ${e.message}")
