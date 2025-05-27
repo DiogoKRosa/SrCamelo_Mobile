@@ -230,6 +230,7 @@ fun VendorPageScreen(
             }
             ButtonWhite(title = "Localizar", onClick = onClickLocation)
             ButtonWhite(title = "Pedir", onClick = {navController.navigate(SrCameloScreens.ChooseProduct.name + "/${uid}")})
+            ButtonWhite(title = "Conversar", onClick = {navController.navigate(SrCameloScreens.PrivateChat.name + "/${uid}")})
         }
     }
 }
