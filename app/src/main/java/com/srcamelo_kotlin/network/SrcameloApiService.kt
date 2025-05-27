@@ -113,4 +113,15 @@ interface SrcameloApiService{
     suspend fun sendInvoice(
         @Body body: InvoiceModel
     ):ResponseModel<Any>
+
+    @GET("invoice")
+    suspend fun getInvoice(
+        @Query("uid") userId: String
+    ):ResponseModel<List<InvoiceModel>>
+
+    @PUT("invoice/{invoiceId}")
+    suspend fun updateInvoice(
+        @Path("invoiceId") invoiceId: String,
+        @Query("status") status: String
+    ): ResponseModel<Any>
 }
