@@ -98,8 +98,11 @@ fun InvoiceVendorCard(
                     }
                 }
                 Spacer(modifier = Modifier.height(22.dp))
-                Column{
-                    InvoiceButton()
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)){
+                    if(status == "pendente"){
+                        InvoiceButton(text = "Entregue")
+                    }
+                    InvoiceButton(text = "Cancelar")
                 }
             }
         }

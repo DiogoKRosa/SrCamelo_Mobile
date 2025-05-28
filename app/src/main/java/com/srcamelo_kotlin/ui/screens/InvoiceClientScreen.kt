@@ -52,13 +52,16 @@ import java.time.format.DateTimeFormatter
 
 
 @Composable
-fun InvoiceButton(){
-    Button(onClick = {},
+fun InvoiceButton(
+    text: String = "",
+    onClick: () -> Unit = {}
+){
+    Button(onClick = onClick,
         modifier = Modifier.size(147.dp, 32.dp),
         shape = RoundedCornerShape(10.dp),
         colors = ButtonColors(containerColor = White, contentColor = Color(0xFF5CAC0E), disabledContentColor = Gray, disabledContainerColor = Color(0xFF5CAC0E))
     ) {
-        Text("Cancelar", fontFamily = Montserrat, fontWeight = FontWeight.Normal, fontSize = 10.sp)
+        Text(text, fontFamily = Montserrat, fontWeight = FontWeight.Normal, fontSize = 10.sp)
     }
 }
 
