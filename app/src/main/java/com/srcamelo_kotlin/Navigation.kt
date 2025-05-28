@@ -17,6 +17,7 @@ import com.srcamelo_kotlin.ui.screens.ChatScreen
 import com.srcamelo_kotlin.ui.screens.ChooseAccountScreen
 import com.srcamelo_kotlin.ui.screens.ChooseProductScreen
 import com.srcamelo_kotlin.ui.screens.ClientAccountScreen
+import com.srcamelo_kotlin.ui.screens.ClientChatScreen
 import com.srcamelo_kotlin.ui.screens.ClientHomeScreen
 import com.srcamelo_kotlin.ui.screens.CompleteScreen
 import com.srcamelo_kotlin.ui.screens.InitialScreen
@@ -310,11 +311,12 @@ fun SrCameloNavigation(
         }
 
         composable(route = SrCameloScreens.ClientChat.name){
-            ChatScreen(
+            ClientChatScreen(
                 onClickBack = {navController.navigateUp()},
                 onClickHome = {navController.navigate(SrCameloScreens.ClientHome.name)},
                 onClickCart = {navController.navigate(SrCameloScreens.Orders.name)},
                 onClickBalloon = {navController.navigate(SrCameloScreens.ClientChat.name)},
+                onClickProfile = {navController.navigate(SrCameloScreens.ClientOptions.name)},
                 navController = navController,
                 dataStoreManager = dataStoreManager
             )
