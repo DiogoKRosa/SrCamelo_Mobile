@@ -110,7 +110,7 @@ fun InvoiceClientCard(
                 }
                 Spacer(modifier = Modifier.height(22.dp))
                 Column{
-                    InvoiceButton()
+                    InvoiceButton(text = "Cancelar")
                 }
             }
         }

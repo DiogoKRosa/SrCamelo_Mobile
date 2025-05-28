@@ -228,9 +228,13 @@ fun VendorPageScreen(
                 }
                 Spacer(modifier = Modifier.height(24.dp))
             }
-            ButtonWhite(title = "Localizar", onClick = onClickLocation)
-            ButtonWhite(title = "Pedir", onClick = {navController.navigate(SrCameloScreens.ChooseProduct.name + "/${uid}")})
-            ButtonWhite(title = "Conversar", onClick = {navController.navigate(SrCameloScreens.PrivateChat.name + "/${uid}")})
+            Column(
+                verticalArrangement = Arrangement.spacedBy(20.dp)
+            ){
+                ButtonWhite(title = "Localizar", onClick = onClickLocation)
+                ButtonWhite(title = "Pedir", onClick = {navController.navigate(SrCameloScreens.ChooseProduct.name + "/${uid}")})
+                ButtonWhite(title = "Conversar", onClick = {navController.navigate(SrCameloScreens.PrivateChat.name + "/${uid}")})
+            }
         }
     }
 }
