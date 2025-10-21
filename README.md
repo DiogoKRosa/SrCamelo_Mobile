@@ -10,7 +10,7 @@ O objetivo é conectar **clientes** e **vendedores ambulantes**, oferecendo func
 - 💰 Realização de compras (fluxo básico de checkout)  
 - 📍 Visualização da localização do vendedor ambulante (mapa / geolocalização)
 
-> 🔗 **Observação:** o backend do projeto está em um repositório separado. Atualize o campo `BASE_URL` conforme o endereço do backend em desenvolvimento/produção.
+> 🔗 **Observação:** o backend do projeto está em um repositório separado. Atualize o campo `API_URL` conforme o endereço do backend em desenvolvimento/produção.
 
 ---
 
@@ -31,11 +31,11 @@ O objetivo é conectar **clientes** e **vendedores ambulantes**, oferecendo func
 ### 1. Pré-requisitos
 - Android Studio instalado 
 - SDK Android e emulador configurados ou dispositivo físico conectado  
-- Backend rodando (repositório separado) — veja a URL do servidor/API
+- Backend rodando (repositório separado)
 
 ### 2. Clone o repositório
 ```bash
-git clone https://github.com/seuusuario/srcamelo-app.git
+git clone https://github.com/DiogoKRosa/SrCamelo_API.git
 cd srcamelo-app
 ```
 
@@ -44,7 +44,7 @@ cd srcamelo-app
  - Dentro do novo arquivo adicione as seguintes chaves:
  ```bash
  MAPS_API_KEY = (Inclua a chave do goggle maps api aqui)
-API_URL = "https://seu-backend.example.com/api"
+ API_URL = "https://seu-backend.example.com/api"
  ```
 
  >🔗 Se o backend estiver em um repositório privado, certifique-se de rodá-lo localmente e apontar API_URL para http://10.0.2.2:porta/ (emulador Android) ou para o endereço correto do dispositivo.
